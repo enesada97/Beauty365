@@ -1,0 +1,185 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="font-weight-bold p-t-5 p-l-10 font-17">
+            {{ dialogTitle }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="patient" mat-dialog-content>
+    <form
+      class="register-form m-4"
+      [formGroup]="protocolForm"
+      (ngSubmit)="submit()"
+    >
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>{{ patient.name }}</mat-label>
+            <input
+              disabled
+              matInput
+              placeholder="{{ patient.name }}"
+              type="text"
+            />
+            <mat-icon matSuffix>face</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>{{ patient.surName }}</mat-label>
+            <input
+              matInput
+              disabled
+              placeholder="{{ patient.surName }}"
+              type="text"
+            />
+            <mat-icon matSuffix>face</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Protokol Tipi</mat-label>
+            <mat-select formControlName="protocolTypeId" required>
+              <mat-option
+                *ngFor="let protocolType of protocolTypes"
+                [value]="protocolType.id"
+              >
+                {{ protocolType.typeName }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                protocolForm.get('protocolTypeId').hasError('required') &&
+                protocolForm.get('protocolTypeId').touched
+              "
+            >
+              Protokol Tipi Seçilmelidir
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Kurum</mat-label>
+            <mat-select formControlName="institutionId" required>
+              <mat-option
+                *ngFor="let institution of institutions"
+                [value]="institution.id"
+              >
+                {{ institution.institutionName }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>face</mat-icon>
+            <mat-error
+              *ngIf="
+                protocolForm.get('institutionId').hasError('required') &&
+                protocolForm.get('institutionId').touched
+              "
+            >
+              Kurum Seçilmelidir
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Bölüm</mat-label>
+            <mat-select
+              #mySelect
+              (selectionChange)="onOptionsSelected(mySelect.value)"
+              formControlName="departmentId"
+              required
+            >
+              <mat-option
+                *ngFor="let department of departments"
+                [value]="department.id"
+              >
+                {{ department.departmentName }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                protocolForm.get('departmentId').hasError('required') &&
+                protocolForm.get('departmentId').touched
+              "
+            >
+              Departman Girilmelidir
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <ng-container *ngIf="doctors; else elseTemplate">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Doktor</mat-label>
+              <mat-select formControlName="doctorId">
+                <mat-option *ngFor="let doctor of doctors" [value]="doctor.id"
+                  >{{ doctor.speciality }} {{ doctor.name }}
+                  {{ doctor.surName }}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  protocolForm.get('doctorId').hasError('required') &&
+                  protocolForm.get('doctorId').touched
+                "
+              >
+                Doktor Seçilmelidir
+              </mat-error>
+            </mat-form-field>
+          </ng-container>
+          <ng-template #elseTemplate>
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Önce bölüm seçiniz</mat-label>
+              <mat-select [disabled] formControlName="doctorId">
+                <mat-option
+                  [disabled]
+                  *ngFor="let doctor of doctors"
+                  [value]="doctor.id"
+                >
+                  {{ doctor.name }} {{ doctor.surName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-template>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button
+              mat-raised-button
+              color="primary"
+              [type]="submit"
+              [disabled]="!protocolForm.valid"
+              (click)="confirmAdd()"
+            >
+              Kaydet
+            </button>
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="onNoClick()"
+              tabindex="-1"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

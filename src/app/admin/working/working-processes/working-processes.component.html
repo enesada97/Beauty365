@@ -1,0 +1,511 @@
+<section class="content">
+  <div *ngIf="patientForWorkingDto" class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Hizmetler</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/patient/dashboard">
+                <i class="fas fa-home"></i> Anasayfa</a
+              >
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/admin/patients/all-patients/patient-detail/{{ patientForWorkingDto.patientId }}">{{ patientForWorkingDto.name }} {{ patientForWorkingDto.surName }}</a>
+            </li>
+            <li class="breadcrumb-item active" style="cursor: pointer;"><a onclick="return false">Protokol No:#{{protocolId}}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Hasta Detay -->
+    <!-- <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card project_widget" style="margin-bottom: 0px;">
+                <div class="body">
+                  <div class="row align-items-center">
+              <div class="col-md-4" style="margin-bottom: 0px;">
+                <img
+                  src="assets/images/clinic365/4782.jpg"
+                  alt=""
+                  class="w-100"
+                />
+              </div>
+              <div class="col-md-8" style="margin-bottom: 0px;">
+                    <div class="d-flex justify-content-between">
+                      <h4 class="font-20 weight-500">
+                        <div class="weight-600 font-30 col-blue">
+                          {{ patientForWorkingDto.name }}
+                          {{ patientForWorkingDto.surName }}
+                        </div>
+                      </h4>
+                      <h5>
+                      <strong>Geliş Tarihi </strong>
+                      <br />
+                      {{ patientForWorkingDto.dateOfCome | date: "mediumDate" }}
+                    </h5>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3 col-6 b-r " style="margin-bottom: 0px;">
+                        <strong>Doktor</strong>
+                        <br />
+
+                        <p class="text-muted">
+                          {{ patientForWorkingDto.speciality }}
+                          {{ patientForWorkingDto.drName }}
+                          {{ patientForWorkingDto.drSurName }}
+                        </p>
+                      </div>
+                      <div class="col-md-3 col-6 b-r" style="margin-bottom: 0px;">
+                        <strong>Bölüm</strong>
+                        <br />
+
+                        <p class="text-muted">
+                          {{ patientForWorkingDto.departmentName }}
+                        </p>
+                      </div>
+                      <div class="col-md-3 col-6" style="margin-bottom: 0px;">
+                        <strong>Kurum</strong>
+                        <br />
+                        <p class="text-muted">
+                          {{ patientForWorkingDto.institutionName }}
+                        </p>
+                      </div>
+                      <div class="col-md-3 col-6" style="margin-bottom: 0px;">
+                        <strong>Protokol No</strong>
+                        <br />
+                        <p class="text-muted">
+                          {{ patientForWorkingDto.protocolId }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+    <!-- #END# -->
+    <div class="row">
+      <div class="col-lg-3 col-sm-6">
+        <div class="info-box6 primary">
+          <i class="fas fa-money-bill-wave"></i>
+          <span class="count-numbers">{{ totalPrice }}₺</span>
+          <span class="count-name">Toplam Tutar</span>
+          <input hidden name="totalPrice" [(ngModel)]="totalPrice" />
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="info-box6 danger">
+          <i class="fas fa-percent"></i>
+          <span class="count-numbers" *ngIf="(discount);else noDiscount">{{ discount }}₺</span>
+            <ng-template #noDiscount><span class="count-numbers">%0</span></ng-template>
+          <span class="count-name">İndirim</span>
+          <input hidden name="discount" [(ngModel)]="discount" />
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="info-box6 success">
+          <i class="fas fa-check-circle"></i>
+          <span class="count-numbers">{{ paidValue }}₺</span>
+          <span class="count-name">Ödenen</span>
+          <input hidden name="paidValue" [(ngModel)]="paidValue" />
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="info-box6 info">
+          <i class="fas fa-minus-circle"></i>
+          <span class="count-numbers">{{ arrearsValue }}₺</span>
+          <span class="count-name">Kalan</span>
+          <input
+                      hidden
+                      name="arrearsValue"
+                      [(ngModel)]="arrearsValue"
+                    />
+        </div>
+      </div>
+    </div>
+    <!-- Hizmet Bölümleri -->
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+                <div class="table-responsive" *ngIf="dataSource">
+                  <div class="materialTableHeader">
+                    <div class="row">
+                      <div class="col-8">
+                        <ul class="header-buttons-left ml-0">
+                          <li class="dropdown">
+                            <h2>
+                              <strong>Hizmetler</strong>
+                            </h2>
+                          </li>
+                          <li class="dropdown m-l-20">
+                            <label for="search-input"
+                              ><i class="material-icons search-icon"
+                                >search</i
+                              ></label
+                            >
+                            <input
+                              placeholder="Arama"
+                              type="text"
+                              (keyup)="applyFilter($event.target.value)"
+                              class="browser-default search-field"
+                              aria-label="Search box"
+                            />
+                          </li>
+                          <li>
+                            <div
+                              class="icon-button-demo m-l-10"
+                              [hidden]="!selection.hasValue()"
+                            >
+                              <button
+                                mat-mini-fab
+                                color="warn"
+                                (click)="removeSelectedRows()"
+                              >
+                                <mat-icon class="col-white">delete</mat-icon>
+                              </button>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-4">
+                        <ul class="header-buttons">
+                          <li>
+                            <div class="icon-button-demo">
+                              <button
+                                mat-mini-fab
+                                color="primary"
+                                (click)="exportTable()"
+                              >
+                                <mat-icon
+                                  class="col-white fas fa-barcode"
+                                ></mat-icon>
+                              </button>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="icon-button-demo">
+                              <button
+                                mat-mini-fab
+                                color="primary"
+                                (click)="exportTable()"
+                              >
+                                <mat-icon class="col-white">print</mat-icon>
+                              </button>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="icon-button-demo">
+                              <button
+                                mat-mini-fab
+                                color="primary"
+                                (click)="
+                                  exporter.exportTable('xlsx', {
+                                    fileName: 'protokol-excel'
+                                  })
+                                "
+                              >
+                                <mat-icon
+                                  class="col-white fas fa-file-excel"
+                                ></mat-icon>
+                              </button>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="icon-button-demo">
+                              <button
+                                mat-mini-fab
+                                color="primary"
+                                (click)="refresh()"
+                              >
+                                <mat-icon class="col-white">refresh</mat-icon>
+                              </button>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <mat-table
+                    id="Table"
+                    hiddenColumns="[7]"
+                    matTableExporter
+                    #exporter="matTableExporter"
+                    #sort="matSort"
+                    [dataSource]="dataSource"
+                    matSort
+                    class="mat-cell"
+                  >
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                      <mat-header-cell
+                        *matHeaderCellDef
+                        [ngClass]="'tbl-col-width-per-6'"
+                      >
+                        <mat-checkbox
+                          (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="
+                            selection.hasValue() && !isAllSelected()
+                          "
+                          [ngClass]="'tbl-checkbox'"
+                        >
+                        </mat-checkbox>
+                      </mat-header-cell>
+                      <mat-cell
+                        *matCellDef="let row"
+                        [ngClass]="'tbl-col-width-per-6'"
+                      >
+                        <mat-checkbox
+                          (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)"
+                          [ngClass]="'tbl-checkbox'"
+                        >
+                        </mat-checkbox>
+                      </mat-cell>
+                    </ng-container>
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="id">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header
+                        >Id</mat-header-cell
+                      >
+                      <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="workingDateTime">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header
+                        >İşlem Tarih</mat-header-cell
+                      >
+                      <mat-cell *matCellDef="let row">
+                        {{ row.workingDateTime | date: "MM/dd/yyyy" }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="groupName">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header
+                        >İşlem Grup</mat-header-cell
+                      >
+                      <mat-cell *matCellDef="let row">
+                        {{ row.groupName }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="processName">
+                      <mat-header-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matHeaderCellDef
+                        mat-sort-header
+                        >İşlem Adı</mat-header-cell
+                      >
+                      <mat-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matCellDef="let row"
+                      >
+                        {{ row.processName }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="quantity">
+                      <mat-header-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matHeaderCellDef
+                        mat-sort-header
+                        >Adet</mat-header-cell
+                      >
+                      <mat-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matCellDef="let row"
+                      >
+                        {{ row.quantity }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="price">
+                      <mat-header-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matHeaderCellDef
+                        mat-sort-header
+                        >Ücret</mat-header-cell
+                      >
+                      <mat-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matCellDef="let row"
+                      >
+                        {{ row.price }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="saleValue">
+                      <mat-header-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matHeaderCellDef
+                        mat-sort-header
+                        >İndirim</mat-header-cell
+                      >
+                      <mat-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matCellDef="let row"
+                      >
+                        {{ row.saleValue }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="paidValue">
+                      <mat-header-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matHeaderCellDef
+                        mat-sort-header
+                        >Ödenen</mat-header-cell
+                      >
+                      <mat-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matCellDef="let row"
+                      >
+                        {{ row.paidValue }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="arrearsValue">
+                      <mat-header-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matHeaderCellDef
+                        mat-sort-header
+                        >Kalan</mat-header-cell
+                      >
+                      <mat-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matCellDef="let row"
+                      >
+                        {{ row.arrearsValue }}</mat-cell
+                      >
+                    </ng-container>
+                    <!-- actions -->
+                    <ng-container matColumnDef="actions">
+                      <mat-header-cell *matHeaderCellDef class="pr-0"
+                        >Eylemler</mat-header-cell
+                      >
+                      <mat-cell
+                        *matCellDef="let row; let i = index"
+                        class="pr-0"
+                      >
+                        <!-- <button
+                          mat-icon-button
+                          color="accent"
+                          class="btn-tbl-edit"
+                          (click)="$event.stopPropagation()"
+                          (click)="editCall(row)"
+                        >
+                          <mat-icon aria-label="Edit" class="col-white"
+                            >edit</mat-icon
+                          >
+                        </button>
+                        <button *ngIf="row.arrearsValue===0;else notZero"
+
+                        [disabled]="row.arrearsValue===0"
+                          mat-icon-button
+                          color="accent"
+                          class="btn-tbl-delete"
+                          (click)="$event.stopPropagation()"
+                          (click)="deleteItem(i, row)"
+                        >
+                          <mat-icon  matTooltip="Tahsil edilmiş hizmet silinemez"  matTooltipClass="tooltip-red" aria-label="Delete" class="col-white"
+                            >delete</mat-icon
+                          >
+                        </button>
+                        <ng-template #notZero>
+                          <button
+                          mat-icon-button
+                          color="accent"
+                          class="btn-tbl-delete"
+                          (click)="$event.stopPropagation()"
+                          (click)="deleteItem(i, row)"
+                        >
+                          <mat-icon aria-label="Delete" class="col-white"
+                            >delete</mat-icon
+                          >
+                        </button>
+                        </ng-template> -->
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                          <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item [matMenuTriggerFor]="protocolProcesses">
+                            <mat-icon>group</mat-icon>
+                            <span>Hizmet İşlemleri</span>
+                          </button>
+                        </mat-menu>
+                        <mat-menu #protocolProcesses="matMenu">
+                          <button mat-menu-item
+                          (click)="$event.stopPropagation()"
+                          (click)="editCall(row)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Düzenle</span>
+                          </button>
+                          <button *ngIf="row.arrearsValue===0;else notZero" mat-menu-item matTooltip="Tahsil edilmiş hizmet silinemez"  matTooltipClass="tooltip-red"
+                          disabled
+                          (click)="$event.stopPropagation()"
+                          (click)="deleteItem(i, row)"
+                          >
+                          <mat-icon>delete</mat-icon
+                          >
+                            <span>Sil</span>
+                          </button>
+                          <ng-template #notZero>
+                            <button mat-menu-item
+                          (click)="$event.stopPropagation()"
+                          (click)="deleteItem(i, row)">
+                          <mat-icon>delete</mat-icon
+                        >
+                            Sil
+                          </button>
+                          </ng-template>
+                        </mat-menu>
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row
+                      *matHeaderRowDef="displayedColumns"
+                    ></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns">
+                    </mat-row>
+                  </mat-table>
+
+                  <mat-paginator
+                  #paginator="matPaginator"
+                  [pageIndex]="0"
+                  [pageSize]="5"
+                  [pageSizeOptions]="[5, 10]"
+                  [length]="dataSource.filteredData.length"
+                >
+                </mat-paginator>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fab-container">
+      <div class="fab fab-icon-holder">
+        <i class="fas fa-bars"></i>
+      </div>
+
+      <ul class="fab-options">
+        <li>
+          <span class="fab-label">Hizmet Ekle</span>
+          <div class="fab-icon-holder">
+            <i (click)="getProcessesDialog()" class="fas fa-plus-circle"></i>
+          </div>
+        </li>
+        <li *ngIf="dataSource.data.length>=1;else noCollections">
+          <span class="fab-label">Tahsilat Ekle</span>
+          <div class="fab-icon-holder">
+            <i (click)="getCollectionsDialog()" class="fas fa-user-plus"></i>
+          </div>
+        </li>
+        <ng-template #noCollections>
+          <li>
+            <span class="fab-label">Tahsilat Ekle</span>
+          <div class="fab-icon-holder disabled">
+            <i matTooltip="Mevcut hizmet olmadan tahsilat eklenemez"  matTooltipClass="tooltip-red" class="fas fa-user-plus"></i>
+          </div>
+          </li>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</section>

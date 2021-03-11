@@ -1,0 +1,341 @@
+<section *ngIf="patient" class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Hasta Bilgilerini Düzenle</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Anasayfa</a
+              >
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a
+                routerLink="/admin/patients/all-patients"
+                onClick="return false;"
+                >Hastalar</a
+              >
+            </li>
+            <li class="breadcrumb-item active">Düzenle</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>
+              <strong
+                >{{ patient.name | uppercase
+                }} {{ patient.surName | uppercase }} Bilgilerini Düzenle</strong
+              >
+            </h2>
+          </div>
+          <div class="body">
+            <form class="m-4" [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>T.C Kimlik No</mat-label>
+                    <input
+                      matInput
+                      maxlength="11"
+                      minlength="11"
+                      formControlName="identityNumber"
+                      required
+                    />
+                    <mat-icon matSuffix>person</mat-icon>
+                    <mat-error
+                      *ngIf="
+                        patientForm
+                          .get('identityNumber')
+                          .hasError('required') &&
+                        patientForm.get('identityNumber').touched
+                      "
+                    >
+                      T.C Kimlik girilmesi gereklidir
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        patientForm.get('identityNumber').hasError('minlength')
+                      "
+                    >
+                      T.C alanı 10 haneli olmalıdır Mevcut:
+                      {{ patientForm.get("identityNumber").value.length }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Telefon Numarası</mat-label>
+                    <input
+                      matInput
+                      mask="(000) 000-0000"
+                      [showMaskTyped]="true"
+                      formControlName="phoneNumber"
+                      required
+                    />
+                    <mat-icon matSuffix>phone</mat-icon>
+                    <mat-error
+                      *ngIf="
+                        patientForm.get('phoneNumber').hasError('required') &&
+                        patientForm.get('phoneNumber').touched
+                      "
+                    >
+                      Telefon numarasının girilmesi gereklidir
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Adı</mat-label>
+                    <input matInput formControlName="name" required />
+                    <mat-icon matSuffix>face</mat-icon>
+                    <mat-error
+                      *ngIf="
+                        patientForm.get('name').hasError('required') &&
+                        patientForm.get('name').touched
+                      "
+                    >
+                      Ad alanının girilmesi gereklidir
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Soyadı</mat-label>
+                    <input
+                      matInput
+                      formControlName="surName"
+                      type="text"
+                      required
+                    />
+                    <mat-icon matSuffix>face</mat-icon>
+                    <mat-error
+                      *ngIf="
+                        patientForm.get('surName').hasError('required') &&
+                        patientForm.get('surName').touched
+                      "
+                    >
+                      Soyad alanının girilmesi gereklidir
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Cinsiyet</mat-label>
+                    <mat-select formControlName="gender">
+                      <mat-option [value]="true"> Erkek </mat-option>
+                      <mat-option [value]="false"> Kadın </mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix
+                      ><i class="fas fa-venus-mars"></i
+                    ></mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Kan Grubu</mat-label>
+                    <mat-select formControlName="bloodGroup">
+                      <mat-option [value]="'A+'"> A+ </mat-option>
+                      <mat-option [value]="'B+'"> B+ </mat-option>
+                      <mat-option [value]="'O+'"> O+ </mat-option>
+                      <mat-option [value]="'AB+'"> AB+ </mat-option>
+                      <mat-option [value]="'A-'"> A- </mat-option>
+                      <mat-option [value]="'B-'"> B- </mat-option>
+                      <mat-option [value]="'O-'"> O- </mat-option>
+                      <mat-option [value]="'AB-'"> AB- </mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix><i class="fas fa-tint"></i></mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Doğum Tarihi</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="picker"
+                      placeholder="Tarih Seçiniz"
+                      formControlName="birthDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Fotoğrafınızı yükleyin</mat-label>
+                    <ngx-mat-file-input formControlName="photoUrl">
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>add_a_photo</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Baba Adı</mat-label>
+                    <input matInput formControlName="fatherName" type="text" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Anne Adı</mat-label>
+                    <input matInput formControlName="motherName" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput formControlName="address"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Hastanın Notu</mat-label>
+                    <textarea matInput formControlName="note"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Medeni Hali</mat-label>
+                    <mat-select formControlName="maritalStatus">
+                      <mat-option [value]="true"> Evli </mat-option>
+                      <mat-option [value]="false"> Bekar </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Ülke</mat-label>
+                    <input matInput formControlName="country" type="text" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Eyalet</mat-label>
+                    <input matInput formControlName="region" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Şehir</mat-label>
+                    <input matInput formControlName="city" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Uyruk</mat-label>
+                    <mat-select formControlName="nationality">
+                      <mat-option [value]="'T.C'"> T.C </mat-option>
+                      <mat-option [value]="'diğer'"> Diğerleri </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Hasta sorunlu mu?</mat-label>
+                    <mat-select formControlName="isTrobule">
+                      <mat-option [value]="true"> Evet </mat-option>
+                      <mat-option [value]="false"> Hayır </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Meslek</mat-label>
+                    <input matInput formControlName="job" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Sigara Kullanımı</mat-label>
+                    <mat-select formControlName="usingSmoke">
+                      <mat-option [value]="true"> Evet </mat-option>
+                      <mat-option [value]="false"> Hayır </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Alkol Kullanımı</mat-label>
+                    <mat-select formControlName="usingAlcohol">
+                      <mat-option [value]="true"> Evet </mat-option>
+                      <mat-option [value]="false"> Hayır </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>SMS Onayı</mat-label>
+                    <mat-select formControlName="smsConfirm">
+                      <mat-option [value]="true"> Evet </mat-option>
+                      <mat-option [value]="false"> Hayır </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>GDPR Onayı</mat-label>
+                    <mat-select formControlName="gdprConfirm">
+                      <mat-option [value]="true"> Evet </mat-option>
+                      <mat-option [value]="false"> Hayır </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>E-posta</mat-label>
+                    <input matInput formControlName="eMail" type="email" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button
+                    class="mr-3"
+                    [disabled]="!patientForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    Kaydet
+                  </button>
+                  <button type="button" mat-button>İptal</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

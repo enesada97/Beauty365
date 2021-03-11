@@ -1,0 +1,63 @@
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Opsiyonel İşlem Ayarları</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i> Anasayfa</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Ayarlar</a>
+                        </li>
+                        <li class="breadcrumb-item active">Opsiyonel İşlem Ayarları</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="optionalSettings.length>0" class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Opsiyonel İşlem Ayarları</h2>
+                    </div>
+                    <div class="body">
+                        <form [formGroup]="optionalSettingsForm" (ngSubmit)="passParameter()" ngNativeValidate>
+                            <div class="row" *ngFor="let isOpen of getIsOpensFormControls(); let i = index">
+                              <hr>
+                                <div class="col-9">
+                                    <h6>{{optionalSettings[i].alias}}</h6>
+                                </div>
+                                <div class="col-3">
+                                    <mat-slide-toggle [formControl]="isOpen"><span *ngIf="isOpen.value==true;else notOpen">{{isOpen.value}}</span>
+                                    <ng-template #notOpen>
+                                      <span>{{isOpen.value}}</span>
+                                    </ng-template></mat-slide-toggle>
+                              </div>
+                                <hr>
+                            </div>
+                            <div class="row">
+                              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                <div class="example-button-row">
+                                  <button
+                                    mat-raised-button
+                                    color="primary"
+                                    type="submit"
+                                    [disabled]="!optionalSettingsForm.valid"
+                                  >
+                                    Kaydet
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

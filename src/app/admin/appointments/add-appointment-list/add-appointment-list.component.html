@@ -1,0 +1,221 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Randevu</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Anasayfa</a
+              >
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a
+                routerLink="/admin/patients/all-appointments"
+                onClick="return false;"
+                >Randevular</a
+              >
+            </li>
+            <li class="breadcrumb-item active">Randevu Listesi Ekle</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2><strong> Randevu Listesi Oluştur </strong></h2>
+          </div>
+          <div class="body">
+            <form
+              class="m-4"
+              [formGroup]="createAppointmentsForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Tarih Aralığı Seçiniz</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                      <input
+                        matStartDate
+                        placeholder="Başlangıç Tarihi"
+                        formControlName="startDate"
+                      />
+                      <input
+                        matEndDate
+                        placeholder="Bitiş Tarihi"
+                        formControlName="finishDate"
+                      />
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    <mat-error
+                      *ngIf="
+                      createAppointmentsForm.get('startDate').hasError('required') &&
+                      createAppointmentsForm.get('startDate').touched
+                      "
+                    >
+                      Tarih Aralığı Girilmelidir
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Protokol Tipi</mat-label>
+                    <mat-select
+                      formControlName="protocolTypeId"
+                      required
+                    >
+                      <mat-option
+                        *ngFor="let protocolType of protocolTypes"
+                        [value]="protocolType.id"
+                      >
+                        {{ protocolType.typeName }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                      createAppointmentsForm.get('protocolTypeId').hasError('required') &&
+                      createAppointmentsForm.get('protocolTypeId').touched
+                      "
+                    >
+                      Protokol Tipi Girilmelidir
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Bölüm</mat-label>
+                    <mat-select
+                      #mySelect
+                      (selectionChange)="onOptionsSelected(mySelect.value)"
+                      formControlName="departmentId"
+                      required
+                    >
+                      <mat-option
+                        *ngFor="let department of departments"
+                        [value]="department.id"
+                      >
+                        {{ department.departmentName }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                      createAppointmentsForm.get('departmentId').hasError('required') &&
+                      createAppointmentsForm.get('departmentId').touched
+                      "
+                    >
+                      Departman Girilmelidir
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <ng-container *ngIf="doctors; else elseTemplate">
+                    <mat-form-field class="example-full-width mb-3">
+                      <mat-label>Doktor</mat-label>
+                      <mat-select formControlName="doctorId">
+                        <mat-option *ngFor="let doctor of doctors" [value]="doctor.id"
+                          >{{ doctor.speciality }} {{ doctor.name }}
+                          {{ doctor.surName }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="
+                        createAppointmentsForm.get('doctorId').hasError('required') &&
+                        createAppointmentsForm.get('doctorId').touched
+                        "
+                      >
+                        Doktor Seçilmelidir
+                      </mat-error>
+                    </mat-form-field>
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Önce bölüm seçiniz</mat-label>
+                      <mat-select [disabled] formControlName="doctorId">
+                        <mat-option
+                          [disabled]
+                          *ngFor="let doctor of doctors"
+                          [value]="doctor.id"
+                        >
+                          {{ doctor.name }} {{ doctor.surName }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Başlangıç Saati</mat-label>
+                    <input type="time" matInput formControlName="startTime"/>
+                    <mat-error
+                      *ngIf="
+                      createAppointmentsForm.get('startTime').hasError('required') &&
+                      createAppointmentsForm.get('startTime').touched
+                      "
+                    >
+                      Başlangıç Saati Girilmelidir
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Bitiş Saati</mat-label>
+                    <input type="time" matInput formControlName="finishTime"/>
+                    <mat-error
+                      *ngIf="
+                      createAppointmentsForm.get('finishTime').hasError('required') &&
+                      createAppointmentsForm.get('finishTime').touched
+                      "
+                    >
+                    Bitiş Saati Girilmelidir
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>Muayene Aralığı</mat-label>
+                    <input type="number" matInput formControlName="rangeMinutes"/>
+                    <mat-error
+                      *ngIf="
+                      createAppointmentsForm.get('rangeMinutes').hasError('required') &&
+                      createAppointmentsForm.get('rangeMinutes').touched
+                      "
+                    >
+                    Muayene Aralığı Girilmelidir
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button
+                    class="mr-3"
+                    [disabled]="!createAppointmentsForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    Randevu Listesi Oluştur
+                  </button>
+                  <button type="button" mat-button>İptal</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,246 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="font-weight-bold p-t-5 p-l-10 font-17">
+            {{ dialogTitle }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content class="mat-typography content">
+    <div class="row clearfix" style="margin-left: 0;margin-right: 0;">
+      <div style="padding-left: 0px;" class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="header bg-red">
+            <h2>
+              Protokol Tipleri
+              <small>Seçiniz</small>
+            </h2>
+
+          </div>
+          <div style="padding: 0px;" class="body">
+            <div class="example-container">
+        <mat-selection-list #protocolType [(ngModel)]="selectedProtocolTypeId" [multiple]="false">
+          <mat-list-option *ngFor="let protocolType of protocolTypes" [value]="protocolType.id">
+            {{protocolType.typeName}}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+    </div>
+      </div>
+    </div>
+  <div style="padding-left: 0px;" class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+    <div class="card">
+    <div class="header bg-green">
+      <h2>
+        Doktorlar
+        <small>Seçiniz</small>
+      </h2>
+
+    </div>
+      <div style="padding: 0px;" class="body">
+        <div class="example-container">
+    <mat-selection-list #doctor [(ngModel)]="selectedDoctorId" [disabled]="protocolType.selectedOptions.isEmpty()" [multiple]="false">
+      <mat-list-option *ngFor="let doctor of doctors" [value]="doctor.id">
+        {{doctor.name}} {{doctor.surName}}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</div>
+  </div>
+</div>
+<div style="padding-left: 0px;" class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+  <div class="card">
+    <div class="header bg-cyan">
+      <h2>
+        Kurumlar
+        <small>Seçiniz</small>
+      </h2>
+    </div>
+    <div style="padding: 0px;" class="body">
+      <div class="example-container">
+  <mat-selection-list #institution [(ngModel)]="selectedInstitutionId" [disabled]="doctor.selectedOptions.isEmpty()" (ngModelChange)="onNgModelChange($event)"  [multiple]="false">
+    <mat-list-option *ngFor="let institution of institutions" [value]="institution.id">
+      {{institution.institutionName}}
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+</div>
+</div>
+</div>
+      <div *ngIf="dataSource" style="padding-left: 0px;" class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div style="padding: 0px;" class="body">
+            <div class="table-responsive" *ngIf="!institution.selectedOptions.isEmpty()">
+              <div class="materialTableHeader" style="min-width: 375px;">
+                <div class="row" style="margin-left: 0;margin-right: 0;">
+                  <div class="col-7">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>İşlemler</strong>
+                        </h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"
+                          ><i class="material-icons search-icon"
+                            >search</i
+                          ></label
+                        >
+                        <input
+                          placeholder="Arama"
+                          type="text"
+                          (keyup)="applyFilter($event.target.value)"
+                          class="browser-default search-field"
+                          style="width: 100px;"
+                          aria-label="Search box"
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-5">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="refresh()"
+                          >
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          class="icon-button-demo m-l-10"
+                          [hidden]="!selection.hasValue()"
+                        >
+                          <button
+                            mat-mini-fab
+                            color="warn"
+                            (click)="addSelectedRowsForProcess()"
+                          >
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table
+                #table
+                [dataSource]="dataSource"
+                matSort
+                class="mat-cell"
+              >
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    [ngClass]="'tbl-col-width-per-11'"
+                  >
+                    <mat-checkbox
+                      (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [ngClass]="'tbl-checkbox'"
+                    >
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+                    [ngClass]="'tbl-col-width-per-11'"
+                  >
+                    <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [ngClass]="'tbl-checkbox'"
+                    >
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Id</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="processGroupName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >İşlem Grup</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.processGroupName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="processName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >İşlem</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.processName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="institutionName">
+                  <mat-header-cell
+
+                    *matHeaderCellDef
+                    mat-sort-header
+                    >Kurum</mat-header-cell
+                  >
+                  <mat-cell
+
+                    *matCellDef="let row"
+                  >
+                    {{ row.institutionName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="price">
+                  <mat-header-cell
+
+                    *matHeaderCellDef
+                    mat-sort-header
+                    >Ücrets</mat-header-cell
+                  >
+                  <mat-cell
+
+                    *matCellDef="let row"
+                  >
+                    {{ row.price }}</mat-cell
+                  >
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                >
+                </mat-row>
+              </mat-table>
+              <mat-paginator
+                #paginator
+                [pageIndex]="0"
+                [pageSize]="4"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>

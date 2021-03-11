@@ -1,0 +1,451 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="font-weight-bold p-t-5 p-l-10 font-17">
+            {{ dialogTitle }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content class="mat-typography content">
+    <div class="row" style="margin-left: 0;margin-right: 0;">
+      <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="example-container">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Kategori Arama</mat-label>
+              <input type="text" [(ngModel)]="filterText" matInput>
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+          </div>
+            <div class="example-container">
+        <mat-selection-list #shoes [(ngModel)]="selectedOptions" (ngModelChange)="onNgModelChange($event)" [multiple]="false">
+          <mat-list-option [selected]="true" value="all">
+            Tüm İşlemler
+          </mat-list-option>
+          <mat-list-option *ngFor="let category of categories | filter:filterText" [value]="category.name">
+            {{category.name}}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+    </div>
+      </div>
+    </div>
+      <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive" *ngIf="dataSource">
+              <div class="materialTableHeader" style="min-width: 565px;">
+                <div class="row" style="margin-left: 0;margin-right: 0;">
+                  <div class="col-9">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>Hizmetler</strong>
+                        </h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"
+                          ><i class="material-icons search-icon"
+                            >search</i
+                          ></label
+                        >
+                        <input
+                              placeholder="Arama"
+                              type="text"
+                              [(ngModel)]="filterValue"
+                              (keyup)="applyFilter($event.target.value)"
+                              class="browser-default search-field"
+                              aria-label="Search box"
+                            />
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-3">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="refresh()"
+                          >
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          class="icon-button-demo m-l-10"
+                          [hidden]="!selection.hasValue()"
+                        >
+                          <button
+                            mat-mini-fab
+                            color="warn"
+                            (click)="addSelectedRowsForProcess()"
+                            (click)="scroll(target)"
+                          >
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table
+                #table
+                [dataSource]="dataSource"
+                matSort
+                class="mat-cell"
+              >
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    [ngClass]="'tbl-col-width-per-11'"
+                  >
+                    <mat-checkbox
+                      (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [ngClass]="'tbl-checkbox'"
+                    >
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+                    [ngClass]="'tbl-col-width-per-11'"
+                  >
+                    <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [ngClass]="'tbl-checkbox'"
+                    >
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Id</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="groupName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-16'"
+                    >İşlem Grup</mat-header-cell
+                  >
+                  <mat-cell [ngClass]="'tbl-col-width-per-16'" *matCellDef="let row">
+                    {{ row.groupName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="processName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-20'"
+                    >İşlem</mat-header-cell
+                  >
+                  <mat-cell [ngClass]="'tbl-col-width-per-20'" *matCellDef="let row">
+                    {{ row.processName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="price">
+                  <mat-header-cell
+                    [ngClass]="'tbl-col-width-per-6'"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    >Ücret</mat-header-cell
+                  >
+                  <mat-cell
+                    [ngClass]="'tbl-col-width-per-6'"
+                    *matCellDef="let row"
+                  >
+                    {{ row.price }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="isLab">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    [ngClass]="'tbl-col-width-per-14'"
+                    >Laboratuvar
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+                    [ngClass]="'tbl-col-width-per-14'"
+                  >
+                    <ng-container
+                      *ngIf="row.isLab == true; else elseTemplate"
+                    >
+                      Evet
+                    </ng-container>
+                    <ng-template #elseTemplate> Hayır </ng-template>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="isRad">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    [ngClass]="'tbl-col-width-per-11'"
+                    >Radyoloji
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+                    [ngClass]="'tbl-col-width-per-11'"
+                  >
+                    <ng-container
+                      *ngIf="row.isRad == true; else elseTemplate"
+                    >
+                      Evet
+                    </ng-container>
+                    <ng-template #elseTemplate> Hayır </ng-template>
+                  </mat-cell>
+                </ng-container>
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0" [ngClass]="'tbl-col-width-per-6'"
+                    >Eylemler</mat-header-cell
+                  >
+                  <mat-cell [ngClass]="'tbl-col-width-per-6'"
+                    *matCellDef="let row; let i = index"
+                    class="pr-0"
+                  >
+                    <button
+                      mat-icon-button
+                      color="accent"
+                      class="btn-tbl-description"
+                      (click)="addNewProcesses(row)"
+                    >
+                      <mat-icon aria-label="Detail" class="col-white"
+                        >add</mat-icon
+                      >
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedProcessColumns"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedProcessColumns"
+                >
+                </mat-row>
+              </mat-table>
+              <mat-paginator
+                #paginator
+                [pageIndex]="0"
+                [pageSize]="4"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-left: 0;margin-right: 0;">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div #target class="body">
+            <div class="table-responsive" *ngIf="dataSourceForProcess">
+              <div class="materialTableHeader" style="min-width: auto;">
+                <div class="row">
+                  <div class="col-6">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>Seçilen Hizmetler</strong>
+                        </h2>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-6">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="getProcessesAdd()"
+                          >
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          class="icon-button-demo m-l-10"
+                          [hidden]="!dataSourceForProcess.data"
+                        >
+                          <button
+                            mat-mini-fab
+                            color="warn"
+                            (click)="deleteAllNewProcess()"
+                          >
+                            <mat-icon class="col-white">delete</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          class="icon-button-demo m-l-10"
+                          [hidden]="!dataSourceForProcess.data"
+                        >
+                          <button
+                          type="submit"
+              [mat-dialog-close]="1"
+                            mat-mini-fab
+                            color="primary"
+                            (click)="addSelectedRowProcesses()"
+                          >
+                            <mat-icon class="col-white">exit_to_app</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table
+                #table
+                [dataSource]="dataSourceForProcess"
+                matSort
+                class="mat-cell"
+              >
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Id</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="groupName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >İşlem Grup</mat-header-cell
+                  >
+                  <mat-cell  *matCellDef="let row">
+                    {{ row.groupName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="processName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >İşlem</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.processName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="price">
+                  <mat-header-cell
+
+                    *matHeaderCellDef
+                    mat-sort-header
+                    >Ücret</mat-header-cell
+                  >
+                  <mat-cell
+
+                    *matCellDef="let row"
+                  >
+                    {{ row.price }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="isLab">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+
+                    >Laboratuvar
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+
+                  >
+                    <ng-container
+                      *ngIf="row.isLab == true; else elseTemplate"
+                    >
+                      Evet
+                    </ng-container>
+                    <ng-template #elseTemplate> Hayır </ng-template>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="isRad">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+
+                    >Radyoloji
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+
+                  >
+                    <ng-container
+                      *ngIf="row.isRad == true; else elseTemplate"
+                    >
+                      Evet
+                    </ng-container>
+                    <ng-template #elseTemplate> Hayır </ng-template>
+                  </mat-cell>
+                </ng-container>
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0"
+                    >Eylemler</mat-header-cell
+                  >
+                  <mat-cell
+                    *matCellDef="let row; let i = index"
+                    class="pr-0"
+                  >
+                    <button
+                      mat-icon-button
+                      color="accent"
+                      class="btn-tbl-description"
+                      (click)="addNewProcess(i,row)"
+                    >
+                      <mat-icon aria-label="Detail" class="col-white"
+                        >exit_to_app</mat-icon
+                      >
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="accent"
+                      class="btn-tbl-delete"
+                      (click)="$event.stopPropagation()"
+                      (click)="deleteNewProcess(i, row)"
+                    >
+                      <mat-icon aria-label="Delete" class="col-white"
+                        >delete</mat-icon
+                      >
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedProcessAddColumns"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedProcessAddColumns"
+                >
+                </mat-row>
+              </mat-table>
+              <mat-paginator
+                #paginatorAdd
+                [pageIndex]="0"
+                [pageSize]="4"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>

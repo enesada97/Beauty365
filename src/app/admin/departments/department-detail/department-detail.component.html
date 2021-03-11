@@ -1,0 +1,42 @@
+<section *ngIf="department" class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Hasta Profili</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/admin/dashboard/main">
+                  <i class="fas fa-home"></i> Anasayfa</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Hastalar</a>
+              </li>
+              <li class="breadcrumb-item active">{{ department.departmentName| uppercase }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-lg-4 col-md-12">
+          <div class="card border-apply">
+            <div class="m-b-20">
+              <div class="contact-grid">
+                <div class="profile-header l-bg-orange">
+                  <div class="user-name">{{ department.departmentName| uppercase }}</div>
+                  <div class="name-center">Klinikte Hasta</div>
+                </div>
+                <img class="user-img" src="assets/images/user/usrbig4.jpg" alt="">
+                <div class="profile-userbuttons">
+                  <button routerLink="edit-department/{{ department.id }}" mat-flat-button color="primary">Departman Bilgilerini Düzenle</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

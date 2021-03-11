@@ -1,0 +1,320 @@
+<section class="content" style="min-width: 432px;">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Randevu İşlemleri</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Anasayfa</a
+              >
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/admin/appointments/all-appointments" onClick="return false;"
+                >Randevular</a
+              >
+            </li>
+            <li class="breadcrumb-item active">Listele</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive" *ngIf="dataSource">
+              <div class="materialTableHeader" style="min-width: 855px;">
+                <div class="row">
+                  <div class="col-6">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>Randevular</strong>
+                        </h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"
+                          ><i class="material-icons search-icon"
+                            >search</i
+                          ></label
+                        >
+                        <input
+                              placeholder="Arama"
+                              type="text"
+                              (keyup)="applyFilter($event.target.value)"
+                              class="browser-default search-field"
+                              aria-label="Search box"
+                            />
+                      </li>
+                      <li>
+                        <div
+                          class="icon-button-demo m-l-10"
+                          [hidden]="!selection.hasValue()"
+                        >
+                          <button
+                            mat-mini-fab
+                            color="warn"
+                            (click)="removeSelectedRows()"
+                          >
+                            <mat-icon class="col-white">delete</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-6">
+                    <ul class="header-buttons">
+                      <li>
+                        <div
+                        class="icon-button-demo"
+                        >
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="beforeDay()"
+                          >
+                            <mat-icon class="col-white">chevron_left</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                        class="icon-button-demo"
+                        >
+                        <mat-form-field style="width: 10rem;" class="example-full-width mb-1">
+                          <mat-label>Randevu Tarihi Seçiniz</mat-label>
+                          <input matInput [matDatepicker]="picker" placeholder="Tarih Seçiniz" [(ngModel)]="date" (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                        class="icon-button-demo"
+                        >
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="afterDay()"
+                          >
+                            <mat-icon class="col-white">chevron_right</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="addNew()"
+                          >
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="refresh()"
+                          >
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table
+                #table
+                [dataSource]="dataSource"
+                matSort
+                class="mat-cell"
+              >
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    [ngClass]="'tbl-col-width-per-6'"
+                  >
+                    <mat-checkbox
+                      (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [ngClass]="'tbl-checkbox'"
+                    >
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+                    [ngClass]="'tbl-col-width-per-6'"
+                  >
+                    <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [ngClass]="'tbl-checkbox'"
+                    >
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+                <!-- ID Column -->
+                <ng-container matColumnDef="appointmentNo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Id</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">{{ row.appointmentNo }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="patientName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Hasta Ad</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.patientName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="patientSurname">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Soyad</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.patientSurname }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="time">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Saat</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.time }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="typeName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Protokol Tip</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.typeName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="phoneNumber">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Telefon</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.phoneNumber}}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="patientHasArrive">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    [ngClass]="'tbl-col-width-per-8'"
+                    >Durum
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+                    [ngClass]="'tbl-col-width-per-8'"
+                  >
+                    <ng-container *ngIf="row.patientHasArrive == true; else elseTemplate">
+                      <div color="accent" class="btn-tbl-check">
+                      <mat-icon aria-label="Ok" class="col-white">check</mat-icon>
+                    </div>
+                    </ng-container>
+                    <ng-template #elseTemplate><button [disabled]="true" mat-icon-button color="accent" class="btn-tbl-close">
+                      <mat-icon aria-label="Ok" class="col-white">close</mat-icon>
+                    </button></ng-template>
+                  </mat-cell>
+                </ng-container>
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0"
+                    >Eylemler</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row; let i = index" class="pr-0">
+                    <button mat-icon-button [matMenuTriggerFor]="menu2">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu2="matMenu">
+                      <button mat-menu-item [hidden]="row.phoneNumber==null" [matMenuTriggerFor]="protocolProcesses">
+                        <mat-icon>group</mat-icon>
+                        <span>Protokol İşlemleri</span>
+                      </button>
+                      <button mat-menu-item [hidden]="row.phoneNumber==null"
+                      (click)="$event.stopPropagation()"
+                      (click)="acceptForProcess(row)">
+                        <mat-icon>check</mat-icon>
+                        <span>Muayene Kabul</span>
+                      </button>
+                      <button mat-menu-item [matMenuTriggerFor]="appointmentProcesses">
+                        <mat-icon>face</mat-icon>
+                        <span>Hasta İşlemleri</span>
+                      </button>
+                    </mat-menu>
+                    <mat-menu #protocolProcesses="matMenu">
+                      <button mat-menu-item
+                      (click)="$event.stopPropagation()"
+                      (click)="addProtocolForPatient(row)">
+                        <mat-icon>add</mat-icon>
+                        <span>Ekle</span>
+                      </button>
+                    </mat-menu>
+                    <mat-menu #appointmentProcesses="matMenu">
+                      <button mat-menu-item *ngIf="!(row.patientName==null&&row.protocolId==0);else newAppointment"
+                      (click)="editCall(row)">
+                        <mat-icon>edit</mat-icon>
+                        <span>Düzenle</span>
+                      </button>
+                      <button mat-menu-item *ngIf="row.phoneNumber"
+                      (click)="$event.stopPropagation()"
+                      (click)="patientDescription(row)">
+                        <mat-icon>description</mat-icon>
+                        <span>Hasta Detay</span>
+                      </button>
+                      <ng-template #newAppointment>
+                        <button mat-menu-item
+                        (click)="$event.stopPropagation()"
+                        (click)="editCall(row)">
+                          <mat-icon>add</mat-icon>
+                          <span>Yeni Randevu</span>
+                        </button>
+                      </ng-template>
+                      <button mat-menu-item
+                      (click)="$event.stopPropagation()"
+                      (click)="deleteItem(i, row)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Sil</span>
+                      </button>
+                    </mat-menu>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                  matRipple
+                >
+                </mat-row>
+              </mat-table>
+              <mat-paginator
+                #paginator
+                [pageIndex]="0"
+                [pageSize]="25"
+                [pageSizeOptions]="[25, 100]"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

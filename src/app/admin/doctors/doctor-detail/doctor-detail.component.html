@@ -1,0 +1,103 @@
+<section *ngIf="doctor&&department" class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Doktor Profili</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/admin/dashboard/main">
+                  <i class="fas fa-home"></i> Anasayfa</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Doktorlar</a>
+              </li>
+              <li class="breadcrumb-item active">{{ doctor.name| uppercase }} {{ doctor.surName| uppercase }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-lg-4 col-md-12">
+          <div class="card border-apply">
+            <div class="m-b-20">
+              <div class="contact-grid">
+                <div class="profile-header bg-green">
+                  <div class="user-name">{{ doctor.name| uppercase }} {{ doctor.surName| uppercase }}</div>
+                  <div class="name-center">Klinikte Doktor</div>
+                </div>
+                <img class="user-img" src="assets/images/user/usrbig4.jpg" alt="">
+                <p>
+                  <i class="material-icons">location_on</i>
+                  <br />
+                  {{doctor.address}}
+                </p>
+                <div>
+                  <span class="phone">
+                    <i class="material-icons">phone</i>{{doctor.phone}}</span>
+                </div>
+                <div class="profile-userbuttons">
+                  <button routerLink="edit-doctor/{{ doctor.id }}" mat-flat-button color="primary">Doktor Bilgilerini Düzenle</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="header">
+              <h2>Doktor İletişim Bilgileri</h2>
+            </div>
+            <div class="tab-pane body active" id="about">
+              <small class="text-muted">Email Adres: </small>
+              <p>{{doctor.eMail}}</p>
+              <hr>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8 col-md-12">
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" aria-expanded="true">
+              <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="card project_widget">
+                    <div class="header">
+                      <h5>Doktor Hakkında</h5>
+                    </div>
+                    <div class="body">
+                      <div class="row">
+                        <div class="col-md-3 col-6 b-r">
+                          <strong>Bölüm</strong>
+                          <br>
+                          
+                          <p class="text-muted">{{department.departmentName}}</p>
+                        </div>
+                        <div class="col-md-3 col-6 b-r">
+                          <strong>Ünvan</strong>
+                          <br>
+                          <p class="text-muted">{{doctor.speciality}}</p>
+                        </div>
+                        <div class="col-md-3 col-6">
+                          <strong>T.C Kimlik</strong>
+                          <br>
+                          <p class="text-muted">{{doctor.identityNumber}}</p>
+                        </div>
+                        <div class="col-md-3 col-6 b-r">
+                          <strong>Lisans numarası</strong>
+                          <br>
+                          <p class="text-muted">{{doctor.licenceNumber}}</p>
+                        </div>
+                      </div>
+                      <hr>
+                      <br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

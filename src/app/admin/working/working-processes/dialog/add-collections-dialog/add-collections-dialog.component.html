@@ -1,0 +1,643 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="font-weight-bold p-t-5 p-l-10 font-17">
+            {{ dialogTitle }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content class="mat-typography content">
+    <div class="row" style="margin-left: 0; margin-right: 0">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive" *ngIf="dataSource">
+              <div class="body">
+                <!-- Fiyatlar -->
+                <div class="row">
+                  <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="info-box6-little primary">
+                      <i class="fas fa-hand-holding"></i>
+                      <span class="count-numbers">{{ selectedPay }}₺</span>
+                      <span class="count-name">Ödenecek</span>
+                      <input
+                        hidden
+                        name="selectedPay"
+                        [(ngModel)]="selectedPay"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="info-box6-little success">
+                      <i class="fas fa-money-bill-wave"></i>
+                      <span class="count-numbers"
+                        >{{ selectedPay - arrears }}₺</span
+                      >
+                      <span class="count-name">Ödenen</span>
+                      <!-- <input hidden name="totalPrice" [(ngModel)]="totalPrice" /> -->
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="info-box6-little danger">
+                      <i class="fas fa-percent"></i>
+                      <span
+                        class="count-numbers"
+                        *ngIf="saleValue > 0; else noDiscount"
+                        >{{ saleValue }}₺</span
+                      >
+                      <ng-template #noDiscount>
+                        <ng-container *ngIf="discount > 0; else noDiscountTwo"
+                          ><span class="count-numbers"
+                            >%{{ discount }}</span
+                          ></ng-container
+                        >
+                      </ng-template>
+                      <ng-template #noDiscountTwo>
+                        <ng-container *ngIf="latestPrice > 0"
+                          ><span class="count-numbers"
+                            >{{ discountFinder }}₺</span
+                          >
+                          <input
+                            hidden
+                            name="discountFinder"
+                            [(ngModel)]="discountFinder"
+                          /> </ng-container
+                      ></ng-template>
+                      <span class="count-name">İndirim</span>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="info-box6-little info">
+                      <i class="fas fa-minus-circle"></i>
+                      <span class="count-numbers">{{ arrears }}₺</span>
+                      <span class="count-name">Kalan</span>
+                      <input
+                        hidden
+                        type="number"
+                        name="arrears"
+                        [(ngModel)]="arrears"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <mat-accordion>
+                  <mat-expansion-panel #panel1>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title style="justify-content: center">
+                        <p class="font-bold col-teal">
+                          Tahsilat Ödeme İşlemleri
+                        </p>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div [hidden]="!clickDiscount" class="alert alert-warning">
+                      <strong>Uyarı!</strong> İndirim uygulandığında tahsilet işlemleri düzenlenemez,
+                      <a (click)="deleteDiscount()" class="alert-link">İndirimi iptal etmek için tıklayınız</a>.
+                    </div>
+                    <div class="materialTableHeader" style="min-width: 515px">
+                      <div class="row">
+                        <div class="col-9">
+                          <ul class="header-buttons-left ml-0">
+                            <li class="dropdown">
+                              <h2>
+                                <strong>Tahsilat Ekle</strong>
+                              </h2>
+                            </li>
+                            <li class="dropdown m-l-20">
+                              <label for="search-input"
+                                ><i class="material-icons search-icon"
+                                  >search</i
+                                ></label
+                              >
+                              <input
+                                placeholder="Arama"
+                                type="text"
+                                (keyup)="applyFilter($event.target.value)"
+                                class="browser-default search-field"
+                                aria-label="Search box"
+                              />
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="col-3">
+                          <ul class="header-buttons">
+                            <li>
+                              <div class="icon-button-demo">
+                                <button
+                                  mat-mini-fab
+                                  color="primary"
+                                  (click)="refresh()"
+                                >
+                                  <mat-icon class="col-white">refresh</mat-icon>
+                                </button>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="icon-button-demo">
+                                <button
+                                  mat-mini-fab
+                                  color="primary"
+                                  (click)="panel1.toggle()"
+                                >
+                                  <mat-icon class="col-white">remove</mat-icon>
+                                </button>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <mat-table
+                      #table
+                      [dataSource]="dataSource"
+                      matSort
+                      class="mat-cell"
+                    >
+                      <ng-container matColumnDef="select">
+                        <mat-header-cell
+                          *matHeaderCellDef
+                          [ngClass]="'tbl-col-width-per-8'"
+                        >
+                          <mat-checkbox
+                          [disabled]="clickDiscount"
+                            (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="
+                              selection.hasValue() && !isAllSelected()
+                            "
+                            [ngClass]="'tbl-checkbox'"
+                          >
+                          </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell
+                          *matCellDef="let row"
+                          [ngClass]="'tbl-col-width-per-8'"
+                        >
+                          <mat-checkbox
+                          [disabled]="clickDiscount"
+                            (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            (change)="singleSelectRow($event, row)"
+                            [checked]="selection.isSelected(row)"
+                            [ngClass]="'tbl-checkbox'"
+                          >
+                          </mat-checkbox>
+                        </mat-cell>
+                      </ng-container>
+                      <!-- ID Column -->
+                      <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="groupName">
+                        <mat-header-cell *matHeaderCellDef
+                          >İşlem Grup</mat-header-cell
+                        >
+                        <mat-cell *matCellDef="let row">
+                          {{ row.groupName }}</mat-cell
+                        >
+                      </ng-container>
+                      <ng-container matColumnDef="processName">
+                        <mat-header-cell *matHeaderCellDef
+                          >İşlem</mat-header-cell
+                        >
+                        <mat-cell *matCellDef="let row">
+                          {{ row.processName }}</mat-cell
+                        >
+                      </ng-container>
+                      <ng-container matColumnDef="price">
+                        <mat-header-cell
+                          [ngClass]="'tbl-col-width-per-11'"
+                          *matHeaderCellDef
+                          >Ücret</mat-header-cell
+                        >
+                        <mat-cell
+                          [ngClass]="'tbl-col-width-per-11'"
+                          *matCellDef="let row"
+                        >
+                          {{ row.price }}</mat-cell
+                        >
+                      </ng-container>
+                      <!-- actions -->
+                      <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef class="pr-0"
+                          >Tahsilat Tutarı</mat-header-cell
+                        >
+                        <mat-cell
+                          *matCellDef="let row; let i = index"
+                          class="pr-0"
+                        >
+                          <mat-form-field
+                            class="example-full-width"
+                            appearance="outline"
+                          >
+                            <mat-label>Tahsilat Tutarı</mat-label>
+                            <input
+                            [disabled]="clickDiscount"
+                              style="font-weight: bold; color: black"
+                              type="number"
+                              matInput
+                              name="selectedPays"
+                              [(ngModel)]="selectedPays[i]"
+                              (ngModelChange)="onChangeFirst(row)"
+                            />
+                            <mat-icon matSuffix
+                              ><i class="fas fa-lira-sign"></i
+                            ></mat-icon>
+                          </mat-form-field>
+                        </mat-cell>
+                      </ng-container>
+                      <mat-header-row
+                        *matHeaderRowDef="displayedCollections"
+                      ></mat-header-row>
+                      <mat-row
+                        *matRowDef="let row; columns: displayedCollections"
+                      >
+                      </mat-row>
+                    </mat-table>
+                    <mat-paginator #paginator [pageIndex]="0" [pageSize]="5">
+                    </mat-paginator>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+              <div class="body">
+                <!-- akordiyon -->
+                <div class="row">
+                  <div class="col-12 mb-3">
+                    <mat-accordion>
+                      <mat-expansion-panel #panel2>
+                        <mat-expansion-panel-header>
+                          <mat-panel-title style="justify-content: center">
+                            <p class="font-bold col-teal">
+                              İndirim uygulamak ister misiniz ?
+                            </p>
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                          <div
+                            class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3"
+                          >
+                            <mat-form-field
+                              class="example-full-width"
+                              appearance="outline"
+                            >
+                              <mat-label>İndirim Tutarı</mat-label>
+                              <input
+                                [formControl]="formControlForDiscountPrice"
+                                style="font-weight: bold; color: black"
+                                matInput
+                                mask="separator.2"
+                                thousandSeparator=","
+                                [attr.disabled]="discount || latestPrice"
+                                name="saleValue"
+                                [(ngModel)]="saleValue"
+                              />
+                              <mat-icon matSuffix
+                                ><i class="fas fa-lira-sign"></i
+                              ></mat-icon>
+                              <mat-error
+                                *ngIf="
+                                  formControlForDiscountPrice.hasError('max')
+                                "
+                              >
+                                İndirim maksimum kalan ödeme
+                                <span class="font-bold">({{ arrears }}₺) </span>
+                                değeri kadar olabilir
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div
+                            class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3"
+                          >
+                            <mat-form-field
+                              class="example-full-width"
+                              appearance="outline"
+                            >
+                              <mat-label>İndirim Oranı</mat-label>
+                              <input
+                                [formControl]="formControlForDiscount"
+                                style="font-weight: bold; color: black"
+                                matInput
+                                mask="separator.2"
+                                thousandSeparator=","
+                                [attr.disabled]="saleValue || latestPrice"
+                                name="discount"
+                                [(ngModel)]="discount"
+                              />
+                              <mat-icon matSuffix
+                                ><i class="fas fa-percentage"></i
+                              ></mat-icon>
+                              <mat-error
+                                *ngIf="formControlForDiscount.hasError('max')"
+                              >
+                                İndirim oranı en fazla
+                                <span class="font-bold">%100</span> olabilir
+                              </mat-error>
+                              <mat-error
+                                *ngIf="formControlForDiscount.hasError('min')"
+                              >
+                                İndirim oranı en az
+                                <span class="font-bold">%1</span> olabilir
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div
+                            class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3"
+                          >
+                            <mat-form-field
+                              class="example-full-width"
+                              appearance="outline"
+                            >
+                              <mat-label>Son Tutar</mat-label>
+                              <input
+                                [formControl]="
+                                  formControlForDiscountLatestPrice
+                                "
+                                style="font-weight: bold; color: black"
+                                matInput
+                                type="number"
+                                [attr.disabled]="(discount || saleValue) >= 0"
+                                name="latestPrice"
+                                [(ngModel)]="latestPrice"
+                              />
+                              <mat-icon matSuffix
+                                ><i class="fas fa-lira-sign"></i
+                              ></mat-icon>
+                              <mat-error
+                                *ngIf="
+                                  formControlForDiscountLatestPrice.hasError(
+                                    'max'
+                                  )
+                                "
+                              >
+                                İndirim maksimum kalan ödeme
+                                <span class="font-bold">({{ arrears }}₺) </span>
+                                değeri kadar olabilir
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div
+                          class="alert alert-info"
+                          *ngIf="!(discount || saleValue || latestPrice)"
+                        >
+                          <strong>Uyarı!</strong> Lütfen indirim eklemek için
+                          bir indirim türü seçiniz!
+                        </div>
+                        <div class="row">
+                          <div
+                            class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mt-3"
+                          >
+                            <button
+                              [hidden]="clickDiscount"
+                              class="mr-3"
+                              (click)="passParameter()"
+                              mat-raised-button
+                              color="accent"
+                              [disabled]="
+                                !(
+                                  (discount || saleValue || latestPrice) &&
+                                  formControlForDiscountLatestPrice.valid &&
+                                    formControlForDiscountPrice.valid &&
+                                    formControlForDiscount.valid &&
+                                  clickDiscount == false
+                                )
+                              "
+                            >
+                              İndirim Ekle
+                            </button>
+                          </div>
+                          <div
+                            class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mt-3"
+                          >
+                            <button
+                              [hidden]="!clickDiscount"
+                              class="mr-3"
+                              (click)="deleteDiscount()"
+                              mat-raised-button
+                              color="warn"
+                            >
+                              İndirim İptal
+                            </button>
+                          </div>
+                        </div>
+                      </mat-expansion-panel>
+                    </mat-accordion>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field
+                      class="example-full-width"
+                      appearance="outline"
+                    >
+                      <mat-label>Ödeme Tipi</mat-label>
+                      <mat-select [(value)]="selectedPayType" required>
+                        <mat-option value="1">Nakit Ödeme</mat-option>
+                        <mat-option value="2">Kredi Kartı</mat-option>
+                      </mat-select>
+                      <mat-icon matSuffix>payment</mat-icon>
+                      <mat-error> Ödeme Tipi Seçiniz </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-5 col-lg-5 col-md-8 col-sm-8 mb-3">
+                    <mat-form-field
+                      class="example-full-width"
+                      appearance="outline"
+                    >
+                      <mat-label>Tahsilat Tutarı</mat-label>
+                      <input
+                        [formControl]="formControl"
+                        style="font-weight: bold; color: black"
+                        matInput
+                        type="number"
+                        name="addPay"
+                        [(ngModel)]="addPay"
+                      />
+                      <mat-icon matSuffix
+                        ><i class="fas fa-lira-sign"></i
+                      ></mat-icon>
+                      <mat-error *ngIf="formControl.hasError('max')">
+                        Tahsilat tutarı maksimum kalan ödeme
+                        <span class="font-bold">({{ arrears }}₺) </span> değeri
+                        kadar olmalıdır
+                      </mat-error>
+                    <mat-error *ngIf="formControl.hasError('min')">
+                        Tahsilat tutarı minimum <span class="font-bold">1₺</span> değeri
+                        kadar olmalıdır
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 mb-3 p-2">
+                    <button
+                      mat-mini-fab
+                      color="primary"
+                      class="mr-3"
+                      (click)="addPayment()"
+                      [disabled]="!(formControl.valid && selectedPayType && formControl.value)"
+                    >
+                      <mat-icon>add_circle_outline</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive" *ngIf="selectedPay!=arrears">
+              <div class="materialTableHeader" style="min-width: auto">
+                <div class="row">
+                  <div class="col-6">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>Seçilen Ödemeler</strong>
+                        </h2>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-6">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="getCollectionsAdd()"
+                          >
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          class="icon-button-demo m-l-10"
+                          [hidden]="!dataSourceForCollection.data"
+                        >
+                          <button
+                            mat-mini-fab
+                            color="warn"
+                            (click)="deleteAllPayments()"
+                          >
+                            <mat-icon class="col-white">delete</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          class="icon-button-demo m-l-10"
+                          [hidden]="!dataSourceForCollection.data"
+                        >
+                          <button
+                            type="submit"
+                            mat-mini-fab
+                            color="primary"
+                            (click)="addCollections()"
+                            [disabled]="
+                              !(arrears==0 && selectedPayType)
+                            "
+                          >
+                            <mat-icon class="col-white">exit_to_app</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table
+                #table
+                [dataSource]="dataSourceForCollection"
+                matSort
+                class="mat-cell"
+              >
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Id</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="paymentType">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Ödeme Tipi</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    <ng-container
+                      *ngIf="row.paymentType == 1; else elseTemplate"
+                    >
+                      Nakit
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      Kredi Kartı
+                    </ng-template></mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="discount">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >İndirim</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    <ng-container
+                      *ngIf="row.discount == true; else elseTemplate"
+                    >
+                      Evet
+                    </ng-container>
+                    <ng-template #elseTemplate> Hayır </ng-template></mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="paymentValue">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Ödenecek</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.paymentValue }}</mat-cell
+                  >
+                </ng-container>
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0"
+                    >Eylemler</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row; let i = index" class="pr-0">
+                    <button
+                      mat-icon-button
+                      color="accent"
+                      class="btn-tbl-delete"
+                      (click)="$event.stopPropagation()"
+                      (click)="deletePayment(i, row)"
+                    >
+                      <mat-icon aria-label="Delete" class="col-white"
+                        >delete</mat-icon
+                      >
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedCollectionsBeforePayment"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="
+                    let row;
+                    columns: displayedCollectionsBeforePayment
+                  "
+                >
+                </mat-row>
+              </mat-table>
+              <mat-paginator #paginatorAdd [pageIndex]="0" [pageSize]="4">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

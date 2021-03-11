@@ -1,0 +1,198 @@
+<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Hasta Arama</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/admin/dashboard/main">
+                  <i class="fas fa-home"></i> Anasayfa</a
+                >
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">İşlemler</a>
+              </li>
+              <li class="breadcrumb-item active">Arama</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="header">
+              <h2><strong>Arama</strong> Sayfası</h2>
+            </div>
+            <div class="body">
+              <form class="m-4" [formGroup]="processForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width mb-3">
+                        <mat-label>İşlem Grubu</mat-label>
+                        <mat-select formControlName="processGroupId" multiple required>
+                          <mat-option *ngFor="let processGroup of processGroups" [value]="processGroup.id">{{processGroup.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <p>Selected: {{processForm.get('processGroupId').value}}</p>
+                  </div>
+                </div>
+  
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <button
+                      class="mr-3 btn btn-block"
+                      mat-raised-button
+                      color="primary"
+                    >
+                      Arama
+                    </button>
+                  </div>
+                </div>
+              </form>
+                <div *ngIf="searchedProcesses" class="table-responsive">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      (keyup)="applyFilter($event.target.value)"
+                      placeholder="Filtrele"
+                    />
+                  </mat-form-field>
+                  <mat-table
+                    #table
+                    [dataSource]="dataSource"
+                    matSort
+                    class="mat-cell"
+                  >
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="id">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header
+                        >Id</mat-header-cell
+                      >
+                      <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header
+                        >Ad</mat-header-cell
+                      >
+                      <mat-cell *matCellDef="let row"> {{ row.name }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="processGroupId">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header
+                        >Grup</mat-header-cell
+                      >
+                      <mat-cell *matCellDef="let row"> {{ row.processGroupId }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="unit">
+                      <mat-header-cell [ngClass]="'tbl-col-width-per-11'" *matHeaderCellDef mat-sort-header
+                        >Birim</mat-header-cell
+                      >
+                      <mat-cell [ngClass]="'tbl-col-width-per-11'" *matCellDef="let row">
+                        {{ row.unit }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="doctorRatio">
+                      <mat-header-cell [ngClass]="'tbl-col-width-per-11'" *matHeaderCellDef mat-sort-header
+                        >Dr.Prim</mat-header-cell
+                      >
+                      <mat-cell [ngClass]="'tbl-col-width-per-11'" *matCellDef="let row">
+                        {{ row.doctorRatio }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="cost">
+                        <mat-header-cell [ngClass]="'tbl-col-width-per-11'" *matHeaderCellDef mat-sort-header
+                          >Maliyet</mat-header-cell
+                        >
+                        <mat-cell [ngClass]="'tbl-col-width-per-11'" *matCellDef="let row">
+                          {{ row.cost }}</mat-cell
+                        >
+                      </ng-container>
+                      <ng-container matColumnDef="taxRatio">
+                        <mat-header-cell [ngClass]="'tbl-col-width-per-11'" *matHeaderCellDef mat-sort-header
+                          >Vergi Oran</mat-header-cell
+                        >
+                        <mat-cell [ngClass]="'tbl-col-width-per-11'" *matCellDef="let row">
+                          {{ row.taxRatio }}</mat-cell
+                        >
+                      </ng-container>
+                      <ng-container matColumnDef="isLab">
+                        <mat-header-cell
+                          *matHeaderCellDef
+                          mat-sort-header
+                          [ngClass]="'tbl-col-width-per-8'"
+                          >Laboratuvar mı?
+                        </mat-header-cell>
+                        <mat-cell
+                          *matCellDef="let row"
+                          [ngClass]="'tbl-col-width-per-8'"
+                        >
+                          <ng-container *ngIf="row.isLab == true; else elseTemplate">
+                            Evet
+                          </ng-container>
+                          <ng-template #elseTemplate> Hayır </ng-template>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="isRad">
+                        <mat-header-cell
+                          *matHeaderCellDef
+                          mat-sort-header
+                          [ngClass]="'tbl-col-width-per-8'"
+                          >Radyoloji mi?
+                        </mat-header-cell>
+                        <mat-cell
+                          *matCellDef="let row"
+                          [ngClass]="'tbl-col-width-per-8'"
+                        >
+                          <ng-container *ngIf="row.isRad == true; else elseTemplate">
+                            Evet
+                          </ng-container>
+                          <ng-template #elseTemplate> Hayır </ng-template>
+                        </mat-cell>
+                      </ng-container>
+                    <!-- actions -->
+                    <ng-container matColumnDef="actions">
+                      <mat-header-cell *matHeaderCellDef class="pr-0"
+                        >Eylemler</mat-header-cell
+                      >
+                      <mat-cell *matCellDef="let row; let i = index" class="pr-0">
+                        <button
+                        mat-icon-button
+                        routerLink="edit-patient/{{row.id}}"
+                        color="accent"
+                        class="btn-tbl-edit"
+                      >
+                        <mat-icon aria-label="Edit" class="col-white"
+                          >edit</mat-icon
+                        >
+                      </button>
+                        <button
+                          mat-icon-button
+                          routerLink="patient-detail/{{ row.id }}"
+                          color="accent"
+                          class="btn-tbl-description"
+                        >
+                          <mat-icon aria-label="Detail" class="col-white"
+                            >description</mat-icon
+                          >
+                        </button>
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row
+                      *matHeaderRowDef="displayedColumns"
+                    ></mat-header-row>
+                    <mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                  >
+                  </mat-row>
+                  </mat-table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+  </section>
+  

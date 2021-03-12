@@ -98,9 +98,6 @@ import { TestComponent } from './test/test.component';
     MatListModule,
     MatCardModule
   ],
-  providers: [{
-    provide: ErrorHandler,
-    useClass: GlobalErrorHandler
-  },PatientService,MedicalAlertService,AppointmentService,ProtocolService,MedicalService,CollectionService,WorkingService,ProtocolTypeProcessService],
+  providers: [PatientService,MedicalAlertService,AppointmentService,ProtocolService,MedicalService,CollectionService,WorkingService,ProtocolTypeProcessService],
 })
 export class PatientsModule {}

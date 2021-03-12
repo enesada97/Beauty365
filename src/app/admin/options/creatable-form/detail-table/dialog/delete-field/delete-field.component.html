@@ -1,0 +1,39 @@
+<div class="container">
+  <h3 mat-dialog-title>Emin misiniz?</h3>
+  <div mat-dialog-content>
+    <ul class="clearfix">
+      <li>
+        <p><span class="font-weight-bold">Bulunduğu Form Id: </span>{{ data.formTableId }}</p>
+      </li>
+      <li>
+        <p><span class="font-weight-bold">Durum: </span>
+          <ng-container *ngIf="data.isOpen == true; else elseTemplate">
+           Açık
+          </ng-container>
+          <ng-template #elseTemplate>Kapalı</ng-template></p>
+      </li>
+      <li>
+        <p><span class="font-weight-bold">Alan Başlığı: </span>{{ data.label }}</p>
+      </li>
+      <li>
+        <p><span class="font-weight-bold">Alan Tipi: </span>{{ data.type }}</p>
+      </li>
+      <li *ngFor="let fieldValue of formFieldSelectionValue; index as i">
+        <p>
+          <span class="font-weight-bold">Alan Seçenekleri {{i+1}}: </span
+          >{{ fieldValue.value }}
+        </p>
+      </li>
+    </ul>
+  </div>
+  <div mat-dialog-actions class="mb-1">
+    <button
+      mat-flat-button
+      color="warn"
+      (click)="confirmDelete()"
+    >
+      Sil
+    </button>
+    <button mat-flat-button (click)="onNoClick()" tabindex="-1">İptal</button>
+  </div>
+</div>

@@ -41,10 +41,14 @@ import { PreviewComponent } from './creatable-form/dialog/preview/preview.compon
 import { FormFieldSelectionValueService } from 'src/app/core/service/form-field-selection-value.service';
 import { FormFieldService } from 'src/app/core/service/form-field.service';
 import { FormTableService } from 'src/app/core/service/form-table.service';
+import { DetailTableComponent } from './creatable-form/detail-table/detail-table.component';
+import { SaveFieldComponent } from './creatable-form/detail-table/dialog/save-field/save-field.component';
+import { DeleteFieldComponent } from './creatable-form/detail-table/dialog/delete-field/delete-field.component';
+import { SaveFieldValueComponent } from './creatable-form/detail-table/dialog/save-field-value/save-field-value.component';
 
 
 @NgModule({
-  declarations: [ProtocolTypeProcessesComponent, SaveProtocolTypeProcessComponent, DeleteProtocolTypeProcessComponent, OptionalSettingsComponent, CreatableFormComponent, DeleteComponent, SaveComponent, PreviewComponent],
+  declarations: [ProtocolTypeProcessesComponent, SaveProtocolTypeProcessComponent, DeleteProtocolTypeProcessComponent, OptionalSettingsComponent, CreatableFormComponent, DeleteComponent, SaveComponent, PreviewComponent, DetailTableComponent, SaveFieldComponent, DeleteFieldComponent, SaveFieldValueComponent],
   imports: [
     CommonModule,
     OptionsRoutingModule,

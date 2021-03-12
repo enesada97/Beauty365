@@ -1,1 +1,85 @@
-<p>preview works!</p>
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="font-weight-bold p-t-5 p-l-10 font-17">
+            {{ dialogTitle }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form
+      class="register-form m-4 row"
+    >
+    <ng-container *ngFor="let control of dynamicFormArray.fields">
+      <ng-container [ngSwitch]="control.type">
+        <ng-container *ngSwitchCase="'input'">
+          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>{{control.label}}</mat-label>
+            <input matInput>
+          </mat-form-field>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'select'">
+          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>{{control.label}}</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let option of control.values" [value]="option.value">{{option.value}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'radio'">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <label class="pr-5" *ngFor="let option of control.values">
+              <input [value]="option.value" type="radio" name="{{control.formControlName}}">{{option.value}}
+            </label>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'date'">
+          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>{{control.label}}</mat-label>
+              <input matInput [matDatepicker]="picker3">
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'textarea'">
+          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>{{control.label}}</mat-label>
+              <textarea matInput></textarea>
+            </mat-form-field>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="onNoClick()"
+              tabindex="-1"
+            >
+              Kapat
+            </button>
+          </div>
+        </div>
+    </form>
+  </div>
+</div>

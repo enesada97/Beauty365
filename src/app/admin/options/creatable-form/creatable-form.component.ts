@@ -13,6 +13,8 @@ import { FormFieldService } from "src/app/core/service/form-field.service";
 import { FormTableService } from "src/app/core/service/form-table.service";
 import { SweetalertService } from "src/app/core/service/sweetalert.service";
 import { DeleteComponent } from "./dialog/delete/delete.component";
+import { PreviewComponent } from "./dialog/preview/preview.component";
+import { SaveComponent } from "./dialog/save/save.component";
 
 @Component({
   selector: "app-creatable-form",
@@ -21,7 +23,6 @@ import { DeleteComponent } from "./dialog/delete/delete.component";
 })
 export class CreatableFormComponent implements OnInit {
   displayedColumns = ["id", "name", "isOpen", "addedBy", "actions"];
-  selection = new SelectionModel<FormTable>(true, []);
   index: number;
   id: number;
   formTables: FormTable[];
@@ -63,42 +64,36 @@ export class CreatableFormComponent implements OnInit {
     this.getFormOfTables();
   }
   editCall(row) {
-    // this.id = row.id;
-    // this.formFieldService.getById(this.id).subscribe((data) => {
-    //   this.protocol = data;
-    //   if (this.protocol) {
-    //     console.log(this.protocol);
-    //     const dialogRef = this.dialog.open(AddProtocolDialogComponent, {
-    //       data: {
-    //         protocol: this.protocol,
-    //         action: "edit",
-    //       },
-    //     });
-    //     dialogRef.afterClosed().subscribe((result) => {
-    //       if (result === 1) {
-    //         this.refresh();
-    //       }
-    //     });
-    //   }
-    // });
+        const dialogRef = this.dialog.open(SaveComponent, {
+          data: {
+            formTable: row,
+            action: "edit",
+          },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result === 1) {
+            this.refresh();
+          }
+        });
   }
   addNew() {
-    // const dialogRef = this.dialog.open(AddAppointmentDialogComponent, {
-    //   data: {
-    //     appointment: this.appointment,
-    //     action: "add",
-    //     optionalSetting:this.optionalSetting
-    //   },
-    // });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result === 1) {
-    //     this.refresh();
-    //   }
-    // });
+    const dialogRef = this.dialog.open(SaveComponent, {
+      data: {
+        action: "add"
+      },
+    });
+    dialogRef.afterClosed().subscribe((result:FormTable) => {
+      console.log("result:" +result);
+      if(result){
+          this.refresh();
+          this.router.navigateByUrl("admin/options/detail-table/"+result.id);
+        }
+        this.refresh();
+    });
   }
   previewItem(row){
     this.id = row.id;
-    const dialogRef = this.dialog.open(DeleteComponent, {
+    const dialogRef = this.dialog.open(PreviewComponent, {width:'40%',minHeight:'60%',
       data: row
     });
   }

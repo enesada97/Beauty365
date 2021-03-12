@@ -1,0 +1,194 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="font-weight-bold p-t-5 p-l-10 font-17">
+            {{ dialogTitle }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content class="mat-typography content">
+    <div class="row" style="margin-left: 0;margin-right: 0;">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <form
+      class="register-form m-4"
+      [formGroup]="fieldValueForm"
+      (ngSubmit)="submit()"
+    >
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Seçenek Değeri</mat-label>
+            <input matInput formControlName="value" type="text" />
+            <mat-error *ngIf="fieldValueForm.get('value').hasError('required')">
+              Seçenek Değeri gereklidir
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button
+              mat-raised-button
+              color="primary"
+              [type]="submit"
+              [disabled]="!fieldValueForm.valid"
+              (click)="confirmAdd()"
+              class="btn-block"
+            >
+              Ekle
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive" *ngIf="dataSource">
+              <div class="materialTableHeader" style="min-width: 480px;">
+                <div class="row" style="margin-left: 0;margin-right: 0;">
+                  <div class="col-9">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>Seçenekler</strong>
+                        </h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"
+                          ><i class="material-icons search-icon"
+                            >search</i
+                          ></label
+                        >
+                        <input
+                              placeholder="Arama"
+                              type="text"
+                              [(ngModel)]="filterValue"
+                              (keyup)="applyFilter($event.target.value)"
+                              class="browser-default search-field"
+                              aria-label="Search box"
+                              style="width: 200px;"
+                            />
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-3">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="refreshFieldValue()"
+                          >
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table
+                #table
+                [dataSource]="dataSource"
+                matSort
+                class="mat-cell"
+              >
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Id</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="value">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >Seçenek</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.value }}</mat-cell
+                  >
+                </ng-container>
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0"
+                    >Eylemler</mat-header-cell
+                  >
+                  <mat-cell
+                    *matCellDef="let row; let i = index"
+                    class="pr-0"
+                  >
+                    <button
+                      mat-icon-button
+                      color="accent"
+                      class="btn-tbl-delete"
+                      (click)="deleteItem(i,row)"
+                    >
+                      <mat-icon aria-label="Detail" class="col-white"
+                        >delete</mat-icon
+                      >
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                ></mat-header-row>
+                <!-- <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row> -->
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                  [style.cursor]="'pointer'"
+                  matRipple
+                >
+                </mat-row>
+              </mat-table>
+              <!-- Loading spinner -->
+              <div *ngIf="formFieldSelectionValueService.isTblLoading" class="tbl-spinner">
+                <mat-progress-spinner
+                  color="primary"
+                  [diameter]="40"
+                  mode="indeterminate"
+                >
+                </mat-progress-spinner>
+              </div>
+              <div
+                *ngIf="!formFieldSelectionValueService.isTblLoading"
+                class="no-results"
+                [style.display]="
+                  dataSource.data.length == 0 ? '' : 'none'
+                "
+              >
+              <p class="alert alert-danger">Sistem herhangi bir kayıt bulunamadı</p>
+              </div>
+              <mat-paginator
+                #paginator
+                [length]="dataSource.filteredData.length"
+                [pageIndex]="0"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>

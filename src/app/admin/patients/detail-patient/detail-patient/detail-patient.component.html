@@ -582,9 +582,10 @@
                                                     <mat-form-field class="example-full-width" appearance="fill">
                                                       <mat-label>Not Türü Seçiniz</mat-label>
                                                       <mat-select #selectForNotes [(value)]="selectedNoteType">
-                                                        <mat-option value="1">Muayene</mat-option>
-                                                        <mat-option value="2">Test</mat-option>
-                                                        <mat-option value="3" disabled>Test2</mat-option>
+                                                        <mat-option value="Muayene">Muayene</mat-option>
+                                                        <mat-option value="Test">Test</mat-option>
+                                                        <mat-option value="Test2" disabled>Test2</mat-option>
+                                                        <mat-option *ngFor="let dynamicForm of dynamicFormArray" [value]="dynamicForm.id">{{dynamicForm.name}}</mat-option>
                                                       </mat-select>
                                                     </mat-form-field>
                                                   </div>
@@ -592,12 +593,17 @@
                                                 <div class="row">
                                                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 0px !important;">
                                                     <ng-container [ngSwitch]="selectForNotes.value">
-                                                      <ng-container *ngSwitchCase="1">
+                                                      <ng-container *ngSwitchCase="'Muayene'">
                                                         <ng-container *ngTemplateOutlet="medicalContent"></ng-container>
                                                       </ng-container>
-                                                      <ng-container *ngSwitchCase="2">
+                                                      <ng-container *ngSwitchCase="'Test'">
                                                         <ng-container *ngTemplateOutlet="testContent"></ng-container>
                                                       </ng-container>
+                                                      <div *ngFor="let form of dynamicFormArray" >
+                                                        <ng-container *ngSwitchCase="form.id">
+                                                          dinamık form kısmı
+                                                        </ng-container>
+                                                      </div>
                                                     </ng-container>
                                                     <ng-template #medicalContent>
                                                       <div *ngIf="medicals.length>0;else noMedicalNote">
@@ -705,6 +711,7 @@
                                                       <mat-option value="1">Muayene</mat-option>
                                                       <mat-option value="2">Test</mat-option>
                                                       <mat-option value="3" disabled>Test2</mat-option>
+                                                      <mat-option *ngFor="let dynamicForm of dynamicFormArray" [value]="dynamicForm.id">{{dynamicForm.name}}</mat-option>
                                                     </mat-select>
                                                   </mat-form-field>
                                                 </div>
@@ -718,6 +725,11 @@
                                                     <ng-container *ngSwitchCase="2">
                                                       <ng-container *ngTemplateOutlet="testContent"></ng-container>
                                                     </ng-container>
+                                                    <div *ngFor="let form of dynamicFormArray" >
+                                                      <ng-container *ngSwitchCase="form.id">
+                                                        dinamık form kısmı
+                                                      </ng-container>
+                                                    </div>
                                                   </ng-container>
                                                   <ng-template #medicalContent>
                                                     <div *ngIf="medicals.length>0;else noMedicalNoteOpen">
@@ -1208,10 +1220,10 @@
                             <mat-form-field class="example-full-width" appearance="outline">
                               <mat-label>Not Tipi Seçiniz</mat-label>
                               <mat-select #selectForNoteAdd [(ngModel)]="selectedNoteTypeForAdd" (selectionChange)="onOptionsSelectedForm(selectForNoteAdd.value)">
-                                <mat-option value="1">Muayene</mat-option>
-                                <mat-option value="2">Test</mat-option>
-                                <mat-option value="3" disabled>Test2</mat-option>
-                                <mat-option *ngFor="let form of dynamicFormArray" [value]="form.name">{{form.name}}</mat-option>
+                                <mat-option value="Muayene">Muayene</mat-option>
+                                <mat-option value="Test">Test</mat-option>
+                                <mat-option value="Test2" disabled>Test2</mat-option>
+                                <mat-option *ngFor="let form of dynamicFormArray" [value]="form.id">{{form.name}}</mat-option>
                               </mat-select>
                             </mat-form-field>
                           </div>
@@ -1238,14 +1250,14 @@
                         <div class="row">
                           <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                             <ng-container [ngSwitch]="selectForNoteAdd.value">
-                              <ng-container *ngSwitchCase="1">
+                              <ng-container *ngSwitchCase="'Muayene'">
                                 <ng-container *ngTemplateOutlet="addMedical"></ng-container>
                               </ng-container>
-                              <ng-container *ngSwitchCase="2">
+                              <ng-container *ngSwitchCase="'Test'">
                                 <ng-container *ngTemplateOutlet="addTest"></ng-container>
                               </ng-container>
                               <div *ngFor="let form of dynamicFormArray" >
-                              <ng-container *ngSwitchCase="form.name">
+                              <ng-container *ngSwitchCase="form.id">
                                 {{dynamicFormGroup.value | json}}
                                     <form class="m-2 row" [formGroup]="dynamicFormGroup" (ngSubmit)="onSubmitDynamicForm()">
                                 <ng-container *ngFor="let control of form.fields">

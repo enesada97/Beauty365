@@ -417,12 +417,15 @@ import { ActivatedRoute } from "@angular/router";
 import { Appointment } from "src/app/core/models/appointment.model";
 import { AppointmentDto } from "src/app/core/models/appointmentdto.model";
 import { Collection } from "src/app/core/models/collection.model";
+import { DynamicTableData } from "src/app/core/models/dynamic-table-data.model";
+import { FormField } from "src/app/core/models/form-field.model";
 import { MedicalAlert } from "src/app/core/models/medical-alert.mode";
 import { Medical } from "src/app/core/models/medical.model";
 import { Patient } from "src/app/core/models/patient.model";
 import { ProtocolDto } from "src/app/core/models/protocoldto";
 import { AppointmentService } from "src/app/core/service/appointment.service";
 import { CollectionService } from "src/app/core/service/collection.service";
+import { DynamicTableDataService } from "src/app/core/service/dynamic-table-data.service";
 import { FormFieldSelectionValueService } from "src/app/core/service/form-field-selection-value.service";
 import { FormFieldService } from "src/app/core/service/form-field.service";
 import { FormTableService } from "src/app/core/service/form-table.service";
@@ -439,7 +442,7 @@ import { MedicalAlertComponent } from "./dialog/medical-alert/medical-alert.comp
   selector: "app-detail-patient",
   templateUrl: "./detail-patient.component.html",
   styleUrls: ["./detail-patient.component.sass"],
-  providers:[FormTableService,FormFieldService,FormFieldSelectionValueService],
+  providers:[FormTableService,FormFieldService,FormFieldSelectionValueService,DynamicTableDataService],
 })
 export class DetailPatientComponent implements OnInit {
   medicalAlerts: MedicalAlert[] | null;
@@ -468,11 +471,12 @@ export class DetailPatientComponent implements OnInit {
     private fb: FormBuilder,
     private formTableService:FormTableService,
     private formFieldService:FormFieldService,
-    private formFieldSelectionValueService:FormFieldSelectionValueService
+    private formFieldSelectionValueService:FormFieldSelectionValueService,
+    private dynamicTableDataService:DynamicTableDataService
   ) {
     this.dateAdapter.setLocale("tr");
-    this.selectedNoteType = "1";
-    this.selectedNoteTypeForAdd = "1";
+    this.selectedNoteType = "Muayene";
+    this.selectedNoteTypeForAdd = "Muayene";
     this.medical = new Medical({});
     this.medicalForm = this.createContactForm();
     this.dynamicFormGroup =this.createDynamicContactForm();
@@ -514,16 +518,18 @@ export class DetailPatientComponent implements OnInit {
   dateTimeNow = new Date();
   medicals: Medical[] | null = [];
   selectedNoteType: any = undefined;
-  selectedNoteTypeForAdd: any = 1;
+  selectedNoteTypeForAdd: any = "Muayene";
   selectionForAppointment: any = undefined;
   protocolDtoForNote: ProtocolDto;
   medicalForm: FormGroup;
   medical: Medical;
+  dynamicTableDatas:DynamicTableData[]=[];
   collections: Collection[] | null = [];
   clickToAddNote: boolean = false;
   action: string = "add";
   dynamicFormArray:any;
   dynamicFormGroup:FormGroup;
+  formFields:FormField[];
   ngOnInit(): void {
     this.getParamValue();
     this.getMedicalAlertsById();
@@ -578,7 +584,7 @@ export class DetailPatientComponent implements OnInit {
         setTimeout(() =>
           this.protocols.forEach((p) => {
             if (selected == 2) {
-              this.getNotesByProtocolsId(p.protocolNo);
+              this.getMedicalNotesByProtocolsId(p.protocolNo);
             } else {
               this.getCollectionsByProtocolsId(p.protocolNo);
             }
@@ -586,7 +592,12 @@ export class DetailPatientComponent implements OnInit {
         );
       });
   }
-  getNotesByProtocolsId(protocolId: number) {
+  getDynamicTablesDatas(protocolId,formTableId){
+    this.dynamicTableDataService.getListByProtocolAndTableId(protocolId,formTableId).subscribe(data=>{
+      this.dynamicTableDatas=data;
+    })
+  }
+  getMedicalNotesByProtocolsId(protocolId: number) {
     this.medicalService.getByProtocolId(protocolId).subscribe((data) => {
       data == null
         ? null
@@ -763,6 +774,39 @@ export class DetailPatientComponent implements OnInit {
         });
     }
   }
+  onSubmitDynamicForm(){
+    if(this.dynamicFormGroup.valid){
+      let dataControls=Object.assign({},Object.keys(this.dynamicFormGroup.controls));
+      dataControls=Object.values(dataControls);
+      console.log(dataControls);
+      let data=Object.assign({}, this.dynamicFormGroup.value);
+      data=Object.values(data);
+      console.log(data);
+      this.appointmentService
+        .getById(this.selectionForAppointment)
+        .subscribe((ap) => {
+          for (let i = 0; i < dataControls.length; i++) {
+            const element = dataControls[i];
+            let dynamicTableData=new DynamicTableData({});
+            dynamicTableData.fieldValue=data[i];
+            dynamicTableData.formTableId=this.selectedNoteTypeForAdd;
+            dynamicTableData.protocolId=ap.protocolId;
+            dynamicTableData.formFieldId=this.formFields[this.formFields.findIndex(m=>m.formControlName==element)].id;
+            console.log(dynamicTableData);
+             this.dynamicTableDataService.save(dynamicTableData).subscribe(
+               (data) => {
+                 this.dynamicTableDataService._sweetAlert.success(this.dynamicFormArray.find(m=>m.id==this.selectedNoteTypeForAdd).name+" Notu");
+                 i==dataControls.length-1?this.backToNote():null;
+               },
+               (error: HttpErrorResponse) => {
+                 this.dynamicTableDataService.isTblLoading = false;
+                 console.log(error.name + " " + error.message);
+               }
+             );
+          }
+      });
+    }
+  }
   onOptionsSelected(value: any) {
     console.log("the selected value is " + value);
     this.appointmentService
@@ -792,6 +836,7 @@ export class DetailPatientComponent implements OnInit {
         break;
       case 2:
         this.getProtocolsById(2);
+        this.getFormOfTables();
         console.log(this.medicals);
         break;
       case 2.1:
@@ -837,23 +882,23 @@ export class DetailPatientComponent implements OnInit {
       console.log(this.dynamicFormArray);
     })
   }
-  onSubmitDynamicForm(){
-
-  }
   createDynamicContactForm(): FormGroup {
     return this.fb.group({
     });
   }
   onOptionsSelectedForm(value: any) {
+    console.log("seçilen"+this.selectedNoteTypeForAdd);
     this.selectedNoteTypeForAdd=value;
     console.log("the selected value is " + value);
-    if(typeof value=="string"){
+    //Eğer dinamik formlardan biri seçilmiş ise
+    if(typeof value==='number'){
       this.dynamicFormGroup=this.createDynamicContactForm();
-      let data=this.dynamicFormArray.find(m=>m.name==value);
+      let data=this.dynamicFormArray.find(m=>m.id==value);
       this.createFormControl(data);
     }
   }
   createFormControl(data:any){
+    this.formFields=data.fields;
     data.fields.forEach(element => {
       this.dynamicFormGroup.addControl(element.formControlName,new FormControl(''));
     });

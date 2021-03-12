@@ -16,8 +16,9 @@ import { FormTableService } from 'src/app/core/service/form-table.service';
 })
 export class PreviewComponent{
   dynamicFormArray:any;
+  dialogTitle:any;
   constructor(
-    public dialogRef: MatDialogRef<DeleteComponent>,
+    public dialogRef: MatDialogRef<PreviewComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public formTableService: FormTableService,
     private formFieldService: FormFieldService,
@@ -25,6 +26,7 @@ export class PreviewComponent{
   ) {
     this.dynamicFormArray=data;
     this.getFormField();
+    this.dialogTitle="Form Önizleme: "+data.name;
   }
   getFormField(){
     this.formFieldService.getListByFormTableId(this.dynamicFormArray.id).subscribe(field=>{
@@ -36,29 +38,12 @@ export class PreviewComponent{
     }
   getFormFieldValue(fieldId,i){
     this.formFieldSelectionValueService.getListByFormFieldId(fieldId).subscribe(value=>{
-      this.dynamicFormArray[i].fields[y].values=value;
+      this.dynamicFormArray.fields[i].values=value;
       console.log(this.dynamicFormArray);
-      this.createFormControl();
     })
   }
   onNoClick(): void {
     console.log(this.data);
     this.dialogRef.close();
   }
-  confirmDelete(): void {
-    for (let i = 0; i < this.formFieldSelectionValue.length; i++) {
-      const element = this.formFieldSelectionValue[i];
-      this.formFieldSelectionValueService.delete(element.id).subscribe(p=>{});
-    }
-    for (let y = 0; y < this.formFields.length; y++) {
-      const element = this.formFields[y];
-      this.formFieldService.delete(element.id).subscribe(e=>{});
-    }
-    this.formTableService.delete(this.data.id).subscribe(c=>{
-      this.formTableService._sweetAlert.delete("Form");
-      this.dialogRef.close(1);
-    },(error: HttpErrorResponse) => {
-           console.log(error.name + " " + error.message);
-       });
-}
 }

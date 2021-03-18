@@ -14,10 +14,10 @@ export class DynamicTableDataService extends CrudService<DynamicTableData,null,n
   ) {
     super(_http, `${environment.apiUrl}/DynamicTableData`, _sweetAlert);
   }
-  getListByProtocolAndTableId(protocolId:number,formTableId:number): Observable<DynamicTableData[]> {
+  getListByProtocolId(protocolId:number): Observable<DynamicTableData[]> {
     return this._http.get<DynamicTableData[]>(
-      environment.apiUrl + "/DynamicTableData/getListByProtocolAndTableId/"+
-      protocolId+"/"+formTableId
+      environment.apiUrl + "/DynamicTableData/getListByProtocolId/"+
+      protocolId
     );
   }
 }

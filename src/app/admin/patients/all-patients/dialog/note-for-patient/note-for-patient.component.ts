@@ -34,7 +34,9 @@ export class NoteForPatientComponent{
     if(this.note.valid){
       this.patient.note=this.note.value;
          // this.patient.userId=this.authService.getCurrentUserId();
-       this.patientService.save(this.patient).subscribe(data=>{},
+       this.patientService.save(this.patient).subscribe(data=>{
+         this.dialogRef.close(1);
+       },
          (error: HttpErrorResponse) => {
            this.patientService.isTblLoading = false;
            console.log(error.name + " " + error.message);

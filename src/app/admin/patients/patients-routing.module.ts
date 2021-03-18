@@ -16,7 +16,7 @@ const routes: Routes = [
   // },
   {
     path: 'all-patients',
-    component: TestComponent,
+    component: AllPatientsComponent,
   },
   {
     path: 'add-patient',

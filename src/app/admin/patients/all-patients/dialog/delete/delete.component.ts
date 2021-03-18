@@ -23,6 +23,7 @@ export class DeleteComponent {
     this.patientService.delete(this.data.id).subscribe(
                 (data) => {
                   this.dialogRef.close(1);
+                  this.patientService._sweetAlert.delete(this.data.name);
                 },
                 (error: HttpErrorResponse) => {
                   console.log(error.name + " " + error.message);

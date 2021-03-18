@@ -458,6 +458,7 @@ export class DetailPatientComponent implements OnInit {
     { id: 5, name: "Ödemeleri", icon: "shopping_cart" },
   ];
   @ViewChild(MatSelectionList) select: MatSelectionList;
+  @ViewChild(MatSelectionList) selectAppointmentForNoteAdd: MatSelectionList;
   constructor(
     private activatedRoute: ActivatedRoute,
     private patientService: PatientService,
@@ -485,7 +486,6 @@ export class DetailPatientComponent implements OnInit {
   patient: Patient;
   patientDataId: number;
   id: number;
-  notEntered: "Belirtilmemiş";
   displayedColumns = [
     "departmentName",
     "doctorName",
@@ -515,21 +515,20 @@ export class DetailPatientComponent implements OnInit {
   paginatorForCollections: MatPaginator;
   @ViewChild(MatSort, { static: false }) sortingForCollections: MatSort;
   protocols: ProtocolDto[] | null;
-  dateTimeNow = new Date();
   medicals: Medical[] | null = [];
   selectedNoteType: any = undefined;
   selectedNoteTypeForAdd: any = "Muayene";
   selectionForAppointment: any = undefined;
-  protocolDtoForNote: ProtocolDto;
   medicalForm: FormGroup;
   medical: Medical;
-  dynamicTableDatas:DynamicTableData[]=[];
+  dynamicTableDatas:DynamicTableData[] | null=[];
   collections: Collection[] | null = [];
   clickToAddNote: boolean = false;
   action: string = "add";
   dynamicFormArray:any;
   dynamicFormGroup:FormGroup;
   formFields:FormField[];
+  counter:any[];
   ngOnInit(): void {
     this.getParamValue();
     this.getMedicalAlertsById();
@@ -585,6 +584,7 @@ export class DetailPatientComponent implements OnInit {
           this.protocols.forEach((p) => {
             if (selected == 2) {
               this.getMedicalNotesByProtocolsId(p.protocolNo);
+              this.getDynamicTablesDatas(p.protocolNo);
             } else {
               this.getCollectionsByProtocolsId(p.protocolNo);
             }
@@ -592,9 +592,17 @@ export class DetailPatientComponent implements OnInit {
         );
       });
   }
-  getDynamicTablesDatas(protocolId,formTableId){
-    this.dynamicTableDataService.getListByProtocolAndTableId(protocolId,formTableId).subscribe(data=>{
-      this.dynamicTableDatas=data;
+  getDynamicTablesDatas(protocolId){
+    this.dynamicTableDatas=[];
+    this.dynamicTableDataService.getListByProtocolId(protocolId).subscribe(data=>{
+      data == null
+        ? null
+        : this.dynamicTableDatas.findIndex((m) => data.forEach(dataElement=>{
+          dataElement.id==m.id
+        })) === -1
+        ? (this.dynamicTableDatas = this.dynamicTableDatas.concat(data))
+        : null;
+        console.log(this.dynamicTableDatas);
     })
   }
   getMedicalNotesByProtocolsId(protocolId: number) {
@@ -635,7 +643,8 @@ export class DetailPatientComponent implements OnInit {
     });
     dialogRef.afterClosed();
   }
-  addNoteForMedical(protocol: ProtocolDto) {
+  addNoteForMedical(value:any,protocolId) {
+    this.action="add";
     this.select.selectedOptions.clear();
     this.select.options.find((m) => m.value == 2.1).selected = true;
     this.clickToAddNote = true;
@@ -791,8 +800,17 @@ export class DetailPatientComponent implements OnInit {
             dynamicTableData.fieldValue=data[i];
             dynamicTableData.formTableId=this.selectedNoteTypeForAdd;
             dynamicTableData.protocolId=ap.protocolId;
-            dynamicTableData.formFieldId=this.formFields[this.formFields.findIndex(m=>m.formControlName==element)].id;
+            let field=this.formFields[this.formFields.findIndex(m=>m.formControlName==element)];
+            dynamicTableData.formFieldId=field.id;
+            dynamicTableData.fieldLabel=field.label;
+            dynamicTableData.formControlName=field.formControlName;
             console.log(dynamicTableData);
+            if(this.action=="edit"){
+              dynamicTableData.id=this.dynamicTableDatas.find(m=>{
+                m.formTableId==dynamicTableData.formTableId&&m.formFieldId==dynamicTableData.formFieldId
+              }).id;
+              dynamicTableData.updatedDate= new Date();
+            }
              this.dynamicTableDataService.save(dynamicTableData).subscribe(
                (data) => {
                  this.dynamicTableDataService._sweetAlert.success(this.dynamicFormArray.find(m=>m.id==this.selectedNoteTypeForAdd).name+" Notu");
@@ -824,7 +842,7 @@ export class DetailPatientComponent implements OnInit {
   exportMedicalNote(id) {
     Print.exportToPdf("Medical" + id);
   }
-  onSelectionChange(event: MatSelectionListChange) {
+  sideBarSelectionChange(event: MatSelectionListChange) {
     console.log(
       "onSelectionChange",
       event.option.value,
@@ -895,6 +913,7 @@ export class DetailPatientComponent implements OnInit {
       this.dynamicFormGroup=this.createDynamicContactForm();
       let data=this.dynamicFormArray.find(m=>m.id==value);
       this.createFormControl(data);
+      this.protocols.forEach(m=>this.getDynamicTablesDatas(m.protocolNo));
     }
   }
   createFormControl(data:any){
@@ -903,6 +922,81 @@ export class DetailPatientComponent implements OnInit {
       this.dynamicFormGroup.addControl(element.formControlName,new FormControl(''));
     });
     console.log(this.dynamicFormGroup);
+  }
+  onOptionsSelectedNote(value:any,protocolId:number){
+    console.log(value +"-protokolno:"+protocolId);
+    //Eğer dinamik notlardan biri seçilmiş ise
+    if(typeof value==='number'){
+      this.protocols.forEach(m=>this.getDynamicTablesDatas(m.protocolNo))
+    }
+  }
+  public dynamicTableControl(dynamicTableDatas:DynamicTableData[],protocol:ProtocolDto,formId): boolean {
+    if(dynamicTableDatas.some(m=>m.protocolId==protocol.protocolNo&&m.formTableId==formId)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  editNoteForDynamicData(dynamicTableDatas: DynamicTableData[], action: string,formId?) {
+    this.action = action;
+    if (action == "edit") {
+      this.onOptionsSelectedForm(formId);
+       this.getAppointmentsById();
+       this.appointmentService
+         .getByProtocolId(dynamicTableDatas[0].protocolId)
+         .subscribe((a) => {
+           let appointment: Appointment = a;
+           console.log("geri dönen randevu id:" + appointment.id);
+           this.selectionForAppointment = appointment.id;
+         });
+    }
+    for (let i = 0; i < dynamicTableDatas.length; i++) {
+      const element = dynamicTableDatas[i];
+      console.log("control:"+this.dynamicFormGroup.controls[element.formControlName]);
+    this.dynamicFormGroup.controls[element.formControlName].setValue(element.fieldValue);
+    }
+    this.select.selectedOptions.clear();
+    this.select.options.find((m) => m.value == 2.1).selected = true;
+    this.clickToAddNote = true;
+    this.getProtocolsById(2);
+    this.getAppointmentsById();
+  }
+  public dynamicTableProtocolControl(formId): any[] {
+    this.counter=[];
+    for (let i = 0; i < this.dynamicTableDatas.length; i++) {
+      const element=this.dynamicTableDatas[i];
+      if(element.formTableId==formId){
+        if(this.counter.some(e=>e==element.protocolId)===false){
+          this.counter.push(element.protocolId);
+        }
+      }
+      console.log(this.counter);
+    }
+    return this.counter;
+  }
+  public dynamicTableDataControl(formId): any[] {
+    let activeData=[];
+    for (let i = 0; i < this.dynamicTableDatas.length; i++) {
+      if(this.dynamicTableDatas[i].formTableId==formId){
+        activeData.push(this.dynamicTableDatas[i]);
+      }
+    }
+    this.dynamicTableDatas=[];
+    this.dynamicTableDatas=activeData;
+    return this.dynamicTableDatas;
+  }
+  addNotePatient(data:Patient){
+    data=this.patient;
+    this.id = data.id;
+    const dialogRef = this.dialog.open(NoteForPatientComponent, {
+      data: {
+        patient: data,
+        action: "note",
+        dialogTitle:"Not Ekle"
+      },
+    });
+    dialogRef.afterClosed();
+    this.patientService._sweetAlert.success("Hasta notu");
   }
 }
 

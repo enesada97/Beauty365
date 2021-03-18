@@ -56,6 +56,7 @@ import { ProtocolTypeProcessService } from 'src/app/core/service/protocol-type-p
     MatProgressSpinnerModule,
     MatIconModule,
     NgxMaskModule,
+
   ],
   providers:[ProtocoltypeService,ProtocolService,ProtocolTypeProcessService]
 })

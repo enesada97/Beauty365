@@ -93,8 +93,9 @@ export class AllPatientsComponent implements OnInit {
       console.log("veri ="+data);
       console.log(JSON.stringify(data));
       if(data.length){
-        let isOpenControl=data.find(m=>m.isOpen==true);
-        isOpenControl==undefined?this.passParameter(row):null;
+        // let isOpenControl=data.find(m=>m.isOpen==true);
+        // isOpenControl==undefined?this.passParameter(row):null;
+        this.passParameter(row);
       }else{
         this.addProtocolForPatient(row);
       }
@@ -107,7 +108,7 @@ export class AllPatientsComponent implements OnInit {
   passParameter(row:Patient) {
     Swal.fire({
       title: 'Açık Protokol Bulundu! Hasta Detayına Gitmek İster misiniz?',
-      text: row.name+" "+row.surName+" hastasına ait açık protokol varken yeni protokol açılamaz",
+      text: row.name+" "+row.surName+" hastasına ait aktif hasta protokolü bulundu",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -118,6 +119,8 @@ export class AllPatientsComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.router.navigateByUrl('/admin/patients/all-patients/patient-detail/'+row.id);
+      }else{
+        this.addProtocolForPatient(row);
       }
     })
   }

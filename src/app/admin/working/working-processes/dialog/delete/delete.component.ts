@@ -1,5 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Working } from 'src/app/core/models/working.model';
 import { WorkingService } from 'src/app/core/service/working.service';
@@ -26,10 +25,6 @@ export class DeleteComponent{
     if(this.action=="delete"){
     this.workingService.delete(this.data.row.id).subscribe(
       (data) => {
-        this.workingService._sweetAlert.delete(this.data.row.processName)
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error.name + " " + error.message);
       }
     );
     }else{
@@ -40,14 +35,15 @@ export class DeleteComponent{
         this.working.payType=0;
         this.working.paidValue=0;
         this.working.saleValue=0;
-        this.workingService.save(this.working).subscribe(
-          (data) => {
-            this.workingService._sweetAlert.delete(this.data.row.processName)
-          },
-          (error: HttpErrorResponse) => {
-            console.log(error.name + " " + error.message);
-          }
-        );
+        if(this.working.id==0){
+          this.workingService.add(this.working).subscribe(data=>{
+            }
+            );
+        }else{
+          this.workingService.update(this.working).subscribe(data=>{
+            }
+            );
+        }
       })
     }
   }

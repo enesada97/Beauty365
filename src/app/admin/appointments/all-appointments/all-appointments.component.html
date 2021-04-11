@@ -5,19 +5,19 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Randevu İşlemleri</h4>
+              <h4 class="page-title">{{'AppointmentList'| translate}}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i> Anasayfa</a
+                <i class="fas fa-home"></i> {{'Homepage'| translate}}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
-              <a routerLink="/admin/appointments/all-appointments" onClick="return false;"
-                >Randevular</a
+              <a onClick="return false;"
+                >{{'Appointments'| translate}}</a
               >
             </li>
-            <li class="breadcrumb-item active">Listele</li>
+            <li class="breadcrumb-item active">{{'AppointmentList'| translate}}</li>
           </ul>
         </div>
       </div>
@@ -33,7 +33,7 @@
                     <ul class="header-buttons-left ml-0">
                       <li class="dropdown">
                         <h2>
-                          <strong>Randevular</strong>
+                          <strong>{{'AppointmentList'| translate}}</strong>
                         </h2>
                       </li>
                       <li class="dropdown m-l-20">
@@ -43,7 +43,7 @@
                           ></label
                         >
                         <input
-                              placeholder="Arama"
+                              placeholder="{{'Filter'| translate}}"
                               type="text"
                               (keyup)="applyFilter($event.target.value)"
                               class="browser-default search-field"
@@ -56,6 +56,7 @@
                           [hidden]="!selection.hasValue()"
                         >
                           <button
+                          *ngIf="checkClaim('DeleteAppointmentCommand')"
                             mat-mini-fab
                             color="warn"
                             (click)="removeSelectedRows()"
@@ -86,7 +87,7 @@
                         class="icon-button-demo"
                         >
                         <mat-form-field style="width: 10rem;" class="example-full-width mb-1">
-                          <mat-label>Randevu Tarihi Seçiniz</mat-label>
+                          <mat-label>{{'SelectDate'| translate}}</mat-label>
                           <input matInput [matDatepicker]="picker" placeholder="Tarih Seçiniz" [(ngModel)]="date" (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -109,6 +110,7 @@
                       <li>
                         <div class="icon-button-demo">
                           <button
+                          *ngIf="checkClaim('CreateAppointmentCommand')"
                             mat-mini-fab
                             color="primary"
                             (click)="addNew()"
@@ -168,13 +170,13 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="appointmentNo">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Id</mat-header-cell
+                    >{{'Id'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">{{ row.appointmentNo }}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="patientName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Hasta Ad</mat-header-cell
+                    >{{'PatientName'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.patientName }}</mat-cell
@@ -182,7 +184,7 @@
                 </ng-container>
                 <ng-container matColumnDef="patientSurname">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Soyad</mat-header-cell
+                    >{{'PatientSurname'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.patientSurname }}</mat-cell
@@ -190,7 +192,7 @@
                 </ng-container>
                 <ng-container matColumnDef="departmentName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Bölüm</mat-header-cell
+                    >{{'DepartmentName'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.departmentName }}</mat-cell
@@ -198,7 +200,7 @@
                 </ng-container>
                 <ng-container matColumnDef="doctorName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Doktor Ad</mat-header-cell
+                    >{{'DoctorName'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.doctorName }}</mat-cell
@@ -207,7 +209,7 @@
 
                 <ng-container matColumnDef="doctorSurname">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Soyad</mat-header-cell
+                    >{{'DoctorSurName'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.doctorSurname }}</mat-cell
@@ -215,7 +217,7 @@
                 </ng-container>
                 <ng-container matColumnDef="time">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Saat</mat-header-cell
+                    >{{'Time'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.time }}</mat-cell
@@ -223,7 +225,7 @@
                 </ng-container>
                 <ng-container matColumnDef="typeName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Protokol Tip</mat-header-cell
+                    >{{'TypeName'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.typeName }}</mat-cell
@@ -231,7 +233,7 @@
                 </ng-container>
                 <ng-container matColumnDef="phoneNumber">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Telefon</mat-header-cell
+                    >{{'PhoneNumber'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.phoneNumber}}</mat-cell
@@ -242,16 +244,16 @@
                     *matHeaderCellDef
                     mat-sort-header
                     [ngClass]="'tbl-col-width-per-8'"
-                    >Durum
+                    >{{'Status'|translate}}
                   </mat-header-cell>
                   <mat-cell
                     *matCellDef="let row"
                     [ngClass]="'tbl-col-width-per-8'"
                   >
                     <ng-container *ngIf="row.patientHasArrive == true; else elseTemplate">
-                      <div color="accent" class="btn-tbl-check">
+                    <button [disabled]="true" mat-icon-button color="accent" class="btn-tbl-check">
                       <mat-icon aria-label="Ok" class="col-white">check</mat-icon>
-                    </div>
+                    </button>
                     </ng-container>
                     <ng-template #elseTemplate><button [disabled]="true" mat-icon-button color="accent" class="btn-tbl-close">
                       <mat-icon aria-label="Ok" class="col-white">close</mat-icon>
@@ -261,49 +263,52 @@
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef class="pr-0"
-                    >Eylemler</mat-header-cell
+                    >{{'Actions'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row; let i = index" class="pr-0">
                     <button mat-icon-button [matMenuTriggerFor]="menu2">
                       <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu2="matMenu">
-                      <button mat-menu-item *ngIf="!row.patientName==null" [matMenuTriggerFor]="protocolProcesses">
+                      <button mat-menu-item *ngIf="!(row.patientName==null)" [matMenuTriggerFor]="protocolProcesses">
                         <mat-icon>group</mat-icon>
-                        <span>Protokol İşlemleri</span>
+                        <span>{{'ProtocolProcesses'|translate}}</span>
                       </button>
                       <button mat-menu-item [matMenuTriggerFor]="appointmentProcesses">
                         <mat-icon>face</mat-icon>
-                        <span>Hasta İşlemleri</span>
+                        <span>{{'PatientProcesses'|translate}}</span>
                       </button>
                     </mat-menu>
                     <mat-menu #protocolProcesses="matMenu">
                       <button mat-menu-item
                       (click)="$event.stopPropagation()"
                       (click)="addProtocolForPatient(row)">
+                      *ngIf="checkClaim('CreateProtocolCommand')"
                         <mat-icon>add</mat-icon>
-                        <span>Ekle</span>
+                        <span>{{'Add'|translate}}</span>
                       </button>
                     </mat-menu>
                     <mat-menu #appointmentProcesses="matMenu">
-                      <button mat-menu-item *ngIf="!(row.patientName==null&&row.protocolId==0);else newAppointment"
+                      <button mat-menu-item *ngIf="!(row.patientName==null&&row.protocolId==0)&&(checkClaim('UpdateAppointmentCommand'));else newAppointment"
                       (click)="editCall(row)">
                         <mat-icon>edit</mat-icon>
-                        <span>Düzenle</span>
+                        <span>{{'Update'|translate}}</span>
                       </button>
                       <ng-template #newAppointment>
                         <button mat-menu-item
+                        *ngIf="checkClaim('UpdateAppointmentCommand')"
                         (click)="$event.stopPropagation()"
                         (click)="editCall(row)">
                           <mat-icon>add</mat-icon>
-                          <span>Yeni Randevu</span>
+                          <span>{{'NewAppointment'|translate}}</span>
                         </button>
                       </ng-template>
                       <button mat-menu-item
+                      *ngIf="checkClaim('DeleteAppointmentCommand')"
                       (click)="$event.stopPropagation()"
-                      (click)="deleteItem(i, row)">
+                      (click)="deleteItem(row)">
                         <mat-icon>delete</mat-icon>
-                        <span>Sil</span>
+                        <span>{{'Delete'|translate}}</span>
                       </button>
                     </mat-menu>
                   </mat-cell>
@@ -320,7 +325,7 @@
               <mat-paginator
                 #paginator
                 [pageIndex]="0"
-                [pageSize]="5"
+                [pageSize]="100"
                 [pageSizeOptions]="[5, 10, 25, 100]"
               >
               </mat-paginator>

@@ -1,76 +1,54 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AuthService } from "src/app/core/service/auth.service";
-import { Role } from "src/app/core/models/role";
+import { LoginUser } from "src/app/core/models/login-user";
+import { LookUp } from "src/app/core/models/LookUp";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "src/environments/environment";
+import { AuthService } from "src/app/core/service/system-service/auth.service";
+import { TranslateService } from "@ngx-translate/core";
+import { LocalStorageService } from "src/app/core/service/system-service/local-storage.service";
+import { LookUpService } from "src/app/core/service/system-service/lookUp.service";
 @Component({
   selector: "app-signin",
   templateUrl: "./signin.component.html",
   styleUrls: ["./signin.component.scss"],
 })
 export class SigninComponent implements OnInit {
-  authForm: FormGroup;
-  submitted = false;
-  error = "";
-  hide = true;
+  username:string="";
+  loginUser:LoginUser=new LoginUser();
+  langugelookUp:LookUp[];
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService
+    private auth:AuthService,
+    private storageService:LocalStorageService,
+    private lookupService:LookUpService,
+    private httpClient:HttpClient,
+    public translateService:TranslateService,
   ) {}
   ngOnInit() {
-    this.authForm = this.formBuilder.group({
-      username: ["admin@hospital.org", Validators.required],
-      password: ["admin@123", Validators.required],
-    });
+    this.username=this.auth.userName;
+
+    this.httpClient.get<LookUp[]>(environment.apiUrl +"/languages/getlookupwithcode").subscribe(data=>{
+      this.langugelookUp=data;
+    })
+
   }
-  get f() {
-    return this.authForm.controls;
+  getUserName(){
+    return this.username;
   }
-  adminSet() {
-    this.authForm.get("username").setValue("admin@hospital.org");
-    this.authForm.get("password").setValue("admin@123");
+
+  login(){
+    this.auth.login(this.loginUser);
   }
-  doctorSet() {
-    this.authForm.get("username").setValue("doctor@hospital.org");
-    this.authForm.get("password").setValue("doctor@123");
+
+  logOut(){
+      this.storageService.removeToken();
+      this.storageService.removeItem("lang");
   }
-  patientSet() {
-    this.authForm.get("username").setValue("patient@hospital.org");
-    this.authForm.get("password").setValue("patient@123");
-  }
-  onSubmit() {
-    this.submitted = true;
-    this.error = "";
-    if (this.authForm.invalid) {
-      this.error = "Username and Password not valid !";
-      return;
-    } else {
-      this.authService
-        .login(this.f.username.value, this.f.password.value)
-        .subscribe(
-          (res) => {
-            if (res) {
-              const role = this.authService.currentUserValue.role;
-              if (role === Role.All || role === Role.Admin) {
-                this.router.navigate(["/admin/dashboard/main"]);
-              } else if (role === Role.Doctor) {
-                this.router.navigate(["/doctor/dashboard"]);
-              } else if (role === Role.Patient) {
-                this.router.navigate(["/patient/dashboard"]);
-              } else {
-                this.router.navigate(["/authentication/signin"]);
-              }
-            } else {
-              this.error = "Invalid Login";
-            }
-          },
-          (error) => {
-            this.error = error;
-            this.submitted = false;
-          }
-        );
-    }
+
+  changeLang(lang){
+    console.log(lang);
+    localStorage.setItem("lang",lang);
+    this.translateService.use(lang);
   }
 }

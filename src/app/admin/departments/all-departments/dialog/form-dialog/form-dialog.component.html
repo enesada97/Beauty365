@@ -2,11 +2,9 @@
   <div class="modalHeader">
     <div class="editRowModal">
       <div class="modalHeader clearfix">
-        <!-- <img [src]="patient.photoUrl" alt="avatar" /> -->
-        <img src="assets/images/user/user1.jpg" alt="avatar">
         <div class="modal-about">
           <div class="font-weight-bold p-t-5 p-l-10 font-17">
-            {{ dialogTitle }}
+            {{'DepartmentForm'| translate}}
           </div>
         </div>
       </div>
@@ -25,16 +23,16 @@
       [formGroup]="departmentForm"
       (ngSubmit)="submit()"
     >
-      
-      
+
+
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Bölüm Adı</mat-label>
+            <mat-label>{{'DepartmentName'| translate}}</mat-label>
             <input matInput formControlName="departmentName" type="text" />
             <mat-icon matSuffix>face</mat-icon>
             <mat-error *ngIf="departmentForm.get('departmentName').hasError('required')">
-              Bölüm adı gereklidir
+              {{'DepartmentName'| translate}} {{'Required'| translate}}
             </mat-error>
           </mat-form-field>
           </div>
@@ -47,18 +45,17 @@
               color="primary"
               [type]="submit"
               [disabled]="!departmentForm.valid"
-              [mat-dialog-close]="1"
-              (click)="confirmAdd()"
             >
-              Kaydet
+            {{'Save'|translate}}
             </button>
             <button
+            type="button"
               mat-raised-button
               color="warn"
               (click)="onNoClick()"
               tabindex="-1"
             >
-              İptal
+            {{'Cancel'|translate}}
             </button>
           </div>
         </div>

@@ -1,23 +1,24 @@
 export class Appointment {
-    id: number;
-    date: Date;
-    time: string;
-    identityNumber: number;
-    name: string;
-    surName: string;
-    phoneNumber: number;
-    patientDataId:number;
-    protocolId:number;
-    doctorId:number;
-    departmentId:number;
-    protocolTypeId:number;
-    description: string;
-    createdAppointmentDateTime: Date;
-    arriveDateTime: Date;
-    inspectionStartDateTime: Date;
-    inspectionEndDateTime: Date;
-    status: boolean;
-    patientHasArrive: boolean;
+  id?:number;
+  date?:(Date | any);
+  time?:string;
+  identityNumber?:number;
+  name?:string;
+  surName?:string;
+  phoneNumber?:number;
+  patientDataId?:number;
+  protocolId?:number;
+  doctorId?:number;
+  departmentId?:number;
+  protocolTypeId?:number;
+  institutionId?:number;
+  description?:string;
+  createdAppointmentDateTime?:(Date | any);
+  arriveDateTime?:(Date | any);
+  inspectionStartDateTime?:(Date | any);
+  inspectionEndDateTime?:(Date | any);
+  status:boolean;
+  patientHasArrive:boolean;
     constructor(appointment) {
       {
         this.id = appointment.id || 0;

@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from "@angular/common/http";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
@@ -12,6 +11,7 @@ import { FormTableService } from "src/app/core/service/form-table.service";
 import { SaveFieldComponent } from "src/app/admin/options/creatable-form/detail-table/dialog/save-field/save-field.component";
 import { DeleteFieldComponent } from "./dialog/delete-field/delete-field.component";
 import { SaveFieldValueComponent } from "./dialog/save-field-value/save-field-value.component";
+import { AuthService } from "src/app/core/service/system-service/auth.service";
 
 @Component({
   selector: "app-detail-table",
@@ -27,7 +27,8 @@ export class DetailTableComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public formFieldService: FormFieldService,
     private formTableService: FormTableService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService:AuthService
   ) {}
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -40,18 +41,17 @@ export class DetailTableComponent implements OnInit {
       this.getFormTableById(this.id);
     });
   }
+  checkClaim(claim:string):boolean{
+		return this.authService.claimGuard(claim)
+	}
   getListByFormTableId(id: number) {
     this.formFieldService.getListByFormTableId(id).subscribe(
       (data) => {
-        this.formFields = data;
         setTimeout(() => (this.formFieldService.isTblLoading = false), 1000);
+        this.formFields = data;
         this.dataSource = new MatTableDataSource<FormField>(this.formFields);
         setTimeout(() => (this.dataSource.sort = this.sort));
         setTimeout(() => (this.dataSource.paginator = this.paginator));
-      },
-      (error: HttpErrorResponse) => {
-        this.formFieldService.isTblLoading = false;
-        console.log(error.name + " " + error.message);
       }
     );
   }
@@ -77,7 +77,6 @@ export class DetailTableComponent implements OnInit {
           this.refresh();
         }
       }
-      this.refresh();
     });
   }
   editCall(row) {
@@ -93,7 +92,7 @@ export class DetailTableComponent implements OnInit {
       }
     });
   }
-  deleteItem(i: number, row) {
+  deleteItem(row) {
     this.id = row.id;
     const dialogRef = this.dialog.open(DeleteFieldComponent, {
       data: row,

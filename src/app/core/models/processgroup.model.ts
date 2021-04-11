@@ -1,7 +1,7 @@
 export class ProcessGroup{
-    id:number;
-    name:string;
-    status:boolean;
+  id?:number;
+  name?:string;
+  status:boolean;
     constructor(processGroup) {
         {
           this.id = processGroup.id || 0;

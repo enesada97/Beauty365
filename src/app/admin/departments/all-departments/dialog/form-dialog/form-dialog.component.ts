@@ -8,7 +8,7 @@ import {
 } from "@angular/forms";
 import { Department } from 'src/app/core/models/department.model';
 import { DepartmentService } from 'src/app/core/service/department.service';
-import { HttpErrorResponse } from "@angular/common/http";
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
 
 @Component({
   selector: "app-form-dialog",
@@ -24,7 +24,8 @@ export class FormDialogComponent {
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public departmentService: DepartmentService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private sweetAlert:SweetalertService
   ) {
     // Set the defaults
     this.action = data.action;
@@ -37,17 +38,6 @@ export class FormDialogComponent {
     }
     this.departmentForm = this.createContactForm();
   }
-  formControl = new FormControl("", [
-    Validators.required,
-    // Validators.email,
-  ]);
-  getErrorMessage() {
-    return this.formControl.hasError("required")
-      ? "Required field"
-      : this.formControl.hasError("email")
-      ? "Not a valid email"
-      : "";
-  }
   createContactForm(): FormGroup {
     return this.fb.group({
       id: [this.department.id],
@@ -55,25 +45,25 @@ export class FormDialogComponent {
       status: [this.department.status, [Validators.required]]
     });
   }
-  submit() {
-    // emppty stuff
+ submit() {
+    if (this.departmentForm.valid) {
+      this.department = Object.assign({}, this.departmentForm.value);
+      if(this.department.id==0){
+        this.departmentService.add(this.department).subscribe(data=>{
+          this.dialogRef.close(1);
+          this.sweetAlert.success(data.toString());
+          }
+          );
+      }else{
+        this.departmentService.update(this.department).subscribe(data=>{
+          this.dialogRef.close(1);
+          this.sweetAlert.info(data.toString());
+          }
+          );
+      }
+    }
   }
   onNoClick(): void {
     this.dialogRef.close();
-  }
-  public confirmAdd(): void {
-    if (this.departmentForm.valid) {
-      this.department = Object.assign({}, this.departmentForm.value);
-      console.log(this.department);
-      // this.patient.userId=this.authService.getCurrentUserId();
-      this.departmentService.save(this.department).subscribe(data=>{
-        this.departmentService._sweetAlert.success(data['name']);
-        },
-        (error: HttpErrorResponse) => {
-          this.departmentService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
-        }
-        );
-    }
   }
 }

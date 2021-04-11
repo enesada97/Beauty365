@@ -1,5 +1,4 @@
 import { SelectionModel } from "@angular/cdk/collections";
-import { HttpErrorResponse } from "@angular/common/http";
 import {
   Component,
   ElementRef,
@@ -76,7 +75,7 @@ export class AddWorkingsDialogComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginatorAdd: MatPaginator;
 
   ngOnInit(): void {
-    this.processGroupService.getAll().subscribe((data) => {
+    this.processGroupService.getList().subscribe((data) => {
       this.categories = data;
       console.log(data);
       console.log(JSON.stringify(data));
@@ -120,11 +119,19 @@ export class AddWorkingsDialogComponent implements OnInit {
       this.working.price = row.price;
       this.working.paidValue = 0;
       this.working.arrearsValue = row.price;
-      this.workingService.save(this.working).subscribe((data) => {
-        this.workingService._sweetAlert.success("İşlem");
-        this.processesForAdd.splice(i, 1);
+      if(this.working.id==0){
+        this.workingService.add(this.working).subscribe(data=>{
+          this.processesForAdd.splice(i, 1);
         this.getProcessesAdd();
-      });
+          }
+          );
+      }else{
+        this.workingService.update(this.working).subscribe(data=>{
+          this.processesForAdd.splice(i, 1);
+        this.getProcessesAdd();
+          }
+          );
+      }
     });
   }
   scroll(el: HTMLElement) {
@@ -132,22 +139,24 @@ export class AddWorkingsDialogComponent implements OnInit {
   }
   addSelectedRowProcesses() {
     this.dataSourceForProcess.data.forEach((item) => {
-      const index: number = item.id;
+      const index: number = item.processId;
       this.working = new Working({});
-      this.working.processId = item.id;
+      this.working.processId = item.processId;
       this.working.protocolId = this.protocolId;
       this.working.workingDateTime = new Date();
       this.working.quantity = 1;
       this.working.price = item.price;
       this.working.paidValue = 0;
       this.working.arrearsValue = item.price;
-      this.workingService.save(this.working).subscribe(
-        (data) => {},
-        (error: HttpErrorResponse) => {
-          console.log(error.name + " " + error.message);
-        }
-      );
-      this.workingService._sweetAlert.success("Hizmetler");
+      if(this.working.id==0){
+        this.workingService.add(this.working).subscribe(data=>{
+          }
+          );
+      }else{
+        this.workingService.update(this.working).subscribe(data=>{
+          }
+          );
+      }
     });
   }
   addNewProcesses(row) {

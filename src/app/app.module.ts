@@ -13,9 +13,7 @@ import { SidebarComponent } from "./layout/sidebar/sidebar.component";
 import { RightSidebarComponent } from "./layout/right-sidebar/right-sidebar.component";
 import { AuthLayoutComponent } from "./layout/app-layout/auth-layout/auth-layout.component";
 import { MainLayoutComponent } from "./layout/app-layout/main-layout/main-layout.component";
-import { fakeBackendProvider } from "./core/interceptor/fake-backend";
 import { ErrorInterceptor } from "./core/interceptor/error.interceptor";
-import { JwtInterceptor } from "./core/interceptor/jwt.interceptor";
 import { LocationStrategy, HashLocationStrategy } from "@angular/common";
 import {
   PerfectScrollbarModule,
@@ -23,10 +21,28 @@ import {
   PerfectScrollbarConfigInterface,
 } from "ngx-perfect-scrollbar";
 import { ClickOutsideModule } from "ng-click-outside";
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapter";
 import { GlobalErrorHandler } from "./core/error/global-error-handler";
+import { AuthInterceptorService } from "./core/interceptor/auth-interceptor.service";
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslationService } from './core/service/system-service/Translation.service';
+import { JwtModule } from "@auth0/angular-jwt";
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
+// i18 kullanıclak ise aşağıdaki metod aktif edilecek
+
+//  export function HttpLoaderFactory(http: HttpClient) {
+//
+//    var asd=new TranslateHttpLoader(http, '../../../../assets/i18n/', '.json');
+//    return asd;
+//  }
+
+
+export function tokenGetter() {
+  return localStorage.getItem("token");
+}
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelPropagation: false,
@@ -53,6 +69,21 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // core & shared
     CoreModule,
     SharedModule,
+    NgMultiSelectDropDownModule.forRoot(),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      }
+    }),
+     TranslateModule.forRoot({
+       loader:{
+         provide:TranslateLoader,
+         //useFactory:HttpLoaderFactory, //i18 kullanılacak ise useClass kapatılıp yukarıda bulunan HttpLoaderFactory ve bu satır aktif edilecek
+         useClass:TranslationService,
+         deps:[HttpClient]
+       }
+
+    })
   ],
   providers: [
   //   {
@@ -64,10 +95,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
-    fakeBackendProvider,
+    AuthInterceptorService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
+    // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
   ],
   entryComponents: [],
   bootstrap: [AppComponent],

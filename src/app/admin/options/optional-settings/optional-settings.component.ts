@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { OptionalSetting } from 'src/app/core/models/optional-setting.model';
 import { OptionalSettingService } from 'src/app/core/service/optional-setting.service';
+import { AuthService } from 'src/app/core/service/system-service/auth.service';
 import Swal from "sweetalert2";
 
 @Component({
@@ -11,8 +12,9 @@ import Swal from "sweetalert2";
 })
 export class OptionalSettingsComponent implements OnInit {
   optionalSettings:OptionalSetting[]=[];
+  optionalSetting:OptionalSetting;
   optionalSettingsForm: FormGroup;
-  constructor(private optionalSettingService:OptionalSettingService,private fb: FormBuilder) {
+  constructor(private optionalSettingService:OptionalSettingService,private fb: FormBuilder,private authService:AuthService) {
       this.optionalSettingsForm = this.fb.group({
         id: this.fb.array([
         ]),
@@ -27,6 +29,9 @@ export class OptionalSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.getSettings();
   }
+  checkClaim(claim:string):boolean{
+		return this.authService.claimGuard(claim)
+	}
   getOptionsForms( optionalSettings:OptionalSetting[]): void {
     for (let i = 0; i < optionalSettings.length; i++) {
       const element = optionalSettings[i];
@@ -45,7 +50,7 @@ export class OptionalSettingsComponent implements OnInit {
     }
   }
   getSettings(){
-    this.optionalSettingService.getAll().subscribe(data=>{
+    this.optionalSettingService.getList().subscribe(data=>{
       this.optionalSettings=data;
     this.getOptionsForms(this.optionalSettings);
     })
@@ -55,13 +60,14 @@ export class OptionalSettingsComponent implements OnInit {
   }
 public onFormSubmit(): void {
     if (this.optionalSettingsForm.valid) {
-      let optionalSettings:OptionalSetting[] = Object.assign({}, this.optionalSettingsForm.value);
+      let optionalSettings:OptionalSetting[] = Object.assign([], this.optionalSettingsForm.value);
       console.log(this.optionalSettings);
     }
   }
   passParameter() {
     if (this.optionalSettingsForm.valid) {
-      let optionalSettings:OptionalSetting[] = Object.assign({}, this.optionalSettingsForm.value);
+      let optionalSettings= Object.assign([], this.optionalSettingsForm.value);
+      console.log(optionalSettings);
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn btn-success",
@@ -88,12 +94,21 @@ public onFormSubmit(): void {
       })
       .then((result) => {
         if (result.isConfirmed) {
-          for (let i = 0; i < optionalSettings.length; i++) {
-            const element = optionalSettings[i];
-            console.log(element);
-            this.optionalSettingService.save(element).subscribe(opt=>{
-
-            });
+          for (let i = 0; i < optionalSettings.id.length; i++) {
+            this.optionalSetting=new OptionalSetting({});
+            this.optionalSetting.id=optionalSettings.id[i];
+            this.optionalSetting.alias=optionalSettings.alias[i];
+            this.optionalSetting.isOpen=optionalSettings.isOpen[i];
+            this.optionalSetting.key=optionalSettings.key[i];
+            if(this.optionalSetting.id==0){
+              this.optionalSettingService.add(this.optionalSetting).subscribe(data=>{
+                }
+                );
+            }else{
+              this.optionalSettingService.update(this.optionalSetting).subscribe(data=>{
+                }
+                );
+            }
           }
           swalWithBootstrapButtons.fire("Değişiklikler Kaydedildi", "", "success");
         }

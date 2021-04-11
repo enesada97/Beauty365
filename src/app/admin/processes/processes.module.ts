@@ -34,6 +34,9 @@ import { InstitueProcessSaveComponent } from './institue-process-save/institue-p
 import { AddDialogComponent } from './institue-process-save/dialog/add-dialog/add-dialog.component';
 import { DeleteDialogComponent } from './institue-process-save/dialog/delete-dialog/delete-dialog.component';
 import { MatStepperModule } from "@angular/material/stepper";
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @NgModule({
@@ -61,7 +64,15 @@ import { MatStepperModule } from "@angular/material/stepper";
     MatProgressSpinnerModule,
     MatIconModule,
     NgxMaskModule,
-    MatStepperModule
+    MatStepperModule,
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers: [ProcessService,ProcessgroupService,ProcessInstitueService,InstitutionService],
 })

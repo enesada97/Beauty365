@@ -1,10 +1,8 @@
-import { WorkingDto } from 'src/app/core/models/workingdto.model';
 import { WorkingService } from 'src/app/core/service/working.service';
 import { Working } from 'src/app/core/models/working.model';
 import { Component, Inject} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { HttpErrorResponse } from '@angular/common/http';
 import { DateAdapter } from '@angular/material/core';
 
 @Component({
@@ -70,18 +68,16 @@ export class EditDialogComponent{
       let oldPrice=this.working.price;
       let oldArrears=this.working.arrearsValue;
       this.working = Object.assign({}, this.workingForm.value);
-      console.log("son hali" + this.working);
-      // this.patient.userId=this.authService.getCurrentUserId();
       this.working.arrearsValue=this.working.price-oldPrice+oldArrears;
-      this.workingService.save(this.working).subscribe(data=>{
-        console.log(JSON.stringify(data));
-        this.workingService._sweetAlert.success(data['Hizmet']);
-        },
-        (error: HttpErrorResponse) => {
-          this.workingService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
-        }
-        );
+      if(this.working.id==0){
+        this.workingService.add(this.working).subscribe(data=>{
+          }
+          );
+      }else{
+        this.workingService.update(this.working).subscribe(data=>{
+          }
+          );
+      }
     }
   }
 }

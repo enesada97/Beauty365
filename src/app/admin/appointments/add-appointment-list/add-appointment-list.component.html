@@ -5,21 +5,21 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Randevu</h4>
+              <h4 class="page-title">{{'Appointments'|translate}}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i> Anasayfa</a
+                <i class="fas fa-home"></i> {{'Homepage'|translate}}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
               <a
                 routerLink="/admin/patients/all-appointments"
                 onClick="return false;"
-                >Randevular</a
+                >{{'AppointmentList'|translate}}</a
               >
             </li>
-            <li class="breadcrumb-item active">Randevu Listesi Ekle</li>
+            <li class="breadcrumb-item active">{{'AddAppointmentList'|translate}}</li>
           </ul>
         </div>
       </div>
@@ -28,7 +28,7 @@
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
         <div class="card">
           <div class="header">
-            <h2><strong> Randevu Listesi Oluştur </strong></h2>
+            <h2><strong> {{'CreateAppointmentList'|translate}} </strong></h2>
           </div>
           <div class="body">
             <form
@@ -39,16 +39,16 @@
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Tarih Aralığı Seçiniz</mat-label>
+                    <mat-label>{{'DateRange'|translate}}</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
                       <input
                         matStartDate
-                        placeholder="Başlangıç Tarihi"
+                        placeholder="{{'StartDate'|translate}}"
                         formControlName="startDate"
                       />
                       <input
                         matEndDate
-                        placeholder="Bitiş Tarihi"
+                        placeholder="{{'FinishDate'|translate}}"
                         formControlName="finishDate"
                       />
                     </mat-date-range-input>
@@ -63,7 +63,7 @@
                       createAppointmentsForm.get('startDate').touched
                       "
                     >
-                      Tarih Aralığı Girilmelidir
+                    {{'DateRange'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -71,7 +71,7 @@
               <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Protokol Tipi</mat-label>
+                    <mat-label>{{'Type'|translate}}</mat-label>
                     <mat-select
                       formControlName="protocolTypeId"
                       required
@@ -89,13 +89,13 @@
                       createAppointmentsForm.get('protocolTypeId').touched
                       "
                     >
-                      Protokol Tipi Girilmelidir
+                    {{'Type'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Bölüm</mat-label>
+                    <mat-label>{{'Department'|translate}}</mat-label>
                     <mat-select
                       #mySelect
                       (selectionChange)="onOptionsSelected(mySelect.value)"
@@ -115,14 +115,14 @@
                       createAppointmentsForm.get('departmentId').touched
                       "
                     >
-                      Departman Girilmelidir
+                    {{'Department'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <ng-container *ngIf="doctors; else elseTemplate">
-                    <mat-form-field class="example-full-width mb-3">
-                      <mat-label>Doktor</mat-label>
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>{{'Doctor'|translate}}</mat-label>
                       <mat-select formControlName="doctorId">
                         <mat-option *ngFor="let doctor of doctors" [value]="doctor.id"
                           >{{ doctor.speciality }} {{ doctor.name }}
@@ -135,13 +135,13 @@
                         createAppointmentsForm.get('doctorId').touched
                         "
                       >
-                        Doktor Seçilmelidir
+                      {{'Doctor'|translate}} {{'Required'|translate}}
                       </mat-error>
                     </mat-form-field>
                   </ng-container>
                   <ng-template #elseTemplate>
                     <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>Önce bölüm seçiniz</mat-label>
+                      <mat-label>{{'BeforeDepartment'|translate}}</mat-label>
                       <mat-select [disabled] formControlName="doctorId">
                         <mat-option
                           [disabled]
@@ -158,7 +158,7 @@
               <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Başlangıç Saati</mat-label>
+                    <mat-label>{{'StartTime'|translate}}</mat-label>
                     <input type="time" matInput formControlName="startTime"/>
                     <mat-error
                       *ngIf="
@@ -166,13 +166,13 @@
                       createAppointmentsForm.get('startTime').touched
                       "
                     >
-                      Başlangıç Saati Girilmelidir
+                    {{'StartTime'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Bitiş Saati</mat-label>
+                    <mat-label>{{'FinishTime'|translate}}</mat-label>
                     <input type="time" matInput formControlName="finishTime"/>
                     <mat-error
                       *ngIf="
@@ -180,13 +180,13 @@
                       createAppointmentsForm.get('finishTime').touched
                       "
                     >
-                    Bitiş Saati Girilmelidir
+                    {{'FinishTime'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Muayene Aralığı</mat-label>
+                    <mat-label>{{'RangeMinutes'|translate}}</mat-label>
                     <input type="number" matInput formControlName="rangeMinutes"/>
                     <mat-error
                       *ngIf="
@@ -194,7 +194,7 @@
                       createAppointmentsForm.get('rangeMinutes').touched
                       "
                     >
-                    Muayene Aralığı Girilmelidir
+                    {{'RangeMinutes'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -207,9 +207,9 @@
                     mat-raised-button
                     color="primary"
                   >
-                    Randevu Listesi Oluştur
+                  {{'CreateAppointmentList'|translate}}
                   </button>
-                  <button type="button" mat-button>İptal</button>
+                  <button type="button" mat-button>{{'Cancel'|translate}}</button>
                 </div>
               </div>
             </form>

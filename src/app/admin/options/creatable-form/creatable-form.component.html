@@ -5,19 +5,19 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Oluşturulan Formlar</h4>
+              <h4 class="page-title">{{'FormTableList'| translate}}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i> Anasayfa</a
+                <i class="fas fa-home"></i> {{'Homepage'| translate}}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
-              <a routerLink="/admin/protocols/all-protocols" onClick="return false;"
-                >Formlar</a
+              <a onClick="return false;"
+                >{{'Options'| translate}}</a
               >
             </li>
-            <li class="breadcrumb-item active">Listele</li>
+            <li class="breadcrumb-item active">{{'FormTableList'| translate}}</li>
           </ul>
         </div>
       </div>
@@ -33,7 +33,7 @@
                     <ul class="header-buttons-left ml-0">
                       <li class="dropdown">
                         <h2>
-                          <strong>Protokoller</strong>
+                          <strong>{{'FormTableList'| translate}}</strong>
                         </h2>
                       </li>
                       <li class="dropdown m-l-20">
@@ -43,7 +43,7 @@
                           ></label
                         >
                         <input
-                          placeholder="Arama"
+                          placeholder="{{'Filter' |translate}}"
                           type="text"
                           (keyup)="applyFilter($event.target.value)"
                           class="browser-default search-field"
@@ -54,7 +54,7 @@
                   </div>
                   <div class="col-4">
                     <ul class="header-buttons">
-                      <li>
+                      <li *ngIf="checkClaim('CreateFormTableCommand')">
                         <div class="icon-button-demo">
                           <button
                             mat-mini-fab
@@ -90,13 +90,13 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Id</mat-header-cell
+                    >{{'Id'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">#{{ row.id }}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Tablo Adı</mat-header-cell
+                    >{{'Name'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.name }}</mat-cell
@@ -107,21 +107,21 @@
                     *matHeaderCellDef
                     mat-sort-header
                     [ngClass]="'tbl-col-width-per-8'"
-                    >Durum
+                    >{{'IsOpen'|translate}}
                   </mat-header-cell>
                   <mat-cell
                     *matCellDef="let row"
                     [ngClass]="'tbl-col-width-per-8'"
                   >
                     <ng-container *ngIf="row.isOpen == true; else elseTemplate">
-                      <span class="badge col-green">Açık</span>
+                      <span class="badge col-green">{{'Open'| translate}}</span>
                     </ng-container>
-                    <ng-template #elseTemplate><span class="badge col-purple">Kapalı</span></ng-template>
+                    <ng-template #elseTemplate><span class="badge col-purple">{{'Close'| translate}}</span></ng-template>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="addedBy">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Ekleyen Kişi</mat-header-cell
+                    >{{'AddedBy'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.addedBy }}</mat-cell
@@ -130,10 +130,11 @@
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef class="pr-0"
-                    >Eylemler</mat-header-cell
+                    >{{'Actions'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row; let i = index" class="pr-0">
                     <button
+                    *ngIf="checkClaim('GetFormTableQuery')"
                       mat-icon-button
                       routerLink="/admin/options/detail-table/{{ row.id }}"
                       color="accent"
@@ -145,6 +146,7 @@
                       >
                     </button>
                     <button
+                    *ngIf="checkClaim('UpdateFormTableCommand')"
                       mat-icon-button
                       color="accent"
                       class="btn-tbl-edit"
@@ -167,11 +169,12 @@
                     >
                   </button>
                     <button
+                    *ngIf="checkClaim('DeleteFormTableCommand')"
                       mat-icon-button
                       color="accent"
                       class="btn-tbl-delete"
                       (click)="$event.stopPropagation()"
-                      (click)="deleteItem(i, row)"
+                      (click)="deleteItem(row)"
                     >
                       <mat-icon aria-label="Delete" class="col-white"
                         >delete</mat-icon
@@ -210,7 +213,7 @@
                   dataSource.data.length == 0 ? '' : 'none'
                 "
               >
-              <p class="alert alert-danger">Sistem herhangi bir kayıt bulunamadı</p>
+              <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
               </div>
               <mat-paginator
                 #paginator

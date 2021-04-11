@@ -1,7 +1,6 @@
 import { ProcessInstitueService } from './../../../../../core/service/process-institue.service';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-delete-dialog',
@@ -20,10 +19,7 @@ export class DeleteDialogComponent{
   confirmDelete(): void {
     this.processInstitueService.delete(this.data.id).subscribe(
       (data) => {
-        this.processInstitueService._sweetAlert.delete("İşlem")
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error.name + " " + error.message);
+        this.dialogRef.close(1);
       }
     );
 }

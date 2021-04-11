@@ -4,7 +4,6 @@ import { CommonModule } from "@angular/common";
 import { DepartmentsRoutingModule } from "./departments-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AllDepartmentsComponent } from './all-departments/all-departments.component';
-import { AddDepartmentComponent } from './add-department/add-department.component';
 import { EditDepartmentComponent } from './edit-department/edit-department.component';
 import { DepartmentDetailComponent } from './department-detail/department-detail.component';
 import { MatTableModule } from '@angular/material/table';
@@ -28,15 +27,17 @@ import { NgxMaskModule } from 'ngx-mask';
 import { DepartmentService } from 'src/app/core/service/department.service';
 import { DeleteComponent } from './all-departments/dialog/delete/delete.component';
 import { FormDialogComponent } from './all-departments/dialog/form-dialog/form-dialog.component';
+import { HttpClient } from "@angular/common/http";
+import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { TranslationService } from "src/app/core/service/system-service/Translation.service";
 
 @NgModule({
   declarations: [
     AllDepartmentsComponent,
-    AddDepartmentComponent,
     EditDepartmentComponent,
     DepartmentDetailComponent,
     DeleteComponent,
-    FormDialogComponent
+    FormDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -61,6 +62,14 @@ import { FormDialogComponent } from './all-departments/dialog/form-dialog/form-d
     MatProgressSpinnerModule,
     MatIconModule,
     NgxMaskModule,
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers: [DepartmentService],
 })

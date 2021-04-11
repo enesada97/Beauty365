@@ -1,9 +1,11 @@
 export class ProcessInstitueDto {
-    id: number;
-    processGroupName:string;
-    processName:string;
-    institutionName:string;
-    price:number;
-  }
-  
-  
+  processInstitueNo: number;
+  processGroupName: string;
+  processName: string;
+  institueName: string;
+  price: number;
+  tTBPercent: number;
+  tTBFactor: number;
+  processIsLab: boolean;
+  processIsRad: boolean;
+}

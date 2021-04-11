@@ -5,17 +5,14 @@
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <ul class="breadcrumb breadcrumb-style">
               <li class="breadcrumb-item">
-                <h4 class="page-title">Doktor Ekle</h4>
+                <h4 class="page-title">{{'Doctors'|translate}}</h4>
               </li>
               <li class="breadcrumb-item bcrumb-1">
                 <a routerLink="/admin/dashboard/main">
-                  <i class="fas fa-home"></i> Anasayfa</a
+                  <i class="fas fa-home"></i>{{'Homepage'|translate}}</a
                 >
               </li>
-              <li class="breadcrumb-item bcrumb-2">
-                <a routerLink="/admin/doctors/all-doctors" onClick="return false;">Doktorlar</a>
-              </li>
-              <li class="breadcrumb-item active">Ekle</li>
+              <li class="breadcrumb-item active">{{'DoctorForm'|translate}}</li>
             </ul>
           </div>
         </div>
@@ -24,14 +21,14 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
           <div class="card">
             <div class="header">
-              <h2><strong> Doktor Bilgileri</strong></h2>
+              <h2><strong>{{'DoctorForm'|translate}}</strong></h2>
             </div>
             <div class="body">
               <form class="m-4" [formGroup]="doctorForm" (ngSubmit)="onSubmit()">
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <mat-form-field class="example-full-width mb-3">
-                      <mat-label>T.C Kimlik No</mat-label>
+                      <mat-label>{{'IdentityNumber'|translate}}</mat-label>
                       <input
                         matInput
                         maxlength="11"
@@ -48,24 +45,24 @@
                             doctorForm.get('identityNumber').touched
                         "
                       >
-                        T.C Kimlik girilmesi gereklidir
+                      {{'IdentityNumber'|translate}} {{'Required'|translate}}
                       </mat-error>
                       <mat-error
                         *ngIf="
                         doctorForm.get('identityNumber').hasError('minlength')
                         "
                       >
-                        T.C alanı 10 haneli olmalıdır Mevcut:
+                      {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'Current'|translate}}
                         {{ doctorForm.get("identityNumber").value.length }}
                       </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <mat-form-field class="example-full-width mb-3">
-                      <mat-label>Telefon Numarası</mat-label>
+                      <mat-label>{{'PhoneNumber'|translate}}</mat-label>
                       <input
                         matInput
-                        mask="(000) 000-0000" 
+                        mask="(000) 000-0000"
                         [showMaskTyped]="true"
                         formControlName="phone"
                         required
@@ -77,7 +74,7 @@
                         doctorForm.get('phone').touched
                         "
                       >
-                        Telefon numarasının girilmesi gereklidir
+                      {{'PhoneNumber'|translate}} {{'Required'|translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -85,7 +82,7 @@
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <mat-form-field class="example-full-width mb-3">
-                      <mat-label>Adı</mat-label>
+                      <mat-label>{{'Name'|translate}}</mat-label>
                       <input matInput formControlName="name" required />
                       <mat-icon matSuffix>face</mat-icon>
                       <mat-error
@@ -94,13 +91,13 @@
                         doctorForm.get('name').touched
                         "
                       >
-                        Ad alanının girilmesi gereklidir
+                      {{'Name'|translate}} {{'Required'|translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <mat-form-field class="example-full-width mb-3">
-                      <mat-label>Soyadı</mat-label>
+                      <mat-label>{{'SurName'|translate}}</mat-label>
                       <input
                         matInput
                         formControlName="surName"
@@ -114,7 +111,7 @@
                         doctorForm.get('surName').touched
                         "
                       >
-                        Soyad alanının girilmesi gereklidir
+                      {{'SurName'|translate}} {{'Required'|translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -122,7 +119,7 @@
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <mat-form-field class="example-full-width mb-3">
-                        <mat-label>Bölüm</mat-label>
+                        <mat-label>{{'Department'|translate}}</mat-label>
                         <mat-select formControlName="departmentId" required>
                           <mat-option *ngFor="let department of departments" [value]="department.id"> {{department.departmentName}} </mat-option>
                         </mat-select>
@@ -130,17 +127,17 @@
                           *ngIf="doctorForm.get('departmentId').hasError('required')&&
                           doctorForm.get('departmentId').touched"
                         >
-                          Departman Girilmelidir
+                        {{'Department'|translate}} {{'Required'|translate}}
                         </mat-error>
                       </mat-form-field>
                   </div>
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <mat-form-field class="example-full-width mb-3">
-                        <mat-label>Ünvan</mat-label>
+                        <mat-label>{{'Speciality'|translate}}</mat-label>
                         <input matInput formControlName="speciality" type="text" />
                         <mat-icon matSuffix>face</mat-icon>
                         <mat-error *ngIf="doctorForm.get('speciality').hasError('required')">
-                          Ünvan gereklidir
+                          {{'Speciality'|translate}} {{'Required'|translate}}
                         </mat-error>
                     </mat-form-field>
                   </div>
@@ -148,28 +145,22 @@
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <mat-form-field class="example-full-width mb-3">
-                        <mat-label>E-mail</mat-label>
+                        <mat-label>{{'Email'|translate}}</mat-label>
                         <input matInput formControlName="eMail" type="text" />
                         <mat-icon matSuffix>email</mat-icon>
                     </mat-form-field>
                   </div>
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <mat-form-field class="example-full-width mb-3">
-                      <mat-label>Lisans Numarası</mat-label>
+                      <mat-label>{{'LicenceNumber'|translate}}</mat-label>
                       <input matInput formControlName="licenceNumber" type="text" />
-                      <mat-error
-                          *ngIf="doctorForm.get('licenceNumber').hasError('required')&&
-                          doctorForm.get('licenceNumber').dirty"
-                        >
-                          Lisans Numarası Girilmelidir
-                        </mat-error>
                   </mat-form-field>
                   </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                       <mat-form-field class="example-full-width mb-3">
-                        <mat-label>Address</mat-label>
+                        <mat-label>{{'Address'|translate}}</mat-label>
                         <textarea matInput formControlName="address"></textarea>
                       </mat-form-field>
                     </div>
@@ -182,9 +173,9 @@
                       mat-raised-button
                       color="primary"
                     >
-                      Kaydet
+                    {{'Save'|translate}}
                     </button>
-                    <button type="button" mat-button>İptal</button>
+                    <button type="button" mat-button>{{'Cancel'|translate}}</button>
                   </div>
                 </div>
               </form>
@@ -194,4 +185,3 @@
       </div>
     </div>
   </section>
-  

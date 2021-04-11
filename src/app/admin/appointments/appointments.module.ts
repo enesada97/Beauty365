@@ -34,6 +34,11 @@ import { DepartmentService } from 'src/app/core/service/department.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { OptionalSettingService } from 'src/app/core/service/optional-setting.service';
+import { ProtocolTypeProcessService } from 'src/app/core/service/protocol-type-process.service';
+import { WorkingService } from 'src/app/core/service/working.service';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
 
 @NgModule({
   declarations: [AllAppointmentsComponent, AddAppointmentDialogComponent, DeleteComponent, AddAppointmentListComponent],
@@ -64,8 +69,16 @@ import { OptionalSettingService } from 'src/app/core/service/optional-setting.se
     MatProgressButtonsModule,
     MatMomentDateModule,
     MatExpansionModule,
-    MatTooltipModule
+    MatTooltipModule,
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
   ],
-  providers: [ProtocoltypeService,AppointmentService,DepForDoctorsService,DepartmentService,OptionalSettingService],
+  providers: [ProtocoltypeService,AppointmentService,DepForDoctorsService,DepartmentService,OptionalSettingService,ProtocolTypeProcessService,WorkingService],
 })
 export class AppointmentsModule { }

@@ -1,10 +1,10 @@
 export class ProcessInstitue{
-    id:number;
-    institueId:number;
-    processId:number;
-    price:number;
-    tTBPercent:number;
-    tTBFactor:number;
+  id?:number;
+  institueId?:number;
+  processId?:number;
+  price?:number;
+  tTBPercent?:number;
+  tTBFactor?:number;
     constructor(processInstitue) {
         {
           this.id = processInstitue.id || 0;

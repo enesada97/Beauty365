@@ -1,5 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -16,6 +15,7 @@ import { ProtocolType } from 'src/app/core/models/protocoltype.model';
 import { AppointmentService } from 'src/app/core/service/appointment.service';
 import { DepartmentService } from 'src/app/core/service/department.service';
 import { DepForDoctorsService } from 'src/app/core/service/depfordoctors.service';
+import { OptionalSettingService } from 'src/app/core/service/optional-setting.service';
 import { PatientService } from 'src/app/core/service/patient.service';
 import { ProtocoltypeService } from 'src/app/core/service/protocoltype.service';
 
@@ -28,12 +28,12 @@ import { ProtocoltypeService } from 'src/app/core/service/protocoltype.service';
     AppointmentService,
     DepartmentService,
     DepForDoctorsService,
-    PatientService
+    PatientService,
+    OptionalSettingService
   ],
 })
 export class AddAppointmentDialogComponent implements OnInit{
   action: string;
-  dialogTitle: string;
   appointmentForm: FormGroup;
   appointment: Appointment;
   optionalSetting:OptionalSetting;
@@ -51,7 +51,7 @@ export class AddAppointmentDialogComponent implements OnInit{
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   dataSource: MatTableDataSource<Patient>;
-  id: any;
+  optionalSettingForIdentityRequired:OptionalSetting;
   constructor(
     public dialogRef: MatDialogRef<AddAppointmentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -61,7 +61,8 @@ export class AddAppointmentDialogComponent implements OnInit{
     private depForDoctorsService: DepForDoctorsService,
     private patientService:PatientService,
     private fb: FormBuilder,
-    private dateAdapter: DateAdapter<any>
+    private dateAdapter: DateAdapter<any>,
+    private optionalSettingService:OptionalSettingService
   ) {
     this.dateAdapter.setLocale("tr");
     this.action = data.action;
@@ -69,7 +70,6 @@ export class AddAppointmentDialogComponent implements OnInit{
       this.appointment = data.appointment;
     }else {
       this.optionalSetting=data.optionalSetting;
-      this.dialogTitle = 'Yeni Randevu';
       this.appointment = new Appointment({});
       this.appointment.protocolId=0;
       this.appointment.arriveDateTime=new Date();
@@ -102,6 +102,12 @@ export class AddAppointmentDialogComponent implements OnInit{
         status: [this.appointment.status],
       });
     }
+    getOptionalSetting(){
+      this.optionalSettingService.getById(3).subscribe(data=>{
+        this.optionalSettingForIdentityRequired=data;
+        console.log(this.optionalSettingForIdentityRequired);
+      })
+    }
     createContactFormForSearch(): FormGroup {
       return this.fb.group({
        identityNumber:[null],
@@ -117,18 +123,33 @@ export class AddAppointmentDialogComponent implements OnInit{
         .subscribe((data) => (this.doctors = data));
     }
   ngOnInit(): void {
+    this.getOptionalSetting();
     if(this.action=="edit"){
       this.departmentService
       .getById(this.appointment.departmentId)
       .subscribe((data) => (this.department = data));
-    this.depForDoctorsService.getDoctorById(this.appointment.doctorId).subscribe((data) => (this.doctor = data));
+    this.depForDoctorsService.getById(this.appointment.doctorId).subscribe((data) => (this.doctor = data));
     }else{
       this.departmentService
-      .getAll()
-      .subscribe((data) => (this.departments = data));
+      .getList()
+      .subscribe((data) => {this.departments = data;
+        if(this.departments[0]){
+      this.appointmentForm.controls['departmentId'].setValue(this.departments[0].id);
+      this.depForDoctorsService.getDoctorListByDepId(this.departments[0].id).subscribe(m=>{
+        this.doctors=m;
+        if(this.doctors[0]){
+          this.appointmentForm.controls['doctorId'].setValue(this.doctors[0].id);
+            }});
+        }});
+        this.protocolTypeService
+      .getList()
+      .subscribe((data) => {this.protocolTypes = data;
+        if(this.protocolTypes[0]){
+      this.appointmentForm.controls['protocolTypeId'].setValue(this.protocolTypes[0].id);
+        }});
     }
     this.protocolTypeService
-      .getAllProtocolTypesForAny()
+      .getList()
       .subscribe((data) => (this.protocolTypes = data));
   }
   applyFilter(filterValue: string) {
@@ -140,12 +161,6 @@ export class AddAppointmentDialogComponent implements OnInit{
   ]);
 
   submit() {
-    // emppty stuff
-  }
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-  public confirmAdd(): void {
     if (this.appointmentForm.valid) {
       this.appointment = Object.assign({}, this.appointmentForm.value);
       this.appointment.createdAppointmentDateTime = new Date();
@@ -156,33 +171,51 @@ export class AddAppointmentDialogComponent implements OnInit{
       this.patient.identityNumber=this.appointment.identityNumber;
       this.patientService.getSearchedPatients(this.patient).subscribe(res=>{
         if(res.length){
+          this.patient=res[0];
+          this.appointment.patientDataId=this.patient.id;
           console.log("Hasta kaydı var");
+          this.appointmentService.add(this.appointment).subscribe(data=>{
+            console.log(this.appointment);
+            this.dialogRef.close(1);
+            }
+            );
         }else{
           this.patient.name=this.appointment.name;
           this.patient.surName=this.appointment.surName;
-          this.patientService.save(this.patient).subscribe(p=>{
+          this.patientService.add(this.patient).subscribe(p=>{
+            this.patient=p
+            this.appointment.patientDataId=this.patient.id;
+            this.appointmentService.add(this.appointment).subscribe(data=>{
+              console.log(this.appointment);
+              this.dialogRef.close(1);
+              }
+              );
             console.log(p);
           });
         }
       },
-      (error: HttpErrorResponse) => {
-        this.patient.name=this.appointment.name;
-          this.patient.surName=this.appointment.surName;
-          this.patientService.save(this.patient).subscribe(pa=>{
-            console.log(pa);
-          });
-      },
+      // (error: HttpErrorResponse) => {
+      //   this.patient.name=this.appointment.name;
+      //     this.patient.surName=this.appointment.surName;
+      //     this.patientService.add(this.patient).subscribe(pa=>{
+      //       this.patient=pa;
+      //       this.appointment.patientDataId=this.patient.id;
+      //       this.appointmentService.add(this.appointment).subscribe(data=>{
+      //         console.log(this.appointment);
+      //         this.dialogRef.close(1);
+      //         },
+      //         (error: HttpErrorResponse) => {
+      //           this.patientService.isTblLoading = false;
+      //           console.log(error.name + " " + error.message);
+      //         }
+      //         );
+      //     });
+      // },
       )
-      this.appointmentService.save(this.appointment).subscribe(data=>{
-        console.log(this.appointment);
-        this.patientService._sweetAlert.success(data['date'].toLocaleString() + "tarihli randevu");
-        },
-        (error: HttpErrorResponse) => {
-          this.patientService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
-        }
-        );
     }
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
   }
   onSearchSubmit(): void {
     this.patient = Object.assign({}, this.patientForm.value);

@@ -1,9 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, Inject } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Patient } from 'src/app/core/models/patient.model';
 import { PatientService } from 'src/app/core/service/patient.service';
+import { SweetalertService } from 'src/app/core/service/sweetalert.service';
 
 @Component({
   selector: 'app-note-for-patient',
@@ -21,10 +21,9 @@ export class NoteForPatientComponent{
     public dialogRef: MatDialogRef<NoteForPatientComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public patientService: PatientService,
-    private fb: FormBuilder,
+    private sweetAlert:SweetalertService
   ) {
     this.action = data.action;
-    this.dialogTitle = data.dialogTitle;
     this.patient = data.patient;
    }
   onNoClick(): void {
@@ -33,14 +32,10 @@ export class NoteForPatientComponent{
   public confirmAdd(): void {
     if(this.note.valid){
       this.patient.note=this.note.value;
-         // this.patient.userId=this.authService.getCurrentUserId();
-       this.patientService.save(this.patient).subscribe(data=>{
+       this.patientService.update(this.patient).subscribe(data=>{
          this.dialogRef.close(1);
-       },
-         (error: HttpErrorResponse) => {
-           this.patientService.isTblLoading = false;
-           console.log(error.name + " " + error.message);
-        }
+         this.sweetAlert.success(data);
+       }
          );
     }
   }

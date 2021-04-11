@@ -1,19 +1,19 @@
 export class Collection {
-  id: number;
-  collectorId: number;
-  protocolId:number;
-  paymentType:number;
-  price:number;
-  bankId:number;
-  paymentBillNo:string;
+  id?:number;
+  collectorId?:number;
+  protocolId?:number;
+  paymentType?:number;
+  price?:number;
+  bankId?:number;
+  paymentBillNo?:string;
   discount:boolean;
   cancelled:boolean;
-  paymentValue:number;
-  discountValue:number;
-  addedDate:Date;
-  updatedDate:Date;
-  addedBy:string;
-  updatedBy:string;
+  paymentValue?:number;
+  discountValue?:number;
+  addedDate?:(Date | any);
+  updatedDate?:(Date | any);
+  addedBy?:string;
+  updatedBy?:string;
   constructor(collection) {
     {
       this.id = collection.id || 0;

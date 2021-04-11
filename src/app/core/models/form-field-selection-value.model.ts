@@ -1,7 +1,7 @@
 export class FormFieldSelectionValue {
-  id: number;
-  formFieldId: number;
-  value:string;
+  id?: number;
+  formFieldId?: number;
+  value?:string;
   constructor(formFieldSelectionValue) {
     {
       this.id = formFieldSelectionValue.id || 0;

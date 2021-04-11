@@ -7,13 +7,8 @@ import { DetailPatientComponent } from './detail-patient/detail-patient/detail-p
 import { EditPatientComponent } from './edit-patient/edit-patient.component';
 import { PatientDetailComponent } from './patient-detail/patient-detail.component';
 import { SearchPatientComponent } from './search-patient/search-patient.component';
-import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
-  // {
-  //   path: 'all-patients',
-  //   component: AllPatientsComponent,
-  // },
   {
     path: 'all-patients',
     component: AllPatientsComponent,

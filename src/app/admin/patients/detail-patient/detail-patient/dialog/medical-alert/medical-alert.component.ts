@@ -8,7 +8,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { HttpErrorResponse } from "@angular/common/http";
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
 
 @Component({
   selector: "app-medical-alert",
@@ -17,38 +17,36 @@ import { HttpErrorResponse } from "@angular/common/http";
 })
 export class MedicalAlertComponent implements OnInit {
   action: string;
-  dialogTitle: string;
   medicalAlertForm: FormGroup;
   medicalAlert: MedicalAlert;
   constructor(
     public dialogRef: MatDialogRef<MedicalAlertComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public medicalAlertService: MedicalAlertService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private sweetAlert: SweetalertService
   ) {
     // Set the defaults
     this.action = data.action;
-    this.dialogTitle = data.dialogTitle;
     if (this.action === "edit") {
       this.medicalAlert = data.medicalAlert;
     } else {
       this.medicalAlert = new MedicalAlert({});
-      this.medicalAlert.patientDataId =data.patientDataId;
+      this.medicalAlert.patientDataId = data.patientDataId;
     }
     this.medicalAlertForm = this.createContactForm();
   }
-  ngOnInit(){
-    this.dialogRef.updatePosition({ top: `0px`});
+  ngOnInit() {
+    this.dialogRef.updatePosition({ top: `0px` });
   }
-  formControl = new FormControl("", [
-    Validators.required,
-    // Validators.email,
-  ]);
   createContactForm(): FormGroup {
     return this.fb.group({
       id: [this.medicalAlert.id],
       patientDataId: [this.medicalAlert.patientDataId],
-      note: [this.medicalAlert.note, [Validators.required,Validators.maxLength(100)]],
+      note: [
+        this.medicalAlert.note,
+        [Validators.required, Validators.maxLength(100)],
+      ],
     });
   }
   submit() {}
@@ -58,21 +56,23 @@ export class MedicalAlertComponent implements OnInit {
   public confirmAdd(): void {
     if (this.medicalAlertForm.valid) {
       this.medicalAlert = Object.assign({}, this.medicalAlertForm.value);
-      console.log(JSON.stringify(this.medicalAlert));
-      this.medicalAlertService.save(this.medicalAlert).subscribe(
-        (data) => {},
-        (error: HttpErrorResponse) => {
-          console.log(error.name + " " + error.message);
-        }
-      );
+      if (this.medicalAlert.id == 0) {
+        this.medicalAlertService.add(this.medicalAlert).subscribe((data) => {
+          this.dialogRef.close(1);
+          this.sweetAlert.success(data.toString());
+        });
+      } else {
+        this.medicalAlertService.update(this.medicalAlert).subscribe((data) => {
+          this.dialogRef.close(1);
+          this.sweetAlert.info(data.toString());
+        });
+      }
     }
   }
-  deleteMedicalAlert(){
-    this.medicalAlertService.delete(this.medicalAlert.id).subscribe(
-      (data) => {console.log(data);},
-      (error: HttpErrorResponse) => {
-        console.log(error.name + " " + error.message);
-      }
-    );
+  deleteMedicalAlert() {
+    this.medicalAlertService.delete(this.medicalAlert.id).subscribe((data) => {
+      this.dialogRef.close(1);
+      this.sweetAlert.delete(data.toString());
+    });
   }
 }

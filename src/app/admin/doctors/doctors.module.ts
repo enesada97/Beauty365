@@ -29,6 +29,10 @@ import { DeleteComponent } from "./all-doctors/dialog/delete/delete.component";
 import { FormDialogComponent } from "./all-doctors/dialog/form-dialog/form-dialog.component";
 import { DepForDoctorsService } from 'src/app/core/service/depfordoctors.service';
 import { DepartmentService } from 'src/app/core/service/department.service';
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
+import { HttpClient } from "@angular/common/http";
+import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { TranslationService } from "src/app/core/service/system-service/Translation.service";
 
 @NgModule({
   declarations: [
@@ -63,7 +67,15 @@ import { DepartmentService } from 'src/app/core/service/department.service';
     MatProgressSpinnerModule,
     MatIconModule,
     NgxMaskModule,
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
   ],
-  providers: [DepForDoctorsService,DepartmentService],
+  providers: [DepForDoctorsService,DepartmentService,SweetalertService],
 })
 export class DoctorsModule {}

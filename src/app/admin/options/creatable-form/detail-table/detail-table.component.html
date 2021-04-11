@@ -5,17 +5,17 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Ayarlar</h4>
+              <h4 class="page-title">{{'CreatableFormList'|translate}}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i> Anasayfa</a
+                <i class="fas fa-home"></i> {{'Homepage'|translate}}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
-              <a href="#" onClick="return false;">Oluşturulabilir Form</a>
+              <a href="#" onClick="return false;">{{'CreatableForms'|translate}}</a>
             </li>
-            <li class="breadcrumb-item active">#{{formTable.id}} {{formTable.name}} Detay</li>
+            <li class="breadcrumb-item active">#{{formTable.id}} {{formTable.name}} {{'Detail'|translate}}</li>
           </ul>
         </div>
       </div>
@@ -28,7 +28,7 @@
               <div class="col-md-12" style="margin-bottom: 0px;">
                     <div class="row">
                       <div class="col-md-4 col-4 b-r " style="margin-bottom: 0px;">
-                        <strong>Form Adı</strong>
+                        <strong>{{'Name'|translate}}</strong>
                         <br />
 
                         <p class="text-muted">
@@ -36,20 +36,20 @@
                         </p>
                       </div>
                       <div class="col-md-4 col-4 b-r" style="margin-bottom: 0px;">
-                        <strong>Durumu</strong>
+                        <strong>{{'Status'|translate}}</strong>
                         <br />
 
                         <p *ngIf="formTable.isOpen;else tableFalse" class="text-muted">
-                          Açık
+                          {{'Open'|translate}}
                         </p>
                         <ng-template #tableFalse>
                           <p class="text-muted">
-                            Kapalı
+                            {{'Close'|translate}}
                           </p>
                         </ng-template>
                       </div>
                       <div class="col-md-4 col-4" style="margin-bottom: 0px;">
-                        <strong>Oluşturan</strong>
+                        <strong>{{'AddedBy'|translate}}</strong>
                         <br />
                         <p class="text-muted">
                           {{formTable.addedBy}}
@@ -73,7 +73,7 @@
                     <ul class="header-buttons-left ml-0">
                       <li class="dropdown">
                         <h2>
-                          <strong>Form Alanları</strong>
+                          <strong>{{'FormFieldList'| translate}}</strong>
                         </h2>
                       </li>
                       <li class="dropdown m-l-20">
@@ -83,7 +83,7 @@
                           ></label
                         >
                         <input
-                          placeholder="Arama"
+                          placeholder="{{'Filter'| translate}}"
                           type="text"
                           (keyup)="applyFilter($event.target.value)"
                           class="browser-default search-field"
@@ -94,7 +94,7 @@
                   </div>
                   <div class="col-4">
                     <ul class="header-buttons">
-                      <li>
+                      <li *ngIf="checkClaim('CreateFormFieldCommand')">
                         <div class="icon-button-demo">
                           <button
                             mat-mini-fab
@@ -129,19 +129,19 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Id</mat-header-cell
+                    >{{'Id'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="formTableId">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Bulunduğu Form</mat-header-cell
+                    >{{'FormTableId'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row"> {{ row.formTableId }}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="label">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Alan Başlığı</mat-header-cell
+                    >{{'Label'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row"> {{ row.label }}</mat-cell>
                 </ng-container>
@@ -150,38 +150,38 @@
                     *matHeaderCellDef
                     mat-sort-header
                     [ngClass]="'tbl-col-width-per-8'"
-                    >Durum
+                    >{{'IsOpen'|translate}}
                   </mat-header-cell>
                   <mat-cell
                     *matCellDef="let row"
                     [ngClass]="'tbl-col-width-per-8'"
                   >
                     <ng-container *ngIf="row.isOpen == true; else elseTemplate">
-                      <span class="badge col-green">Açık</span>
+                      <span class="badge col-green">{{'Open'|translate}}</span>
                     </ng-container>
-                    <ng-template #elseTemplate><span class="badge col-purple">Kapalı</span></ng-template>
+                    <ng-template #elseTemplate><span class="badge col-purple">{{'Close'|translate}}</span></ng-template>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="type">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Tipi</mat-header-cell
+                    >{{'Type'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     <ng-container [ngSwitch]="row.type">
                       <ng-container *ngSwitchCase="'input'">
-                        Küçük Yazı Alanı
+                        {{'LittleLetterSpace'|translate}}
                       </ng-container>
                       <ng-container *ngSwitchCase="'textarea'">
-                        Büyük Yazı Alanı
+                        {{'BigLetterSpace'|translate}}
                       </ng-container>
                       <ng-container *ngSwitchCase="'radio'">
-                        İşaretleme Kutusu
+                        {{'RadioBox'|translate}}
                       </ng-container>
                       <ng-container *ngSwitchCase="'date'">
-                        Tarih Seçiçi
+                        {{'DatePicker'|translate}}
                       </ng-container>
                       <ng-container *ngSwitchCase="'select'">
-                        Seçim Kutusu
+                        {{'CheckBox'|translate}}
                       </ng-container>
                     </ng-container>
                     </mat-cell
@@ -190,7 +190,7 @@
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef class="pr-0"
-                    >Eylemler</mat-header-cell
+                    >{{'Actions' | translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row; let i = index" class="pr-0">
                     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -198,26 +198,29 @@
                     </button>
                     <mat-menu #menu="matMenu">
                       <button mat-menu-item
+                      *ngIf="checkClaim('UpdateFormFieldCommand')"
                       (click)="editCall(row)">
                         <mat-icon>edit</mat-icon>
-                        <span>Düzenle</span>
+                        <span>{{'Update'| translate}}</span>
                       </button>
                       <button mat-menu-item
-                      (click)="deleteItem(i, row)">
+                      *ngIf="checkClaim('DeleteFormFieldCommand')"
+                      (click)="deleteItem(row)">
                         <mat-icon>delete</mat-icon>
-                        <span>Sil</span>
+                        <span>"{{'Delete'| translate}}"</span>
                       </button>
                       <button *ngIf="row.type!=('input'||'date')" mat-menu-item [matMenuTriggerFor]="formFieldValues">
                         <mat-icon>group</mat-icon>
-                        <span>Seçenek İşlemleri</span>
+                        <span>{{'SelectionValueProcesses'|translate}}</span>
                       </button>
                     </mat-menu>
                     <mat-menu #formFieldValues="matMenu">
                       <button mat-menu-item
+                      *ngIf="checkClaim('UpdateFormFieldSelectionValueCommand')"
                       (click)="$event.stopPropagation()"
                       (click)="editFieldValueCall(row)">
                         <mat-icon>edit</mat-icon>
-                        <span>Düzenle</span>
+                        <span>"{{'Update'| translate}}"</span>
                       </button>
                     </mat-menu>
                   </mat-cell>
@@ -249,7 +252,7 @@
                   dataSource.data.length == 0 ? '' : 'none'
                 "
               >
-              <p class="alert alert-danger">Sistem herhangi bir kayıt bulunamadı</p>
+              <p class="alert alert-danger">{{'NoRecordsFound' |translate}} </p>
               </div>
               <mat-paginator
                 #paginator

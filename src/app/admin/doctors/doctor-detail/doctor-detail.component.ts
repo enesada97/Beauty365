@@ -14,23 +14,23 @@ export class DoctorDetailComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private depForDoctorsService: DepForDoctorsService,
-    private departmentService: DepartmentService 
+    private departmentService: DepartmentService
   ) {}
   doctor:Doctor;
   department:Department;
   notEntered:"Belirtilmemiş"
-  
+
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
       this.getDoctorById(params['id']);
     });
-    
-    
+
+
   }
   getDoctorById(id) {
-    this.depForDoctorsService.getDoctorById(id).subscribe(data => {
-      this.doctor = data; 
+    this.depForDoctorsService.getById(id).subscribe(data => {
+      this.doctor = data;
       this.getDepartment(this.doctor.departmentId)
     });
   }

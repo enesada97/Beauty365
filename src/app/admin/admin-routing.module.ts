@@ -4,6 +4,11 @@ import { Routes, RouterModule } from "@angular/router";
 
 const routes: Routes = [
   {
+    path: "managements",
+    loadChildren: () =>
+      import("./managements/managements.module").then((m) => m.ManagementsModule),
+  },
+  {
     path: "dashboard",
     loadChildren: () =>
       import("./dashboard/dashboard.module").then((m) => m.DashboardModule),

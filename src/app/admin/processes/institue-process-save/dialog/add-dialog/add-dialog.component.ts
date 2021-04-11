@@ -9,7 +9,6 @@ import { ProcessInstitue } from 'src/app/core/models/process-institue.model';
 import { Process } from 'src/app/core/models/process.model';
 import { ProcessGroup } from 'src/app/core/models/processgroup.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { HttpErrorResponse } from '@angular/common/http';
 import { InstitutionService } from 'src/app/core/service/institution.service';
 
 @Component({
@@ -19,7 +18,6 @@ import { InstitutionService } from 'src/app/core/service/institution.service';
 })
 export class AddDialogComponent implements OnInit {
   action: string;
-  dialogTitle: string;
   processInstitueForm: FormGroup;
   processForm: FormGroup;
   processInstitue: ProcessInstitue;
@@ -42,7 +40,6 @@ export class AddDialogComponent implements OnInit {
       this.processInstitue = data.processInstitue;
       this.processService.getById(data.processId).subscribe(data=>this.process=data);
     } else {
-      this.dialogTitle = "Yeni İşlem";
       this.processInstitue = new ProcessInstitue({});
       this.process = new Process({});
     }
@@ -74,42 +71,59 @@ export class AddDialogComponent implements OnInit {
       });
     }
   ngOnInit(): void {
-    this.processgroupService.getAll().subscribe((data)=>(this.processGroups=data));
-    this.institutionService.getAll().subscribe((data)=>(this.institutions=data));
+    this.processgroupService.getList().subscribe((data)=>(this.processGroups=data));
+    this.institutionService.getList().subscribe((data)=>(this.institutions=data));
   }
   formControl = new FormControl("", [
     Validators.required,
     // Validators.email,
   ]);
-  
-  submit() {
-    // emppty stuff
+
+  public submit() {
+    if (this.processForm.valid) {
+      this.process = Object.assign({}, this.processForm.value);
+      if(this.process.id==0){
+        this.processService.add(this.process).subscribe(data=>{
+          if(this.processInstitueForm.valid){
+            this.processInstitue = Object.assign({}, this.processInstitueForm.value);
+            this.processInstitue.processId=data['id'];
+            if(this.processInstitue.id==0){
+              this.processInstitueService.add(this.processInstitue).subscribe(data=>{
+                this.dialogRef.close(1);
+                }
+                );
+            }else{
+              this.processInstitueService.update(this.processInstitue).subscribe(data=>{
+                this.dialogRef.close(1);
+                }
+                );
+            }
+          }
+        })
+      }else
+      {
+        this.processService.update(this.process).subscribe(data=>{
+          if(this.processInstitueForm.valid){
+            this.processInstitue = Object.assign({}, this.processInstitueForm.value);
+            this.processInstitue.processId=data['id'];
+            if(this.processInstitue.id==0){
+              this.processInstitueService.add(this.processInstitue).subscribe(data=>{
+                this.dialogRef.close(1);
+                }
+                );
+            }else{
+              this.processInstitueService.update(this.processInstitue).subscribe(data=>{
+                this.dialogRef.close(1);
+                }
+                );
+            }
+          }
+        })
+      }
+    }
   }
   onNoClick(): void {
     this.dialogRef.close();
-  }
-  public confirmAdd(): void {
-    if (this.processForm.valid) {
-      this.process = Object.assign({}, this.processForm.value);
-      console.log(this.process);
-      // this.patient.userId=this.authService.getCurrentUserId();
-      this.processService.save(this.process).subscribe(data=>{
-        if (this.processInstitueForm.valid) {
-          this.processInstitue = Object.assign({}, this.processInstitueForm.value);  
-          this.processInstitue.processId=data['id'];
-          console.log(this.process)
-          console.log(this.processInstitue)
-          this.processInstitueService.save(this.processInstitue).subscribe(data=>{
-            this.processInstitueService.isTblLoading=false;
-          })
-        }
-        this.processService._sweetAlert.success(data['name']);
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error.name + " " + error.message);
-        }
-        );
-    }
   }
 }
 

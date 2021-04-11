@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Department } from 'src/app/core/models/department.model';
 import { Doctor } from 'src/app/core/models/doctor.model';
 import { DepartmentService } from 'src/app/core/service/department.service';
 import { DepForDoctorsService } from 'src/app/core/service/depfordoctors.service';
+import { SweetalertService } from 'src/app/core/service/sweetalert.service';
 
 @Component({
   selector: 'app-edit-doctor',
@@ -13,34 +14,36 @@ import { DepForDoctorsService } from 'src/app/core/service/depfordoctors.service
 })
 export class EditDoctorComponent implements OnInit {
   doctorForm: FormGroup;
-  formdata;
   doctor: Doctor;
   departments:Department[];
   constructor(
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private depForDoctorsService: DepForDoctorsService,
-    private departmentService:DepartmentService
+    private departmentService:DepartmentService,
+    private sweetAlert:SweetalertService,
+    private router:Router
   ) {}
-  
+
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
       this.getDoctorById(params["id"]);
     });
-    this.departmentService.getAll().subscribe((data) => (this.departments = data));
+    this.departmentService.getList().subscribe((data) => (this.departments = data));
   }
   getDoctorById(id) {
-    this.depForDoctorsService.getDoctorById(id).subscribe((data) => {
-      this.formdata = data;
-      this.doctor = this.formdata;
+    this.depForDoctorsService.getById(id).subscribe((data) => {
+      this.doctor = data;
       this.doctorForm = this.createContactForm();
     });
   }
   public onSubmit(): void {
     if (this.doctorForm.valid) {
       this.doctor = Object.assign({}, this.doctorForm.value);
-      // this.patient.userId=this.authService.getCurrentUserId();
-      this.depForDoctorsService.addDoctor(this.doctor);
+      this.depForDoctorsService.update(this.doctor).subscribe(data=>{
+        this.router.navigateByUrl('/admin/doctors/doctor-detail/'+data.doctor.id);
+        this.sweetAlert.info(data.toString());
+      })
     }
   }
   createContactForm(): FormGroup {

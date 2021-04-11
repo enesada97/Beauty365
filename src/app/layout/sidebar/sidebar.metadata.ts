@@ -6,9 +6,9 @@ export interface RouteInfo {
   iconType: string;
   icon: string;
   class: string;
+  claim:string;
   groupTitle: boolean;
   badge: string;
   badgeClass: string;
-  role: string[];
   submenu: RouteInfo[];
 }

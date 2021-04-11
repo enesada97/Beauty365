@@ -1,10 +1,9 @@
 export class ProcessDtoForWorking {
-    id:number;
+    processId:number;
     groupName:string;
     processName:string;
     price:number;
     isLab:boolean;
     isRad:boolean;
   }
-  
-  
+

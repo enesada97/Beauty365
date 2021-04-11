@@ -5,21 +5,19 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Hasta Bilgilerini Düzenle</h4>
+              <h4 class="page-title">{{'PatientForm'|translate}}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i> Anasayfa</a
+                <i class="fas fa-home"></i>{{'Homepage'|translate}}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
-              <a
-                routerLink="/admin/patients/all-patients"
-                onClick="return false;"
-                >Hastalar</a
+              <a onClick="return false;"
+                >{{'Patients'|translate}}</a
               >
             </li>
-            <li class="breadcrumb-item active">Düzenle</li>
+            <li class="breadcrumb-item active">{{'PatientForm'|translate}}</li>
           </ul>
         </div>
       </div>
@@ -31,7 +29,7 @@
             <h2>
               <strong
                 >{{ patient.name | uppercase
-                }} {{ patient.surName | uppercase }} Bilgilerini Düzenle</strong
+                }} {{ patient.surName | uppercase }}</strong
               >
             </h2>
           </div>
@@ -40,7 +38,7 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>T.C Kimlik No</mat-label>
+                    <mat-label>{{'IdentityNumber'|translate}}</mat-label>
                     <input
                       matInput
                       maxlength="11"
@@ -57,21 +55,21 @@
                         patientForm.get('identityNumber').touched
                       "
                     >
-                      T.C Kimlik girilmesi gereklidir
+                    {{'IdentityNumber'|translate}} {{'Required'|translate}}
                     </mat-error>
                     <mat-error
                       *ngIf="
                         patientForm.get('identityNumber').hasError('minlength')
                       "
                     >
-                      T.C alanı 10 haneli olmalıdır Mevcut:
+                    {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentValue'|translate}}:
                       {{ patientForm.get("identityNumber").value.length }}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Telefon Numarası</mat-label>
+                    <mat-label>{{'PhoneNumber'|translate}}</mat-label>
                     <input
                       matInput
                       mask="(000) 000-0000"
@@ -86,7 +84,7 @@
                         patientForm.get('phoneNumber').touched
                       "
                     >
-                      Telefon numarasının girilmesi gereklidir
+                    {{'PhoneNumber'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -94,7 +92,7 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Adı</mat-label>
+                    <mat-label>{{'Name'|translate}}</mat-label>
                     <input matInput formControlName="name" required />
                     <mat-icon matSuffix>face</mat-icon>
                     <mat-error
@@ -103,13 +101,13 @@
                         patientForm.get('name').touched
                       "
                     >
-                      Ad alanının girilmesi gereklidir
+                    {{'Name'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Soyadı</mat-label>
+                    <mat-label>{{'SurName'|translate}}</mat-label>
                     <input
                       matInput
                       formControlName="surName"
@@ -123,7 +121,7 @@
                         patientForm.get('surName').touched
                       "
                     >
-                      Soyad alanının girilmesi gereklidir
+                    {{'SurName'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -131,10 +129,10 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Cinsiyet</mat-label>
+                    <mat-label>{{'Gender'|translate}}</mat-label>
                     <mat-select formControlName="gender">
-                      <mat-option [value]="true"> Erkek </mat-option>
-                      <mat-option [value]="false"> Kadın </mat-option>
+                      <mat-option [value]="true"> {{'Male'|translate}} </mat-option>
+                      <mat-option [value]="false"> {{'Female'|translate}} </mat-option>
                     </mat-select>
                     <mat-icon matSuffix
                       ><i class="fas fa-venus-mars"></i
@@ -143,7 +141,7 @@
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Kan Grubu</mat-label>
+                    <mat-label>{{'BloodGroup'|translate}}</mat-label>
                     <mat-select formControlName="bloodGroup">
                       <mat-option [value]="'A+'"> A+ </mat-option>
                       <mat-option [value]="'B+'"> B+ </mat-option>
@@ -161,11 +159,11 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Doğum Tarihi</mat-label>
+                    <mat-label>{{'BirthDate'|translate}}</mat-label>
                     <input
                       matInput
                       [matDatepicker]="picker"
-                      placeholder="Tarih Seçiniz"
+                      placeholder="{{'Select'|translate}}"
                       formControlName="birthDate"
                     />
                     <mat-datepicker-toggle
@@ -177,7 +175,7 @@
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Fotoğrafınızı yükleyin</mat-label>
+                    <mat-label>{{'PhotoUrl'|translate}}</mat-label>
                     <ngx-mat-file-input formControlName="photoUrl">
                     </ngx-mat-file-input>
                     <mat-icon matSuffix>add_a_photo</mat-icon>
@@ -187,13 +185,13 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Baba Adı</mat-label>
+                    <mat-label>{{'FatherName'|translate}}</mat-label>
                     <input matInput formControlName="fatherName" type="text" />
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Anne Adı</mat-label>
+                    <mat-label>{{'MotherName'|translate}}</mat-label>
                     <input matInput formControlName="motherName" type="text" />
                   </mat-form-field>
                 </div>
@@ -201,7 +199,7 @@
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Address</mat-label>
+                    <mat-label>{{'Address'|translate}}</mat-label>
                     <textarea matInput formControlName="address"></textarea>
                   </mat-form-field>
                 </div>
@@ -209,7 +207,7 @@
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Hastanın Notu</mat-label>
+                    <mat-label>{{'Note'|translate}}</mat-label>
                     <textarea matInput formControlName="note"></textarea>
                   </mat-form-field>
                 </div>
@@ -217,16 +215,16 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Medeni Hali</mat-label>
+                    <mat-label>{{'MaritalStatus'|translate}}</mat-label>
                     <mat-select formControlName="maritalStatus">
-                      <mat-option [value]="true"> Evli </mat-option>
-                      <mat-option [value]="false"> Bekar </mat-option>
+                      <mat-option [value]="true"> {{'Married'|translate}} </mat-option>
+                      <mat-option [value]="false"> {{'Single'|translate}} </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Ülke</mat-label>
+                    <mat-label>{{'Country'|translate}}</mat-label>
                     <input matInput formControlName="country" type="text" />
                   </mat-form-field>
                 </div>
@@ -234,13 +232,13 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Eyalet</mat-label>
+                    <mat-label>{{'Region'|translate}}</mat-label>
                     <input matInput formControlName="region" />
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Şehir</mat-label>
+                    <mat-label>{{'City'|translate}}</mat-label>
                     <input matInput formControlName="city" />
                   </mat-form-field>
                 </div>
@@ -248,16 +246,16 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Uyruk</mat-label>
+                    <mat-label>{{'Nationality'|translate}}</mat-label>
                     <mat-select formControlName="nationality">
-                      <mat-option [value]="'T.C'"> T.C </mat-option>
-                      <mat-option [value]="'diğer'"> Diğerleri </mat-option>
+                      <mat-option [value]="'T.C'"> {{'TC'|translate}} </mat-option>
+                      <mat-option [value]="'diğer'"> {{'Other'|translate}} </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Hasta sorunlu mu?</mat-label>
+                    <mat-label>{{'IsTrouble'|translate}}</mat-label>
                     <mat-select formControlName="isTrobule">
                       <mat-option [value]="true"> Evet </mat-option>
                       <mat-option [value]="false"> Hayır </mat-option>
@@ -268,16 +266,16 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Meslek</mat-label>
+                    <mat-label>{{'Job'|translate}}</mat-label>
                     <input matInput formControlName="job" />
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Sigara Kullanımı</mat-label>
+                    <mat-label>{{'UsingSmoke'|translate}}</mat-label>
                     <mat-select formControlName="usingSmoke">
-                      <mat-option [value]="true"> Evet </mat-option>
-                      <mat-option [value]="false"> Hayır </mat-option>
+                      <mat-option [value]="true"> {{'Yes'|translate}} </mat-option>
+                      <mat-option [value]="false"> {{'No'|translate}} </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -285,19 +283,19 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Alkol Kullanımı</mat-label>
+                    <mat-label>{{'UsingAlcohol'|translate}}</mat-label>
                     <mat-select formControlName="usingAlcohol">
-                      <mat-option [value]="true"> Evet </mat-option>
-                      <mat-option [value]="false"> Hayır </mat-option>
+                      <mat-option [value]="true"> {{'Yes'|translate}} </mat-option>
+                      <mat-option [value]="false"> {{'No'|translate}} </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>SMS Onayı</mat-label>
+                    <mat-label>{{'SmsConfirm'|translate}}</mat-label>
                     <mat-select formControlName="smsConfirm">
-                      <mat-option [value]="true"> Evet </mat-option>
-                      <mat-option [value]="false"> Hayır </mat-option>
+                      <mat-option [value]="true"> {{'Yes'|translate}} </mat-option>
+                      <mat-option [value]="false"> {{'No'|translate}} </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -305,16 +303,16 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>GDPR Onayı</mat-label>
+                    <mat-label>{{'GdprConfirm'|translate}}</mat-label>
                     <mat-select formControlName="gdprConfirm">
-                      <mat-option [value]="true"> Evet </mat-option>
-                      <mat-option [value]="false"> Hayır </mat-option>
+                      <mat-option [value]="true"> {{'Yes'|translate}} </mat-option>
+                      <mat-option [value]="false"> {{'No'|translate}} </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>E-posta</mat-label>
+                    <mat-label>{{'eMail'|translate}}</mat-label>
                     <input matInput formControlName="eMail" type="email" />
                   </mat-form-field>
                 </div>
@@ -327,9 +325,9 @@
                     mat-raised-button
                     color="primary"
                   >
-                    Kaydet
+                  {{'Save'|translate}}
                   </button>
-                  <button type="button" mat-button>İptal</button>
+                  <button type="button" mat-button>{{'Cancel'|translate}}</button>
                 </div>
               </div>
             </form>

@@ -8,7 +8,7 @@ import {
 } from "@angular/forms";
 import { Institution } from 'src/app/core/models/institution.model';
 import { InstitutionService } from 'src/app/core/service/institution.service';
-import { HttpErrorResponse } from "@angular/common/http";
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
 
 @Component({
   selector: "app-form-dialog",
@@ -24,7 +24,8 @@ export class FormDialogComponent {
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public institutionService: InstitutionService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private sweetAlert:SweetalertService
   ) {
     // Set the defaults
     this.action = data.action;
@@ -37,17 +38,6 @@ export class FormDialogComponent {
     }
     this.institutionForm = this.createContactForm();
   }
-  formControl = new FormControl("", [
-    Validators.required,
-    // Validators.email,
-  ]);
-  getErrorMessage() {
-    return this.formControl.hasError("required")
-      ? "Required field"
-      : this.formControl.hasError("email")
-      ? "Not a valid email"
-      : "";
-  }
   createContactForm(): FormGroup {
     return this.fb.group({
       id: [this.institution.id],
@@ -56,24 +46,24 @@ export class FormDialogComponent {
     });
   }
   submit() {
-    // emppty stuff
+    if (this.institutionForm.valid) {
+      this.institution = Object.assign({}, this.institutionForm.value);
+      if(this.institution.id==0){
+        this.institutionService.add(this.institution).subscribe(data=>{
+          this.dialogRef.close(1);
+          this.sweetAlert.success(data.toString());
+          }
+          );
+      }else{
+        this.institutionService.update(this.institution).subscribe(data=>{
+          this.dialogRef.close(1);
+          this.sweetAlert.info(data.toString());
+          }
+          );
+      }
+    }
   }
   onNoClick(): void {
     this.dialogRef.close();
-  }
-  public confirmAdd(): void {
-    if (this.institutionForm.valid) {
-      this.institution = Object.assign({}, this.institutionForm.value);
-      console.log(this.institution);
-      // this.patient.userId=this.authService.getCurrentUserId();
-      this.institutionService.save(this.institution).subscribe(data=>{
-        this.institutionService._sweetAlert.success(data['name']);
-        },
-        (error: HttpErrorResponse) => {
-          this.institutionService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
-        }
-        );
-    }
   }
 }

@@ -1,0 +1,304 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{'UserList'|translate}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i>{{'Homepage'|translate}}</a
+              >
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a onClick="return false;"
+                >{{'Users'|translate}}</a
+              >
+            </li>
+            <li class="breadcrumb-item active">{{'UserList'|translate}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive" *ngIf="dataSource">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>{{'UserList'|translate}}</strong>
+                        </h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"
+                          ><i class="material-icons search-icon"
+                            >search</i
+                          ></label
+                        >
+                        <input
+                          placeholder="Arama"
+                          type="text"
+                          (keyup)="applyFilter($event.target.value)"
+                          class="browser-default search-field"
+                          aria-label="Search box"
+                        />
+                      </li>
+                      <li>
+                        <div
+                        *ngIf="checkClaim('DeleteUserCommand')"
+                          class="icon-button-demo m-l-10"
+                          [hidden]="!selection.hasValue()"
+                        >
+                          <button
+                            mat-mini-fab
+                            color="warn"
+                            (click)="removeSelectedRows()"
+                          >
+                            <mat-icon class="col-white">delete</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            *ngIf="checkClaim('CreateUserCommand')"
+                            (click)="addNew()"
+                          >
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="refresh()"
+                          >
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table
+                #table
+                [dataSource]="dataSource"
+                matSort
+                class="mat-cell"
+              >
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    [ngClass]="'tbl-col-width-per-6'"
+                  >
+                    <mat-checkbox
+                      (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [ngClass]="'tbl-checkbox'"
+                    >
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+                    [ngClass]="'tbl-col-width-per-6'"
+                  >
+                    <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [ngClass]="'tbl-checkbox'"
+                    >
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+                <!-- ID Column -->
+                <ng-container matColumnDef="userId">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >{{'ID' |translate}}</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">{{ row.userId }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="email">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >{{'Email' |translate}}</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.email }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="fullName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >{{'FullName' |translate}}</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.fullName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="status">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    [ngClass]="'tbl-col-width-per-8'"
+                    >{{'Status' |translate}}
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+                    [ngClass]="'tbl-col-width-per-8'"
+                  >
+                    <ng-container *ngIf="row.status == true; else elseTemplate">
+                    <button [disabled]="true" mat-icon-button color="accent" class="btn-tbl-check">
+                      <mat-icon aria-label="Ok" class="col-white">check</mat-icon>
+                    </button>
+                    </ng-container>
+                    <ng-template #elseTemplate><button [disabled]="true" mat-icon-button color="accent" class="btn-tbl-close">
+                      <mat-icon aria-label="Ok" class="col-white">close</mat-icon>
+                    </button></ng-template>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="mobilePhones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >{{'MobilePhones' |translate}}</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.mobilePhones }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="address">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >{{'Address' |translate}}</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.address }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="notes">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header
+                    >{{'Notes' |translate}}</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row">
+                    {{ row.notes }}</mat-cell
+                  >
+                </ng-container>
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0"
+                    >{{'Actions' |translate}}</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row; let i = index" class="pr-0">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item
+                      (click)="$event.stopPropagation()"
+                      (click)="passwordChange(row.userId)"
+                      *ngIf="checkClaim('UserChangePasswordCommand')">
+                      <mat-icon
+                      >enhanced_encryption</mat-icon
+                    >
+                        <span>{{'ChangePassword'|translate}}</span>
+                      </button>
+                      <button mat-menu-item
+                      (click)="$event.stopPropagation()"
+                      (click)="editUserClaims(row.userId)"
+                      *ngIf="checkClaim('UpdateUserClaimCommand')">
+                      <mat-icon
+                      >person_add</mat-icon
+                    >
+                        <span>{{'UserClaim'|translate}}</span>
+                      </button>
+                      <button mat-menu-item
+                      (click)="$event.stopPropagation()"
+                      (click)="editUserGroup(row.userId)"
+                      *ngIf="checkClaim('UpdateGroupClaimCommand')">
+                      <mat-icon
+                      >group</mat-icon
+                    >
+                        <span>{{'GroupClaim'|translate}}</span>
+                      </button>
+                      <button mat-menu-item
+                      (click)="$event.stopPropagation()"
+                      (click)="editCall(row)"
+                      *ngIf="checkClaim('UpdateUserCommand')">
+                      <mat-icon
+                      >edit</mat-icon
+                    >
+                        <span>{{'Update'|translate}}</span>
+                      </button>
+                      <button mat-menu-item
+                      (click)="$event.stopPropagation()"
+                      *ngIf="checkClaim('DeleteUserCommand')"
+                      (click)="deleteItem(row)">
+                      <mat-icon
+                        >delete</mat-icon
+                      >
+                        <span>{{'Delete'|translate}}</span>
+                      </button>
+                    </mat-menu>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                ></mat-header-row>
+                <!-- <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row> -->
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                  [style.cursor]="'pointer'"
+                  matRipple
+                >
+                </mat-row>
+              </mat-table>
+              <!-- Loading spinner -->
+              <div
+                *ngIf="userService.isTblLoading"
+                class="tbl-spinner"
+              >
+                <mat-progress-spinner
+                  color="primary"
+                  [diameter]="40"
+                  mode="indeterminate"
+                >
+                </mat-progress-spinner>
+              </div>
+              <div
+                *ngIf="!userService.isTblLoading"
+                class="no-results"
+                [style.display]="
+                  dataSource.data.length == 0 ? '' : 'none'
+                "
+              >
+              <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
+              </div>
+              <mat-paginator
+                #paginator
+                [length]="dataSource.data.length"
+                [pageIndex]="0"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,7 +1,7 @@
 export class MedicalAlert {
-  id: number;
-  note: string;
-  patientDataId: number;
+  id?:number;
+  note?:string;
+  patientDataId?:number;
   constructor(medicalAlert) {
     {
       this.id = medicalAlert.id || 0;

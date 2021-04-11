@@ -1,22 +1,20 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {  Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { CrudService } from '../crud/crud-service';
+import { CrudService } from '../ceneric-service/crud-service';
 import { FormField } from '../models/form-field.model';
-import { SweetalertService } from './sweetalert.service';
 
 @Injectable()
 export class FormFieldService extends CrudService<FormField,null,number> {
   constructor(
-    protected _http: HttpClient,
-    public _sweetAlert: SweetalertService
+    protected httpClient: HttpClient,
   ) {
-    super(_http, `${environment.apiUrl}/FormField`, _sweetAlert);
+    super(httpClient, `${environment.apiUrl}/formFields/`);
   }
   getListByFormTableId(formTableId:number): Observable<FormField[]> {
-    return this._http.get<FormField[]>(
-      environment.apiUrl + "/FormField/getListByFormTableId/"+
+    return this.httpClient.get<FormField[]>(
+      environment.apiUrl + "/FormFields/getallbyformtableid?id="+
       formTableId
     );
   }

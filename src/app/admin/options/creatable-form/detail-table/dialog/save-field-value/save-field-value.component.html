@@ -4,7 +4,7 @@
       <div class="modalHeader clearfix">
         <div class="modal-about">
           <div class="font-weight-bold p-t-5 p-l-10 font-17">
-            {{ dialogTitle }}
+            {{'FormFieldSelectionValueForm'|translate}}
           </div>
         </div>
       </div>
@@ -19,7 +19,7 @@
   </div>
   <div mat-dialog-content class="mat-typography content">
     <div class="row" style="margin-left: 0;margin-right: 0;">
-      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+      <div *ngIf="checkClaim('CreateFormFieldSelectionValueCommand')" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
         <div class="card">
           <div class="body">
             <form
@@ -30,10 +30,10 @@
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Seçenek Değeri</mat-label>
+            <mat-label>{{'Value'|translate}}</mat-label>
             <input matInput formControlName="value" type="text" />
             <mat-error *ngIf="fieldValueForm.get('value').hasError('required')">
-              Seçenek Değeri gereklidir
+              {{'Value'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
@@ -49,7 +49,7 @@
               (click)="confirmAdd()"
               class="btn-block"
             >
-              Ekle
+            {{'Add'|translate}}
             </button>
           </div>
         </div>
@@ -68,7 +68,7 @@
                     <ul class="header-buttons-left ml-0">
                       <li class="dropdown">
                         <h2>
-                          <strong>Seçenekler</strong>
+                          <strong>{{'FormFieldSelectionValueList'| translate}}</strong>
                         </h2>
                       </li>
                       <li class="dropdown m-l-20">
@@ -78,7 +78,7 @@
                           ></label
                         >
                         <input
-                              placeholder="Arama"
+                              placeholder="{{'Filter'| translate}}"
                               type="text"
                               [(ngModel)]="filterValue"
                               (keyup)="applyFilter($event.target.value)"
@@ -115,13 +115,13 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Id</mat-header-cell
+                    >{{'Id'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="value">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Seçenek</mat-header-cell
+                    >{{'Value'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.value }}</mat-cell
@@ -130,7 +130,7 @@
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef class="pr-0"
-                    >Eylemler</mat-header-cell
+                    >{{'Actions'|translate}}</mat-header-cell
                   >
                   <mat-cell
                     *matCellDef="let row; let i = index"
@@ -140,6 +140,7 @@
                       mat-icon-button
                       color="accent"
                       class="btn-tbl-delete"
+                      *ngIf="checkClaim('DeleteFormFieldSelectionValueCommand')"
                       (click)="deleteItem(i,row)"
                     >
                       <mat-icon aria-label="Detail" class="col-white"
@@ -175,7 +176,7 @@
                   dataSource.data.length == 0 ? '' : 'none'
                 "
               >
-              <p class="alert alert-danger">Sistem herhangi bir kayıt bulunamadı</p>
+              <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
               </div>
               <mat-paginator
                 #paginator

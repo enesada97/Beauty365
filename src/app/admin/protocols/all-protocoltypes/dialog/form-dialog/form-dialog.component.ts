@@ -8,6 +8,7 @@ import {
 } from "@angular/forms";
 import { ProtocolType } from 'src/app/core/models/protocoltype.model';
 import { ProtocoltypeService } from 'src/app/core/service/protocoltype.service';
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
 
 @Component({
   selector: "app-form-dialog",
@@ -23,7 +24,8 @@ export class FormDialogComponent {
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public protocolTypeService: ProtocoltypeService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private sweetAlert:SweetalertService
   ) {
     // Set the defaults
     this.action = data.action;
@@ -36,17 +38,6 @@ export class FormDialogComponent {
     }
     this.protocolTypeForm = this.createContactForm();
   }
-  formControl = new FormControl("", [
-    Validators.required,
-    // Validators.email,
-  ]);
-  getErrorMessage() {
-    return this.formControl.hasError("required")
-      ? "Required field"
-      : this.formControl.hasError("email")
-      ? "Not a valid email"
-      : "";
-  }
   createContactForm(): FormGroup {
     return this.fb.group({
       id: [this.protocolType.id],
@@ -55,16 +46,24 @@ export class FormDialogComponent {
     });
   }
   submit() {
-    // emppty stuff
+    if (this.protocolTypeForm.valid) {
+      this.protocolType = Object.assign({}, this.protocolTypeForm.value);
+      if(this.protocolType.id==0){
+        this.protocolTypeService.add(this.protocolType).subscribe(data=>{
+          this.sweetAlert.success(data.toString());
+          this.dialogRef.close(1);
+          }
+          );
+      }else{
+        this.protocolTypeService.update(this.protocolType).subscribe(data=>{
+          this.sweetAlert.success(data.toString());
+          this.dialogRef.close(1);
+          }
+          );
+      }
+    }
   }
   onNoClick(): void {
     this.dialogRef.close();
-  }
-  public confirmAdd(): void {
-    if (this.protocolTypeForm.valid) {
-      this.protocolType = Object.assign({}, this.protocolTypeForm.value);
-      // this.patient.userId=this.authService.getCurrentUserId();
-      this.protocolTypeService.addProtocolType(this.protocolType);
-    }
   }
 }

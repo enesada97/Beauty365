@@ -15,10 +15,10 @@ import { TableUtil } from "src/app/core/tableUtil";
 import { SelectionModel } from "@angular/cdk/collections";
 import { DeleteComponent } from "./dialog/delete/delete.component";
 import { EditDialogComponent } from "./dialog/edit-dialog/edit-dialog.component";
-import { HttpErrorResponse } from "@angular/common/http";
-import { MatTabChangeEvent } from "@angular/material/tabs";
 import { AddWorkingsDialogComponent } from "./dialog/add-workings-dialog/add-workings-dialog.component";
 import { AddCollectionsDialogComponent } from "./dialog/add-collections-dialog/add-collections-dialog.component";
+import { AuthService } from "src/app/core/service/system-service/auth.service";
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
 
 @Component({
   selector: "app-working-processes",
@@ -48,21 +48,18 @@ export class WorkingProcessesComponent implements OnInit {
   patientForWorkingDto: PatientForWorkingDto;
   processDtoForWorking: ProcessDtoForWorking[];
   workingForCollectionDtos: WorkingDto[];
-  process: Process;
-  index: number;
   working: Working;
-  workingForCollection: Working;
   protocolId: number;
   //Hizmetler
   dataSource: MatTableDataSource<WorkingDto>;
   @ViewChild("Sort", { static: false }) sort: MatSort;
   @ViewChild("Paginator", { static: false }) paginator: MatPaginator;
-  id: any;
   constructor(
     public workingService: WorkingService,
     private activatedRoute: ActivatedRoute,
-    private processService: ProcessService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService:AuthService,
+    private sweetAlert:SweetalertService
   ) {}
   ngOnInit(): void {
     this.getParamValue();
@@ -78,7 +75,7 @@ export class WorkingProcessesComponent implements OnInit {
   getPatientDetail() {
     //Bu kısım hastanın üst kısımda bulunan bilgilerini getirir
     this.workingService
-      .getDtoByProtocolId(this.protocolId)
+      .getPatientForWorkingDtoByProtocolId(this.protocolId)
       .subscribe((data) => {
         this.patientForWorkingDto = data;
         this.protocolId = data.protocolId;
@@ -86,12 +83,13 @@ export class WorkingProcessesComponent implements OnInit {
   }
   getProcesses(){
     this.workingService
-      .forProcessDtoWorking(this.protocolId)
+      .getProcessForWorkingDtoListByProtocolId(this.protocolId)
       .subscribe((data) => (this.processDtoForWorking = data));
   }
   getWorkingDetails() {
-    this.workingService.getDtoById(this.protocolId).subscribe((data) => {
-      this.workingDtos = data  
+    this.workingService.getWorkingDtoListByProtocolId(this.protocolId).subscribe((data) => {
+      setTimeout(() => (this.workingService.isTblLoading = false), 1000);
+      this.workingDtos = data
   this.totalPrice= 0;
   this.paidValue= 0;
   this.discount= 0;
@@ -114,9 +112,8 @@ export class WorkingProcessesComponent implements OnInit {
     TableUtil.exportToPdf("Table");
   }
   editCall(row) {
-    this.id = row.id;
     this.workingService
-      .getById(this.id)
+      .getById(row.id)
       .subscribe((data) => (this.working = data));
     if (this.working) {
       console.log(this.working);
@@ -182,24 +179,19 @@ export class WorkingProcessesComponent implements OnInit {
       : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
   removeSelectedRows() {
-    const totalSelect = this.selection.selected.length;
+    const alertCounter = this.selection.selected[this.selection.selected.length-1].id;
     this.selection.selected.forEach((item) => {
       const index: number = item.id;
-      //this.patientDataBase.deletePatient(index);
       this.workingService.delete(index).subscribe(
-        (data) => {},
-        (error: HttpErrorResponse) => {
-          console.log(error.name + " " + error.message);
+        (data) => {
+          index==alertCounter?this.sweetAlert.delete(data.toString()):null;
+          this.refresh();
         }
       );
-      this.workingService._sweetAlert.delete("Hizmetler");
       this.selection = new SelectionModel<WorkingDto>(true, []);
     });
-    this.refresh();
   }
-  deleteItem(i: number, row) {
-    this.index = i;
-    this.id = row.id;
+  deleteItem(row) {
     const dialogRef = this.dialog.open(DeleteComponent, {
       data: {
         row,
@@ -212,22 +204,10 @@ export class WorkingProcessesComponent implements OnInit {
       }
     });
   }
-  deleteCollection(i: number, row) {
-    this.index = i;
-    this.id = row.id;
-    const dialogRef = this.dialog.open(DeleteComponent, {
-      data: {
-        row,
-        action:"deleteCollection"
-      }
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
-        this.refresh();
-      }
-    });
-  }
   refresh() {
   this.getWorkingDetails();
+  }
+  checkClaim(claim: string): boolean {
+    return this.authService.claimGuard(claim);
   }
 }

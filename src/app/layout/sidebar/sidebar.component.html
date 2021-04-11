@@ -20,11 +20,11 @@
         <!-- Top Most level menu -->
         <li [class.active]="level1Menu === sidebarItem.moduleName && sidebarItem.submenu.length != 0"
           *ngFor="let sidebarItem of sidebarItems" [routerLinkActive]="sidebarItem.submenu.length != 0 ? '' : 'active'">
-          <div class="header" *ngIf="sidebarItem.groupTitle === true">{{sidebarItem.title}}</div>
+          <div class="header" *ngIf="sidebarItem.groupTitle === true">{{sidebarItem.title | translate}}</div>
           <a [routerLink]="sidebarItem.class === '' ? [sidebarItem.path] : null" *ngIf="!sidebarItem.groupTitle;"
             [ngClass]="[sidebarItem.class]" (click)="callLevel1Toggle($event, sidebarItem.moduleName)" class="menu-top">
             <i [ngClass]="[sidebarItem.iconType]">{{sidebarItem.icon}}</i>
-            <span class="hide-menu">{{sidebarItem.title}}
+            <span class="hide-menu">{{sidebarItem.title | translate}}
             </span>
             <span *ngIf="sidebarItem.badge != '' " [ngClass]="[sidebarItem.badgeClass]">{{sidebarItem.badge}}</span>
           </a>
@@ -33,9 +33,9 @@
             <li [ngClass]="level2Menu === sidebarSubItem.moduleName? 'activeSub':''"
               *ngFor="let sidebarSubItem of sidebarItem.submenu"
               [routerLinkActive]="sidebarSubItem.submenu.length > 0 ? '' : 'active'">
-              <a [routerLink]="sidebarSubItem.submenu.length > 0 ? null : [sidebarSubItem.path]"
+              <a  *ngIf="checkClaim(sidebarSubItem.claim)" [routerLink]="sidebarSubItem.submenu.length > 0 ? null : [sidebarSubItem.path]"
                 (click)="callLevel2Toggle($event,sidebarSubItem.moduleName)" [ngClass]="[sidebarSubItem.class]">
-                {{sidebarSubItem.title}}
+                {{sidebarSubItem.title | translate}}
               </a>
               <!-- Second level menu -->
               <ul class="ml-menu-2" *ngIf="sidebarSubItem.submenu.length > 0">
@@ -45,7 +45,7 @@
                   <a [routerLink]="sidebarSubsubItem.submenu.length > 0 ? null : [sidebarSubsubItem.path]"
                     (click)="callLevel3Toggle($event,sidebarSubsubItem.moduleName)"
                     [ngClass]="[sidebarSubsubItem.class]">
-                    {{sidebarSubsubItem.title}}
+                    {{sidebarSubsubItem.title | translate}}
                   </a>
                 </li>
               </ul>

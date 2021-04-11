@@ -28,6 +28,9 @@ import { DeleteComponent } from './all-protocoltypes/dialog/delete/delete.compon
 import { ProtocolService } from 'src/app/core/service/protocol.service';
 import { Delete2Component } from './all-protocols/dialog/delete2/delete2.component';
 import { ProtocolTypeProcessService } from 'src/app/core/service/protocol-type-process.service';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
 
 
 
@@ -56,7 +59,14 @@ import { ProtocolTypeProcessService } from 'src/app/core/service/protocol-type-p
     MatProgressSpinnerModule,
     MatIconModule,
     NgxMaskModule,
-
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers:[ProtocoltypeService,ProtocolService,ProtocolTypeProcessService]
 })

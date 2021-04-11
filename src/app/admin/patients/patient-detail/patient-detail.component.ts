@@ -56,6 +56,5 @@ export class PatientDetailComponent implements OnInit {
       },
     });
     dialogRef.afterClosed();
-    this.patientService._sweetAlert.success("Hasta notu");
   }
 }

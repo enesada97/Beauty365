@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -8,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormFieldSelectionValue } from 'src/app/core/models/form-field-selection-value.model';
 import { FormField } from 'src/app/core/models/form-field.model';
 import { FormFieldSelectionValueService } from 'src/app/core/service/form-field-selection-value.service';
+import { AuthService } from 'src/app/core/service/system-service/auth.service';
 
 @Component({
   selector: 'app-save-field-value',
@@ -16,7 +16,6 @@ import { FormFieldSelectionValueService } from 'src/app/core/service/form-field-
 })
 export class SaveFieldValueComponent implements OnInit {
   filterValue="";
-  dialogTitle;
   formField:FormField;
   formFieldValue:FormFieldSelectionValue;
   formFieldSelectionValues:FormFieldSelectionValue[];
@@ -27,10 +26,10 @@ export class SaveFieldValueComponent implements OnInit {
     public dialogRef: MatDialogRef<SaveFieldValueComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public formFieldSelectionValueService: FormFieldSelectionValueService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService:AuthService
   ) {
       this.formField = data;
-      this.dialogTitle="Form Alanı Seçeneklerini düzenle";
       this.formFieldValue=new FormFieldSelectionValue({});
       this.fieldValueForm = this.createTableContactForm();
   }
@@ -40,6 +39,9 @@ export class SaveFieldValueComponent implements OnInit {
   ngOnInit(): void {
     this.getFormFieldValues();
   }
+  checkClaim(claim:string):boolean{
+		return this.authService.claimGuard(claim)
+	}
   createTableContactForm(): FormGroup {
     return this.fb.group({
       id: [this.formFieldValue.id],
@@ -54,10 +56,6 @@ export class SaveFieldValueComponent implements OnInit {
         this.dataSource = new MatTableDataSource<FormFieldSelectionValue>(this.formFieldSelectionValues);
         setTimeout(() => (this.dataSource.sort = this.sort));
         setTimeout(() => (this.dataSource.paginator = this.paginator));
-      },
-      (error: HttpErrorResponse) => {
-        this.formFieldSelectionValueService.isTblLoading = false;
-        console.log(error.name + " " + error.message);
       }
     )
   }
@@ -69,29 +67,29 @@ export class SaveFieldValueComponent implements OnInit {
   public confirmAdd(): void {
     if (this.fieldValueForm.valid) {
       this.formFieldValue = Object.assign({}, this.fieldValueForm.value);
-      console.log("form:" +JSON.stringify(this.formField));
       this.formFieldValue.formFieldId=this.formField.id;
-      this.formFieldSelectionValueService.save(this.formFieldValue).subscribe(data=>{
-        if(data){
-          this.refreshFieldValue();
-        }
-        },
-        (error: HttpErrorResponse) => {
-          this.formFieldSelectionValueService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
-        }
-        );
+      if (this.formFieldValue.id == 0) {
+        this.formFieldSelectionValueService.add(this.formFieldValue).subscribe((data) => {
+          if(data){
+            this.refreshFieldValue();
+          }
+        });
+      } else {
+        this.formFieldSelectionValueService.update(this.formFieldValue).subscribe((data) => {
+          if(data){
+            this.refreshFieldValue();
+          }
+        });
+      }
     }
   }
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
     }
-    deleteItem(i: number, row) {
-      const index = i;
+    deleteItem(i,row) {
       this.formFieldSelectionValueService.delete(row.id).subscribe(data=>{
       this.formFieldSelectionValues.splice(i,1);
       this.refresh();
-      this.formFieldSelectionValueService._sweetAlert.delete(""+row.value);
       })
     }
     refresh() {

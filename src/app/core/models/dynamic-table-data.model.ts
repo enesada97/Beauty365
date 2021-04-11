@@ -1,15 +1,15 @@
 export class DynamicTableData {
-  id: number;
-  formTableId: number;
-  protocolId:number;
-  formFieldId:number;
-  fieldValue:string;
-  fieldLabel:string;
-  formControlName:string;
-  addedDate:Date;
-  updatedDate:Date;
-  addedBy:string;
-  updatedBy:string;
+  id?:number;
+  formTableId?:number;
+  protocolId?:number;
+  formFieldId?:number;
+  fieldValue?:string;
+  fieldLabel?:string;
+  formControlName?:string;
+  addedDate?:(Date | any);
+  updatedDate?:(Date | any);
+  addedBy?:string;
+  updatedBy?:string;
   constructor(dynamicTableData) {
     {
       this.id = dynamicTableData.id || 0;

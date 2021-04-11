@@ -1,29 +1,29 @@
 export class Patient {
-  id: number;
-  identityNumber: number;
-  name: string;
-  surName: string;
-  fatherName: string;
-  motherName: string;
+  id?: number;
+  identityNumber?: number;
+  name?: string;
+  surName?: string;
+  fatherName?: string;
+  motherName?: string;
   gender: boolean;
-  birthDate: Date;
-  phoneNumber: number;
-  eMail: string;
-  nationality: string;
-  country: string;
-  region: string;
-  city: string;
-  address: string;
-  bloodGroup: string;
-  job: string;
+  birthDate?:(Date | any);
+  phoneNumber?: number;
+  eMail?: string;
+  nationality?: string;
+  country?: string;
+  region?: string;
+  city?: string;
+  address?: string;
+  bloodGroup?: string;
+  job?: string;
   usingSmoke: boolean;
   usingAlcohol: boolean;
   maritalStatus: boolean;
   smsConfirm: boolean;
   gdprConfirm: boolean;
-  note: string;
+  note?: string;
   isTrobule: boolean;
-  photoUrl: string;
+  photoUrl?: string;
   status:boolean;
   constructor(patient) {
     {

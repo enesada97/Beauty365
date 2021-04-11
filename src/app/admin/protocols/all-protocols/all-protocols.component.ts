@@ -1,20 +1,18 @@
 import { SweetalertService } from './../../../core/service/sweetalert.service';
 import { Router } from '@angular/router';
-import { DataSource, SelectionModel } from "@angular/cdk/collections";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Route } from '@angular/compiler/src/core';
+import { SelectionModel } from "@angular/cdk/collections";
+import { HttpClient } from "@angular/common/http";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
-import { BehaviorSubject, fromEvent, merge, Observable } from "rxjs";
-import { map } from "rxjs/operators";
 import { Protocol } from "src/app/core/models/protocol.model";
 import { ProtocolDto } from "src/app/core/models/protocoldto";
 import { ProtocolService } from "src/app/core/service/protocol.service";
 import { AddProtocolDialogComponent } from "../../patients/search-patient/add-protocol-dialog/add-protocol-dialog.component";
 import { Delete2Component } from './dialog/delete2/delete2.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { AuthService } from 'src/app/core/service/system-service/auth.service';
 @Component({
   selector: "app-all-protocols",
   templateUrl: "./all-protocols.component.html",
@@ -41,14 +39,14 @@ export class AllProtocolsComponent implements OnInit {
   protocolDtos: ProtocolDto[];
   protocolDto: ProtocolDto | null;
   protocol: Protocol | null;
-  veri: any;
   dataSource: MatTableDataSource<ProtocolDto>;
   constructor(
     public httpClient: HttpClient,
     public router:Router,
     public dialog: MatDialog,
     public protocolService: ProtocolService,
-    private _sweetAlert: SweetalertService
+    private authService:AuthService,
+    private sweetAlert:SweetalertService
   ) {}
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -56,27 +54,21 @@ export class AllProtocolsComponent implements OnInit {
   ngOnInit() {
     this.getProtocols();
   }
-  getProtocols(){
-    this.protocolService.getDtoAll().subscribe((data) => {
-      this.protocolDtos=data;
-      setTimeout(() =>this.protocolService.isTblLoading = false,1000);
+  getProtocols() {
+    this.protocolService.getDtoList().subscribe((data) => {
+      setTimeout(() => (this.protocolService.isTblLoading = false), 1000);
+      this.protocolDtos = data;
       this.dataSource = new MatTableDataSource<ProtocolDto>(this.protocolDtos);
            setTimeout(() => this.dataSource.sort = this.sort);
            setTimeout(() => this.dataSource.paginator = this.paginator);
-             this.protocolService._sweetAlert.getListSuccess('Protokoller');
-           },
-           (error: HttpErrorResponse) => {
-             this.protocolService.isTblLoading = false;
-             console.log(error.name + " " + error.message);
            });
   }
   refresh() {
     this.getProtocols();
   }
   editCall(row) {
-    this.id = row.protocolNo;
     this.protocolService
-      .getById(this.id)
+      .getById(row.protocolNo)
       .subscribe((data) => {this.protocol = data
       if(this.protocol){
         console.log(this.protocol);
@@ -94,9 +86,7 @@ export class AllProtocolsComponent implements OnInit {
       }
      });
   }
-  deleteItem(i: number, row) {
-    this.index = i;
-    this.id = row.protocolNo;
+  deleteItem(row) {
     const dialogRef = this.dialog.open(Delete2Component, {
       data: {
         row,
@@ -122,20 +112,18 @@ export class AllProtocolsComponent implements OnInit {
       : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
   removeSelectedRows() {
-    const totalSelect = this.selection.selected.length;
+    const alertCounter = this.selection.selected[this.selection.selected.length-1].protocolNo;
     this.selection.selected.forEach((item) => {
       const index: number = item.protocolNo;
       //this.patientDataBase.deletePatient(index);
       this.protocolService.delete(index).subscribe(
-        (data) => {},
-        (error: HttpErrorResponse) => {
-          console.log(error.name + " " + error.message);
+        (data) => {
+          index==alertCounter?this.sweetAlert.delete(data.toString()):null;
+          this.refresh();
         }
       );
-      this.protocolService._sweetAlert.delete("Randevular");
       this.selection = new SelectionModel<ProtocolDto>(true, []);
     });
-    this.refresh();
   }
   applyFilter(filterValue: string) {
     if(filterValue==("aç"||"açı"||"açık"||"Aç"||"Açı"||"Açık")){
@@ -145,5 +133,8 @@ export class AllProtocolsComponent implements OnInit {
       filterValue="false";
     }else
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  checkClaim(claim: string): boolean {
+    return this.authService.claimGuard(claim);
   }
 }

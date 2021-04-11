@@ -1,15 +1,14 @@
-import { DataSource, SelectionModel } from '@angular/cdk/collections';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { SelectionModel } from '@angular/cdk/collections';
+import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
-import { BehaviorSubject, fromEvent, merge, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { MatTableDataSource } from '@angular/material/table';
 import { Institution } from 'src/app/core/models/institution.model';
 import { InstitutionService } from 'src/app/core/service/institution.service';
 import { SweetalertService } from 'src/app/core/service/sweetalert.service';
+import { AuthService } from 'src/app/core/service/system-service/auth.service';
 import { DeleteComponent } from './dialog/delete/delete.component';
 import { FormDialogComponent } from './dialog/form-dialog/form-dialog.component';
 
@@ -20,27 +19,34 @@ import { FormDialogComponent } from './dialog/form-dialog/form-dialog.component'
 })
 export class AllInstitutionsComponent implements OnInit {
   displayedColumns = ["select", "institutionName", "actions"];
-  institutionDataBase: InstitutionService | null;
-  dataSource: ExampleDataSource | null;
   selection = new SelectionModel<Institution>(true, []);
-  index: number;
-  id: number;
+  institutionList: Institution[];
+  dataSource: MatTableDataSource<Institution>;
   institution: Institution | null;
   constructor(
     public httpClient: HttpClient,
-    public sweetAlertService: SweetalertService,
     public dialog: MatDialog,
     public institutionService: InstitutionService,
-    private snackBar: MatSnackBar
+    private authService:AuthService,
+    private sweetAlert:SweetalertService
   ) {}
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild("filter", { static: true }) filter: ElementRef;
-  ngOnInit() {
-    this.loadData();
+  ngOnInit(): void {
+    this.getInstitutionList();
   }
   refresh() {
-    this.loadData();
+    this.getInstitutionList();
+  }
+  getInstitutionList() {
+    this.institutionService.getList().subscribe((data) => {
+      setTimeout(() => (this.institutionService.isTblLoading = false), 1000);
+      this.institutionList = data;
+      this.dataSource = new MatTableDataSource<Institution>(this.institutionList);
+           setTimeout(() => this.dataSource.sort = this.sort);
+           setTimeout(() => this.dataSource.paginator = this.paginator);
+           });
   }
   addNew() {
     const dialogRef = this.dialog.open(FormDialogComponent, {
@@ -51,12 +57,11 @@ export class AllInstitutionsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        this.refreshTable();
+        this.refresh();
       }
     });
   }
   editCall(row) {
-    this.id = row.id;
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
         institution: row,
@@ -65,140 +70,47 @@ export class AllInstitutionsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        this.refreshTable();
+        this.refresh();
       }
     });
   }
-  deleteItem(i: number, row) {
-    this.index = i;
-    this.id = row.id;
+  deleteItem(row) {
     const dialogRef = this.dialog.open(DeleteComponent, {
       data: row,
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        this.refreshTable();
+        this.refresh();
       }
-    });
-  }
-  private refreshTable() {
-    this.paginator._changePageSize(this.paginator.pageSize);
-    this.loadData();
-  }
-  public loadData() {
-    this.institutionDataBase = new InstitutionService(
-      this.httpClient,
-      this.sweetAlertService
-    );
-    this.dataSource = new ExampleDataSource(
-      this.institutionDataBase,
-      this.paginator,
-      this.sort
-    );
-    fromEvent(this.filter.nativeElement, "keyup").subscribe(() => {
-      if (!this.dataSource) {
-        return;
-      }
-      this.dataSource.filter = this.filter.nativeElement.value;
     });
   }
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.renderedData.length;
+    const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
-   masterToggle() {
+  masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.dataSource.renderedData.forEach((row) =>
-          this.selection.select(row)
-        );
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
   removeSelectedRows() {
-    const totalSelect = this.selection.selected.length;
-    console.log(this.selection.selected);
+    const alertCounter = this.selection.selected[this.selection.selected.length-1].id;
     this.selection.selected.forEach((item) => {
-      const index: number = item.id;
-      this.institutionDataBase.delete(index);
-      this.refreshTable();
+      item.status=false;
+      this.institutionService.update(item).subscribe((data) => {
+        if(item.id==alertCounter){
+          this.refresh();
+          this.sweetAlert.delete(data.toString());
+        }
+      });
       this.selection = new SelectionModel<Institution>(true, []);
     });
   }
-}
-export class ExampleDataSource extends DataSource<Institution> {
-  filterChange = new BehaviorSubject("");
-  get filter(): string {
-    return this.filterChange.value;
+  checkClaim(claim: string): boolean {
+    return this.authService.claimGuard(claim);
   }
-  set filter(filter: string) {
-    this.filterChange.next(filter);
-  }
-  filteredData: Institution[] = [];
-  renderedData: Institution[] = [];
-  constructor(
-    public institutionDataBase: InstitutionService,
-    public paginator: MatPaginator,
-    public _sort: MatSort
-  ) {
-    super();
-    this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
-  }
-  connect(): Observable<Institution[]> {
-    const displayDataChanges = [
-      this.institutionDataBase.dataChange,
-      this._sort.sortChange,
-      this.filterChange,
-      this.paginator.page,
-    ];
-    this.institutionDataBase.getAll().subscribe((data) => {
-      this.institutionDataBase.isTblLoading = false;
-      this.institutionDataBase.dataChange.next(data);
-      this.institutionDataBase._sweetAlert.getListSuccess('Kurumlar');
-    },
-    (error: HttpErrorResponse) => {
-      this.institutionDataBase.isTblLoading = false;
-      console.log(error.name + " " + error.message);
-    });
-    return merge(...displayDataChanges).pipe(
-      map(() => {
-        this.filteredData = this.institutionDataBase.data
-          .slice()
-          .filter((institution: Institution) => {
-            const searchStr = institution.institutionName.toLowerCase();
-            return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-          });
-        const sortedData = this.sortData(this.filteredData.slice());
-        const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-        this.renderedData = sortedData.splice(
-          startIndex,
-          this.paginator.pageSize
-        );
-        return this.renderedData;
-      })
-    );
-  }
-  disconnect() {}
-  /** Returns a sorted copy of the database data. */
-  sortData(data: Institution[]): Institution[] {
-    if (!this._sort.active || this._sort.direction === "") {
-      return data;
-    }
-    return data.sort((a, b) => {
-      let propertyA: number | string = "";
-      let propertyB: number | string = "";
-      switch (this._sort.active) {
-        case "id":
-          [propertyA, propertyB] = [a.id, b.id];
-          break;
-        case "name":
-          [propertyA, propertyB] = [a.institutionName, b.institutionName];
-          break;
-      }
-      const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
-      const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
-      return (
-        (valueA < valueB ? -1 : 1) * (this._sort.direction === "asc" ? 1 : -1)
-      );
-    });
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

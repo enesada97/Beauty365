@@ -4,7 +4,7 @@
       <div class="modalHeader clearfix">
         <div class="modal-about">
           <div class="font-weight-bold p-t-5 p-l-10 font-17">
-            {{ dialogTitle }}
+            {{'ProtocolTypeProcessForm'|translate}}
           </div>
         </div>
       </div>
@@ -23,8 +23,8 @@
         <div class="card">
           <div class="header bg-red">
             <h2>
-              Protokol Tipleri
-              <small>Seçiniz</small>
+              {{'ProtocolTypes'|translate}}
+              <small>{{'Choose'|translate}}</small>
             </h2>
 
           </div>
@@ -43,8 +43,8 @@
     <div class="card">
     <div class="header bg-green">
       <h2>
-        Doktorlar
-        <small>Seçiniz</small>
+        {{'Doctors'|translate}}
+        <small>{{'Choose'|translate}}</small>
       </h2>
 
     </div>
@@ -63,8 +63,8 @@
   <div class="card">
     <div class="header bg-cyan">
       <h2>
-        Kurumlar
-        <small>Seçiniz</small>
+        {{'Institutions'|translate}}
+        <small>{{'Choose'|translate}}</small>
       </h2>
     </div>
     <div style="padding: 0px;" class="body">
@@ -88,7 +88,7 @@
                     <ul class="header-buttons-left ml-0">
                       <li class="dropdown">
                         <h2>
-                          <strong>İşlemler</strong>
+                          <strong>{{'Processes'|translate}}</strong>
                         </h2>
                       </li>
                       <li class="dropdown m-l-20">
@@ -98,7 +98,7 @@
                           ></label
                         >
                         <input
-                          placeholder="Arama"
+                          placeholder="{{'Filter'|translate}}"
                           type="text"
                           (keyup)="applyFilter($event.target.value)"
                           class="browser-default search-field"
@@ -175,13 +175,13 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Id</mat-header-cell
+                    >{{'ID'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="processGroupName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >İşlem Grup</mat-header-cell
+                    >{{'ProcessGroupName'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.processGroupName }}</mat-cell
@@ -189,7 +189,7 @@
                 </ng-container>
                 <ng-container matColumnDef="processName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >İşlem</mat-header-cell
+                    >{{'ProcessName'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.processName }}</mat-cell
@@ -200,7 +200,7 @@
 
                     *matHeaderCellDef
                     mat-sort-header
-                    >Kurum</mat-header-cell
+                    >{{'InstitutionName'|translate}}</mat-header-cell
                   >
                   <mat-cell
 
@@ -214,7 +214,7 @@
 
                     *matHeaderCellDef
                     mat-sort-header
-                    >Ücrets</mat-header-cell
+                    >{{'Price'|translate}}</mat-header-cell
                   >
                   <mat-cell
 

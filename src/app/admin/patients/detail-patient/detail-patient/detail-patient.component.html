@@ -5,15 +5,15 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Hasta Profili</h4>
+              <h4 class="page-title">{{ patient.name | uppercase }} {{ patient.surName | uppercase }}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i> Anasayfa</a
+                <i class="fas fa-home"></i> {{'Homepage'|translate}}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
-              <a routerLink="/admin/patients/all-patients">Hastalar</a>
+              <a routerLink="/admin/patients/all-patients">{{'Patients'|translate}}</a>
             </li>
             <li class="breadcrumb-item active">
               {{ patient.name | uppercase }} {{ patient.surName | uppercase }}
@@ -26,18 +26,18 @@
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
           <div class="header" style="padding-bottom: 0px; padding-top: 0px">
-            <h2>Sağlık Bildirimleri</h2>
+            <h2>{{'MedicalAlerts'|translate}}</h2>
           </div>
           <div class="body" style="padding-bottom: 0px; width: 100%">
-            <div class="row clearfix">
-              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+            <div *ngIf="checkClaim('GetMedicalAlertsQuery')" class="row clearfix">
+              <div *ngIf="checkClaim('CreateMedicalAlertCommand')" class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
                 <button
                   style="width: 100%"
                   (click)="addNote()"
                   mat-flat-button
                   color="primary"
                 >
-                  Sağlık Bildirimi Ekle <mat-icon>edit</mat-icon>
+                {{'AddMedicalAlert'|translate}} <mat-icon>edit</mat-icon>
                 </button>
               </div>
               <div
@@ -81,15 +81,16 @@
                     <mat-icon matListAvatar>person</mat-icon>
                     <div style="display: flex; flex-direction: column">
                       <div>
-                        <h6 matLine>Bilgileri</h6>
+                        <h6 matLine>{{'Informations'|translate}}</h6>
                       </div>
                     </div>
                   </div>
                   <div></div>
                 </div>
               </mat-list-option>
+              <!-- Burada menü claims sorgularını yap -->
               <div *ngFor="let item of menuItems">
-                <mat-list-option [value]="item.id" [disableRipple]="true">
+                <mat-list-option *ngIf="checkClaim(item.claim)" [value]="item.id" [disableRipple]="true">
                   <div
                     style="
                       display: flex;
@@ -109,7 +110,7 @@
                 </mat-list-option>
                 <mat-list-option
                   style="padding-left: 5px; height: 40px !important"
-                  *ngFor="let subItem of item.subItems"
+                  *ngFor="let subItem of getSubItems(item)"
                   [value]="subItem.id"
                   [disableRipple]="true"
                 >
@@ -164,7 +165,7 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">history</mat-icon>
-                  İletişim Bilgileri
+                  {{'ContactInformations'|translate}}
                 </ng-template>
                 <br />
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -173,26 +174,26 @@
                       <div class="tab-pane body active" id="about">
                         <div class="row">
                           <div class="col-6">
-                            <small class="text-muted">Telefon Numarası: </small>
+                            <small class="text-muted">{{'PhoneNumber'|translate}}: </small>
                             <p>{{ patient.phoneNumber }}</p>
                             <hr />
-                            <small class="text-muted">Şehir: </small>
+                            <small class="text-muted">{{'City'|translate}}: </small>
                             <p>{{ patient.city }}</p>
                             <hr />
-                            <small class="text-muted">Adres: </small>
+                            <small class="text-muted">{{'Address'|translate}}: </small>
                             <p>{{ patient.address }}</p>
                             <hr />
-                            <small class="text-muted">Email Adres: </small>
+                            <small class="text-muted">{{'Email'|translate}}: </small>
                             <p>{{ patient.eMail }}</p>
                           </div>
                           <div class="col-6">
-                            <small class="text-muted">Ülke: </small>
+                            <small class="text-muted">{{'Country'|translate}}: </small>
                             <p>{{ patient.country }}</p>
                             <hr />
-                            <small class="text-muted">Eyalet: </small>
+                            <small class="text-muted">{{'Region'|translate}}: </small>
                             <p>{{ patient.region }}</p>
                             <hr />
-                            <small class="text-muted">Uyruk: </small>
+                            <small class="text-muted">{{'Nationality'|translate}}: </small>
                             <p>{{ patient.nationality }}</p>
                           </div>
                         </div>
@@ -204,14 +205,14 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">description</mat-icon>
-                  Hasta Hakkında
+                  {{'AboutPatient'|translate}}
                 </ng-template>
                 <div class="col-lg-12 col-md-12 col-sm-12">
                   <div class="project_widget">
                     <div class="body">
                       <div class="row">
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Doğum Tarihi</strong>
+                          <strong>{{'BirthDate'|translate}}</strong>
                           <br />
 
                           <p class="text-muted">
@@ -219,7 +220,7 @@
                           </p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Cinsiyet</strong>
+                          <strong>{{'Gender'|translate}}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -228,21 +229,21 @@
                             "
                             class="text-muted"
                           >
-                            Erkek
+                          {{'Male'|translate}}
                           </p>
                           <ng-template #elseTemplateGender>
-                            <p class="text-muted">Kadın</p>
+                            <p class="text-muted">{{'Female'|translate}}</p>
                           </ng-template>
                         </div>
                         <div class="col-md-3 col-6">
-                          <strong>T.C Kimlik</strong>
+                          <strong>{{'IdentityNumber'|translate}}</strong>
                           <br />
                           <p class="text-muted">
                             {{ patient.identityNumber }}
                           </p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Kan Grubu</strong>
+                          <strong>{{'BloodGroup'|translate}}</strong>
                           <br />
                           <p class="text-muted">{{ patient.bloodGroup }}</p>
                         </div>
@@ -250,23 +251,23 @@
                       <hr />
                       <div class="row">
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Anne Adı</strong>
+                          <strong>{{'MotherName'|translate}}</strong>
                           <br />
                           <p class="text-muted">{{ patient.motherName }}</p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Baba Adı</strong>
+                          <strong>{{'FatherName'|translate}}</strong>
                           <br />
                           <p class="text-muted">{{ patient.fatherName }}</p>
                         </div>
 
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Meslek</strong>
+                          <strong>{{'Job'|translate}}</strong>
                           <br />
                           <p class="text-muted">{{ patient.job }}</p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Evlilik Durumu</strong>
+                          <strong>{{'MaritalStatus'|translate}}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -275,17 +276,17 @@
                             "
                             class="text-muted"
                           >
-                            Evli
+                          {{'Married'|translate}}
                           </p>
                           <ng-template #elseTemplateMarital>
-                            <p class="text-muted">Bekar</p>
+                            <p class="text-muted">{{'Single'|translate}}</p>
                           </ng-template>
                         </div>
                       </div>
                       <hr />
                       <div class="row text-center">
                         <div class="col-md-6 col-12 b-r">
-                          <strong>GDPR Onayı</strong>
+                          <strong>{{'GdprConfirm'|translate}}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -294,14 +295,14 @@
                             "
                             class="text-muted"
                           >
-                            Evet
+                          {{'Yes'|translate}}
                           </p>
                           <ng-template #elseTemplateGdpr>
-                            <p class="text-muted">Hayır</p>
+                            <p class="text-muted">{{'No'|translate}}</p>
                           </ng-template>
                         </div>
                         <div class="col-md-6 col-12 b-r">
-                          <strong>Sms Onayı</strong>
+                          <strong>{{'SmsConfirm'|translate}}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -310,10 +311,10 @@
                             "
                             class="text-muted"
                           >
-                            Evet
+                          {{'Yes'|translate}}
                           </p>
                           <ng-template #elseTemplateSms>
-                            <p class="text-muted">Hayır</p>
+                            <p class="text-muted">{{'No'|translate}}</p>
                           </ng-template>
                         </div>
                       </div>
@@ -325,13 +326,13 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">edit</mat-icon>
-                  Hastanın Notu Ve Bağımlılıkları
+                  {{'NotesAndAddictions'|translate}}
                 </ng-template>
                 <br />
                 <div class="col-lg-12 col-md-12 col-sm-12">
                   <div class="card project_widget">
                     <div class="header">
-                      <h5>Hastanın Notu Ve Bağımlılıkları</h5>
+                      <h5>{{'NotesAndAddictions'|translate}}</h5>
                     </div>
                     <div class="body">
                       <p *ngIf="patient.note; else noNote">
@@ -339,16 +340,16 @@
                       </p>
                       <ng-template #noNote
                         ><div class="alert alert-danger">
-                          Hastanın Notu Yok! Eklemek için
+                          {{'PatientDontHaveNote'|translate}}
                           <a (click)="addNotePatient()" style="color: blue"
-                            >tıklayınız</a
+                            >{{'ClickForAdd'|translate}}</a
                           >
                         </div></ng-template
                       >
                       <hr />
                       <div class="row text-center">
                         <div class="col-md-4 col-8 b-r">
-                          <strong>Sigara Kullanımı</strong>
+                          <strong>{{'UsingSmoke'|translate}}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -357,14 +358,14 @@
                             "
                             class="text-muted"
                           >
-                            Evet
+                          {{'Yes'|translate}}
                           </p>
                           <ng-template #elseTemplateSmoke>
-                            <p class="text-muted">Hayır</p>
+                            <p class="text-muted">{{'No'|translate}}</p>
                           </ng-template>
                         </div>
                         <div class="col-md-4 col-8 b-r">
-                          <strong>Alkol Kullanımı</strong>
+                          <strong>{{'UsingAlcohol'|translate}}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -373,14 +374,14 @@
                             "
                             class="text-muted"
                           >
-                            Evet
+                          {{'Yes'|translate}}
                           </p>
                           <ng-template #elseTemplateAlcohol>
-                            <p class="text-muted">Hayır</p>
+                            <p class="text-muted">{{'No'|translate}}</p>
                           </ng-template>
                         </div>
                         <div class="col-md-4 col-8 b-r">
-                          <strong>Hasta Sorunlu mu?</strong>
+                          <strong>{{'IsTrobule'|translate}}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -389,10 +390,10 @@
                             "
                             class="text-muted"
                           >
-                            Evet
+                          {{'Yes'|translate}}
                           </p>
                           <ng-template #elseTemplateSmoke>
-                            <p class="text-muted">Hayır</p>
+                            <p class="text-muted">{{'No'|translate}}</p>
                           </ng-template>
                         </div>
                       </div>
@@ -405,13 +406,13 @@
                   <mat-icon class="example-tab-icon mr-2"
                     >find_in_page</mat-icon
                   >
-                  Genel Rapor
+                  {{'GeneralReport'|translate}}
                 </ng-template>
                 <br />
                 <div class="col-lg-12 col-md-12 col-sm-12">
                   <div class="card project_widget">
                     <div class="header">
-                      <h5>Genel Rapor</h5>
+                      <h5>{{'GeneralReport'|translate}}</h5>
                     </div>
                     <div class="body">
                       <ul class="list-unstyled">
@@ -592,7 +593,7 @@
           <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card project_widget">
               <div class="body">
-                <ul class="left-timeline">
+                <ul class="left-timeline" *ngIf="protocols&&protocols.length>0;else noProtocols">
                   <li *ngFor="let protocol of protocols">
                     <div *ngIf="!protocol.isOpen; else openProtocol">
                       <time class="left-time" datetime="2017-11-04T18:30"
@@ -630,7 +631,7 @@
                               protocol.protocolNo
                             }}"
                             onClick="return false;"
-                            >Protokol No: #{{ protocol.protocolNo }}</a
+                            >{{'ProtocolNo'|translate}}: #{{ protocol.protocolNo }}</a
                           >
                         </span>
                         <div class="row clearfix">
@@ -643,7 +644,7 @@
                                       style="justify-content: center"
                                     >
                                       <p class="font-bold col-orange">
-                                        Hasta Notları
+                                        {{'PatientNotes'|translate}}
                                       </p>
                                     </mat-panel-title>
                                   </mat-expansion-panel-header>
@@ -667,7 +668,7 @@
                                             appearance="fill"
                                           >
                                             <mat-label
-                                              >Not Türü Seçiniz</mat-label
+                                              >{{'ChooseNoteType'|translate}}</mat-label
                                             >
                                             <mat-select
                                               (selectionChange)="
@@ -680,7 +681,7 @@
                                               [(value)]="selectedNoteType"
                                             >
                                               <mat-option value="Muayene"
-                                                >Muayene</mat-option
+                                                >{{'Medical'|translate}}</mat-option
                                               >
                                               <mat-option value="Test"
                                                 >Test</mat-option
@@ -752,8 +753,8 @@
                                                       >
                                                         <mat-card>
                                                           <mat-card-content
-                                                            [attr.id]="
-                                                              form.name
+                                                            [attr.id]="'Dynamic'+
+                                                              form.id
                                                             "
                                                           >
                                                             <div
@@ -798,7 +799,7 @@
                                                               </button>
                                                               <button
                                                                 (click)="
-                                                                  exportMedicalNote(
+                                                                  exportDynamicNote(
                                                                     form.id
                                                                   )
                                                                 "
@@ -810,9 +811,10 @@
                                                               </button>
                                                               <button
                                                                 (click)="
-                                                                  deleteNoteForMedical(
-                                                                    form.id
-                                                                  )
+                                                                deleteNoteForDynamicData(
+                                                                  dynamicTableDatas,
+                                                                  form.id
+                                                                )
                                                                 "
                                                                 mat-icon-button
                                                               >
@@ -833,23 +835,21 @@
                                                 </div>
                                                 <ng-template #noDynamicData>
                                                   <div
-                                                    class="alert alert-warning w-100"
-                                                  >
-                                                    Hastanın mevcut Muayene notu
-                                                    yok!
-                                                    <strong
+                                                class="alert alert-warning w-100"
+                                              >
+                                              {{'PatientDontHaveCurrentNote'|translate}}
+                                                <strong
                                                       ><a
                                                         (click)="
                                                           addNoteForMedical(
-                                                            selectForNotes.value
+                                                            selectForNotes.value,protocol.protocolNo
                                                           )
                                                         "
                                                         class="alert-link"
-                                                        >Eklemek için
-                                                        tıklayınız</a
+                                                        >{{'ClickForAdd'|translate}}</a
                                                       ></strong
                                                     >
-                                                  </div>
+                                              </div>
                                                 </ng-template>
                                               </ng-container>
                                             </div>
@@ -887,7 +887,7 @@
                                                           class="col-md-12 col-12 b-r"
                                                         >
                                                           <strong
-                                                            >Şikayet</strong
+                                                            >{{'Sikayet'|translate}}</strong
                                                           >
                                                           <br />
                                                           <p class="text-muted">
@@ -900,7 +900,7 @@
                                                           class="col-md-12 col-12 b-r"
                                                         >
                                                           <strong
-                                                            >Hikaye</strong
+                                                            >{{'Hikaye'|translate}}</strong
                                                           >
                                                           <br />
                                                           <p class="text-muted">
@@ -910,7 +910,7 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong>ICD</strong>
+                                                          <strong>{{'Icd'|translate}}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{ medical.icd }}
@@ -920,7 +920,7 @@
                                                           class="col-md-12 col-12 b-r"
                                                         >
                                                           <strong
-                                                            >Soygeçmiş</strong
+                                                            >{{'SoyGecmis'|translate}}</strong
                                                           >
                                                           <br />
                                                           <p class="text-muted">
@@ -933,8 +933,7 @@
                                                           class="col-md-12 col-12"
                                                         >
                                                           <strong
-                                                            >Baş Boyun
-                                                            Tiroid</strong
+                                                            >{{'BasBoyunTiroid'|translate}}</strong
                                                           >
                                                           <br />
                                                           <p class="text-muted">
@@ -988,8 +987,7 @@
                                                           </button>
                                                           <span fxFlex></span>
                                                           <strong
-                                                            >Oluşturulduğu
-                                                            tarih:
+                                                            >{{'AddedDate'|translate}}:
                                                             {{
                                                               medical.addedDate
                                                                 | date
@@ -1006,19 +1004,18 @@
                                               <div
                                                 class="alert alert-warning w-100"
                                               >
-                                                Hastanın mevcut Muayene notu
-                                                yok!
+                                              {{'PatientDontHaveCurrentNote'|translate}}
                                                 <strong
-                                                  ><a
-                                                    (click)="
-                                                      addNoteForMedical(
-                                                        protocol
-                                                      )
-                                                    "
-                                                    class="alert-link"
-                                                    >Eklemek için tıklayınız</a
-                                                  ></strong
-                                                >
+                                                      ><a
+                                                        (click)="
+                                                          addNoteForMedical(
+                                                            selectForNotes.value,protocol.protocolNo
+                                                          )
+                                                        "
+                                                        class="alert-link"
+                                                        >{{'ClickForAdd'|translate}}</a
+                                                      ></strong
+                                                    >
                                               </div>
                                             </ng-template>
                                           </ng-template>
@@ -1074,7 +1071,7 @@
                               protocol.protocolNo
                             }}"
                             onClick="return false;"
-                            >Protokol No: #{{ protocol.protocolNo }}</a
+                            >{{'ProtocolNo'|translate}}: #{{ protocol.protocolNo }}</a
                           >
                         </span>
                         <div class="row clearfix">
@@ -1087,7 +1084,7 @@
                                       style="justify-content: center"
                                     >
                                       <p class="font-bold col-teal">
-                                        Hasta Notları
+                                        {{'PatientNotes'|translate}}
                                       </p>
                                     </mat-panel-title>
                                   </mat-expansion-panel-header>
@@ -1102,7 +1099,7 @@
                                             appearance="fill"
                                           >
                                             <mat-label
-                                              >Not Türü Seçiniz</mat-label
+                                              >{{'ChooseNoteType'|translate}}</mat-label
                                             >
                                             <mat-select
                                               (selectionChange)="
@@ -1115,7 +1112,7 @@
                                               [(value)]="selectedNoteType"
                                             >
                                               <mat-option value="Muayene"
-                                                >Muayene</mat-option
+                                                >{{'Medical'|translate}}</mat-option
                                               >
                                               <mat-option value="Test"
                                                 >Test</mat-option
@@ -1187,8 +1184,8 @@
                                                       >
                                                         <mat-card>
                                                           <mat-card-content
-                                                            [attr.id]="
-                                                              form.name
+                                                            [attr.id]="'Dynamic'+
+                                                              form.id
                                                             "
                                                           >
                                                             <div
@@ -1233,7 +1230,7 @@
                                                               </button>
                                                               <button
                                                                 (click)="
-                                                                  exportMedicalNote(
+                                                                  exportDynamicNote(
                                                                     form.id
                                                                   )
                                                                 "
@@ -1245,9 +1242,10 @@
                                                               </button>
                                                               <button
                                                                 (click)="
-                                                                  deleteNoteForMedical(
-                                                                    form.id
-                                                                  )
+                                                                deleteNoteForDynamicData(
+                                                                  dynamicTableDatas,
+                                                                  form.id
+                                                                )
                                                                 "
                                                                 mat-icon-button
                                                               >
@@ -1270,8 +1268,7 @@
                                                   <div
                                                     class="alert alert-warning w-100"
                                                   >
-                                                    Hastanın mevcut Muayene notu
-                                                    yok!
+                                                  {{'PatientDontHaveCurrentNote'|translate}}
                                                     <strong
                                                       ><a
                                                         (click)="
@@ -1280,8 +1277,7 @@
                                                           )
                                                         "
                                                         class="alert-link"
-                                                        >Eklemek için
-                                                        tıklayınız</a
+                                                        >{{'ClickForAdd'|translate}}</a
                                                       ></strong
                                                     >
                                                   </div>
@@ -1322,7 +1318,7 @@
                                                           class="col-md-12 col-12 b-r"
                                                         >
                                                           <strong
-                                                            >Şikayet</strong
+                                                            >{{'Sikayet'|translate}}</strong
                                                           >
                                                           <br />
                                                           <p class="text-muted">
@@ -1335,7 +1331,7 @@
                                                           class="col-md-12 col-12 b-r"
                                                         >
                                                           <strong
-                                                            >Hikaye</strong
+                                                            >{{'Hikaye'|translate}}</strong
                                                           >
                                                           <br />
                                                           <p class="text-muted">
@@ -1345,7 +1341,7 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong>ICD</strong>
+                                                          <strong>{{'Icd'|translate}}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{ medical.icd }}
@@ -1355,7 +1351,7 @@
                                                           class="col-md-12 col-12 b-r"
                                                         >
                                                           <strong
-                                                            >Soygeçmiş</strong
+                                                            >{{'SoyGecmis'|translate}}</strong
                                                           >
                                                           <br />
                                                           <p class="text-muted">
@@ -1368,8 +1364,7 @@
                                                           class="col-md-12 col-12"
                                                         >
                                                           <strong
-                                                            >Baş Boyun
-                                                            Tiroid</strong
+                                                            >{{'BasBoyunTiroid'|translate}}</strong
                                                           >
                                                           <br />
                                                           <p class="text-muted">
@@ -1423,8 +1418,7 @@
                                                           </button>
                                                           <span fxFlex></span>
                                                           <strong
-                                                            >Oluşturulduğu
-                                                            tarih:
+                                                            >{{'AddedDate'|translate}}:
                                                             {{
                                                               medical.addedDate
                                                                 | date
@@ -1441,19 +1435,18 @@
                                               <div
                                                 class="alert alert-warning w-100"
                                               >
-                                                Hastanın mevcut Muayene notu
-                                                yok!
+                                              {{'PatientDontHaveCurrentNote'|translate}}
                                                 <strong
-                                                  ><a
-                                                    (click)="
-                                                      addNoteForMedical(
-                                                        protocol
-                                                      )
-                                                    "
-                                                    class="alert-link"
-                                                    >Eklemek için tıklayınız</a
-                                                  ></strong
-                                                >
+                                                      ><a
+                                                        (click)="
+                                                          addNoteForMedical(
+                                                            selectForNotes.value,protocol.protocolNo
+                                                          )
+                                                        "
+                                                        class="alert-link"
+                                                        >{{'ClickForAdd'|translate}}</a
+                                                      ></strong
+                                                    >
                                               </div>
                                             </ng-template>
                                           </ng-template>
@@ -1475,6 +1468,9 @@
                     </ng-template>
                   </li>
                 </ul>
+                <ng-template #noProtocols>
+                  <p class="alert alert-warning">{{'NoRecordsFound'|translate}}</p>
+                </ng-template>
               </div>
             </div>
           </div>
@@ -1485,7 +1481,7 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">history</mat-icon>
-                  Randevu Zaman Çizelgesi
+                  {{'TimeLineOfAppointments'|translate}}
                 </ng-template>
                 <br />
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -1532,7 +1528,7 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">description</mat-icon>
-                  Randevu Listesi
+                  {{'AppointmentList'|translate}}
                 </ng-template>
                 <div class="row" style="margin-left: 0; margin-right: 0">
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -1551,7 +1547,7 @@
                                 <ul class="header-buttons-left ml-0">
                                   <li class="dropdown">
                                     <h2>
-                                      <strong>Randevuları</strong>
+                                      <strong>{{'Appointments'|translate}}</strong>
                                     </h2>
                                   </li>
                                   <li class="dropdown m-l-20">
@@ -1561,7 +1557,7 @@
                                       ></label
                                     >
                                     <input
-                                      placeholder="Arama"
+                                      placeholder="{{'Filter'|translate}}"
                                       type="text"
                                       [(ngModel)]="filterValue"
                                       (keyup)="applyFilter($event.target.value)"
@@ -1599,7 +1595,7 @@
                             <!-- ID Column -->
                             <ng-container matColumnDef="appointmentNo">
                               <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >Id</mat-header-cell
+                                >{{'ID'|translate}}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">{{
                                 row.appointmentNo
@@ -1607,7 +1603,7 @@
                             </ng-container>
                             <ng-container matColumnDef="patientName">
                               <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >Hasta Ad</mat-header-cell
+                                >{{'PatientName'|translate}}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.patientName }}</mat-cell
@@ -1615,7 +1611,7 @@
                             </ng-container>
                             <ng-container matColumnDef="patientSurname">
                               <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >Soyad</mat-header-cell
+                                >{{'PatientSurName'|translate}}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.patientSurname }}</mat-cell
@@ -1623,7 +1619,7 @@
                             </ng-container>
                             <ng-container matColumnDef="departmentName">
                               <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >Bölüm</mat-header-cell
+                                >{{'DepartmentName'|translate}}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.departmentName }}</mat-cell
@@ -1631,7 +1627,7 @@
                             </ng-container>
                             <ng-container matColumnDef="doctorName">
                               <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >Doktor Ad</mat-header-cell
+                                >{{'DoctorName'|translate}}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.doctorName }}</mat-cell
@@ -1640,7 +1636,7 @@
 
                             <ng-container matColumnDef="doctorSurname">
                               <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >Soyad</mat-header-cell
+                                >{{'DoctorSurName'|translate}}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.doctorSurname }}</mat-cell
@@ -1648,7 +1644,7 @@
                             </ng-container>
                             <ng-container matColumnDef="time">
                               <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >Saat</mat-header-cell
+                                >{{'Time'|translate}}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.time }}</mat-cell
@@ -1656,7 +1652,7 @@
                             </ng-container>
                             <ng-container matColumnDef="typeName">
                               <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >Protokol Tip</mat-header-cell
+                                >{{'TypeName'|translate}}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.typeName }}</mat-cell
@@ -1664,7 +1660,7 @@
                             </ng-container>
                             <ng-container matColumnDef="phoneNumber">
                               <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >Telefon</mat-header-cell
+                                >{{'PhoneNumber'|translate}}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.phoneNumber }}</mat-cell
@@ -1675,7 +1671,7 @@
                                 *matHeaderCellDef
                                 mat-sort-header
                                 [ngClass]="'tbl-col-width-per-8'"
-                                >Durum
+                                >{{'Status'|translate}}
                               </mat-header-cell>
                               <mat-cell
                                 *matCellDef="let row"
@@ -1687,9 +1683,6 @@
                                     else elseTemplate
                                   "
                                 >
-                                  <!-- <div color="accent" class="btn-tbl-check">
-                                <mat-icon aria-label="Ok" class="col-white">check</mat-icon>
-                              </div> -->
                                   <button
                                     [disabled]="true"
                                     mat-icon-button
@@ -1718,7 +1711,7 @@
                             <!-- actions -->
                             <ng-container matColumnDef="actions">
                               <mat-header-cell *matHeaderCellDef class="pr-0"
-                                >Eylemler</mat-header-cell
+                                >{{'Actions'|translate}}</mat-header-cell
                               >
                               <mat-cell
                                 *matCellDef="let row; let i = index"
@@ -1788,6 +1781,14 @@
                             >
                             </mat-row>
                           </mat-table>
+                          <div
+                            class="no-results"
+                            [style.display]="
+                              dataSource.data.length == 0 ? '' : 'none'
+                            "
+                          >
+                          <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
+                          </div>
                           <mat-paginator
                             #paginator
                             [pageIndex]="0"
@@ -1821,7 +1822,7 @@
                           <ul class="header-buttons-left ml-0">
                             <li class="dropdown">
                               <h2>
-                                <strong>Ödemeleri</strong>
+                                <strong>{{'Payments'|translate}}</strong>
                               </h2>
                             </li>
                           </ul>
@@ -1837,7 +1838,7 @@
                       <!-- ID Column -->
                       <ng-container matColumnDef="collectorId">
                         <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >Id</mat-header-cell
+                          >{{'ID'|translate}}</mat-header-cell
                         >
                         <mat-cell *matCellDef="let row">{{
                           row.collectorId
@@ -1845,7 +1846,7 @@
                       </ng-container>
                       <ng-container matColumnDef="protocolId">
                         <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >Protokol No</mat-header-cell
+                          >{{'ProtocolNo'|translate}}</mat-header-cell
                         >
                         <mat-cell *matCellDef="let row">
                           {{ row.protocolId }}</mat-cell
@@ -1853,19 +1854,19 @@
                       </ng-container>
                       <ng-container matColumnDef="paymentType">
                         <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >Ödeme Tipi</mat-header-cell
+                          >{{'PaymentType'|translate}}</mat-header-cell
                         >
                         <mat-cell
                           [ngSwitch]="row.paymentType"
                           *matCellDef="let row"
                         >
-                          <div *ngSwitchCase="1">Nakit Ödeme</div>
-                          <div *ngSwitchCase="2">Kredi Kartı</div>
+                          <div *ngSwitchCase="1">{{'Cash'|translate}}</div>
+                          <div *ngSwitchCase="2">{{'CreditCard'|translate}}</div>
                         </mat-cell>
                       </ng-container>
                       <ng-container matColumnDef="price">
                         <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >Ödenecek</mat-header-cell
+                          >{{'Price'|translate}}</mat-header-cell
                         >
                         <mat-cell *matCellDef="let row">
                           {{ row.price }}</mat-cell
@@ -1873,20 +1874,20 @@
                       </ng-container>
                       <ng-container matColumnDef="discount">
                         <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >İndirim</mat-header-cell
+                          >{{'Discount'|translate}}</mat-header-cell
                         >
                         <mat-cell
                           [ngSwitch]="row.discount"
                           *matCellDef="let row"
                         >
-                          <div *ngSwitchCase="true">Evet</div>
-                          <div *ngSwitchCase="false">Hayır</div>
+                          <div *ngSwitchCase="true">{{'Yes'|translate}}</div>
+                          <div *ngSwitchCase="false">{{'No'|translate}}</div>
                         </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="paymentValue">
                         <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >Ödenen</mat-header-cell
+                          >{{'PaymentValue'|translate}}</mat-header-cell
                         >
                         <mat-cell *matCellDef="let row">
                           {{ row.paymentValue }}</mat-cell
@@ -1894,7 +1895,7 @@
                       </ng-container>
                       <ng-container matColumnDef="discountValue">
                         <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >İndirim Tutarı</mat-header-cell
+                          >{{'DiscountValue'|translate}}</mat-header-cell
                         >
                         <mat-cell *matCellDef="let row">
                           {{ row.discountValue }}</mat-cell
@@ -1902,7 +1903,7 @@
                       </ng-container>
                       <ng-container matColumnDef="addedDate">
                         <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >Tarih</mat-header-cell
+                          >{{'AddedDate'|translate}}</mat-header-cell
                         >
                         <mat-cell *matCellDef="let row">
                           {{ row.addedDate | date: "MM/dd/yyyy" }}</mat-cell
@@ -1911,7 +1912,7 @@
                       <!-- actions -->
                       <ng-container matColumnDef="actions">
                         <mat-header-cell *matHeaderCellDef class="pr-0"
-                          >Eylemler</mat-header-cell
+                          >{{'Actions'|translate}}</mat-header-cell
                         >
                         <mat-cell
                           *matCellDef="let row; let i = index"
@@ -1940,6 +1941,14 @@
                       >
                       </mat-row>
                     </mat-table>
+              <div
+                class="no-results"
+                [style.display]="
+                dataSourceForCollections.data.length == 0 ? '' : 'none'
+                "
+              >
+              <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
+              </div>
                     <mat-paginator
                       #paginatorForCollections
                       [pageIndex]="0"
@@ -1961,8 +1970,9 @@
             </ng-container>
           </ng-container>
           <ng-template #secondSubContent>
-            <div *ngIf="medicals.length||dynamicTableDatas.length; else noNotes" class="row">
+            <div *ngIf="dynamicTableDataFormControl(); else noNotes" class="row">
               <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+                  {{action}}
                 <div class="card">
                   <div class="body">
                     <div class="row">
@@ -1971,7 +1981,7 @@
                           class="example-full-width"
                           appearance="outline"
                         >
-                          <mat-label>Not Tipi Seçiniz</mat-label>
+                          <mat-label>{{'ChooseNoteType'|translate}}</mat-label>
                           <mat-select
                             #selectForNoteAdd
                             [(ngModel)]="selectedNoteTypeForAdd"
@@ -1979,7 +1989,7 @@
                               onOptionsSelectedForm(selectForNoteAdd.value)
                             "
                           >
-                            <mat-option value="Muayene">Muayene</mat-option>
+                            <mat-option value="Muayene">{{'Medical'|translate}}</mat-option>
                             <mat-option value="Test">Test</mat-option>
                             <mat-option value="Test2" disabled
                               >Test2</mat-option
@@ -1997,11 +2007,11 @@
                           class="example-full-width"
                           appearance="outline"
                         >
-                          <mat-label>Hasta gelişi seçiniz</mat-label>
+                          <mat-label>{{'ChoosePatientArrival'|translate}}</mat-label>
                           <mat-select
                             #selectAppointmentForNoteAdd
                             [(ngModel)]="selectionForAppointment"
-                            [disabled]="action === 'edit'"
+                            disabled
                             (selectionChange)="
                               onOptionsSelected(
                                 selectAppointmentForNoteAdd.value
@@ -2111,24 +2121,6 @@
                                           </mat-radio-group>
                                         </div>
                                       </div>
-                                      <!-- <div
-                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
-                                      >
-                                        <label>{{ control.label }}</label>
-                                        <label
-                                          class="pr-5"
-                                          *ngFor="let option of control.values"
-                                        >
-                                          <input
-                                            [formControlName]="
-                                              control.formControlName
-                                            "
-                                            [value]="option.value"
-                                            type="radio"
-                                            name="{{ control.formControlName }}"
-                                          />{{ option.value }}
-                                        </label>
-                                      </div> -->
                                     </ng-container>
                                     <ng-container *ngSwitchCase="'date'">
                                       <div
@@ -2180,8 +2172,7 @@
                                     </ng-container>
                                   </ng-container>
                                 </ng-container>
-                                <div class="row">
-                                  <div
+                                  <div *ngIf="protocolHaveOneNote()||action=='edit';else protocolHaveNote"
                                     class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3"
                                   >
                                     <button
@@ -2195,7 +2186,7 @@
                                       mat-raised-button
                                       color="primary"
                                     >
-                                      Kaydet
+                                    {{'Save'|translate}}
                                     </button>
                                     <button
                                       class="mr-3"
@@ -2209,17 +2200,30 @@
                                       mat-raised-button
                                       color="accent"
                                     >
-                                      Temizle
+                                    {{'Clear'|translate}}
                                     </button>
                                     <button
                                       (click)="backToNote()"
                                       type="button"
                                       mat-button
                                     >
-                                      İptal
+                                    {{'Cancel'|translate}}
                                     </button>
                                   </div>
-                                </div>
+                                  <ng-template #protocolHaveNote>
+                                    <div
+                                                class="alert alert-danger w-100"
+                                              >
+                                              {{'MustOneNote'|translate}}!
+                                                <strong
+                                                      ><a
+                                                        (click)="backToNote()"
+                                                        class="alert-link"
+                                                        >{{'ClickForBackToNotes'|translate}}</a
+                                                      ></strong
+                                                    >
+                                              </div>
+                                  </ng-template>
                               </form>
                             </ng-container>
                           </div>
@@ -2239,7 +2243,7 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>Şikayet</mat-label>
+                                      <mat-label>{{'Sikayet'|translate}}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="sikayet"
@@ -2252,7 +2256,7 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>Hikaye</mat-label>
+                                      <mat-label>{{'Hikaye'|translate}}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="hikaye"
@@ -2267,7 +2271,7 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>Soygeçmiş</mat-label>
+                                      <mat-label>{{'Soygecmis'|translate}}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="soygecmis"
@@ -2280,7 +2284,7 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>ICD</mat-label>
+                                      <mat-label>{{'Icd'|translate}}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="icd"
@@ -2295,7 +2299,7 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>Baş Boyun Tiroid</mat-label>
+                                      <mat-label>{{'BasBoyunTiroid'|translate}}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="basBoyunTiroid"
@@ -2308,7 +2312,7 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>Notlar</mat-label>
+                                      <mat-label>{{'Notes'|translate}}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="notlar"
@@ -2323,7 +2327,7 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>Durum</mat-label>
+                                      <mat-label>{{'Status'|translate}}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="durum"
@@ -2336,7 +2340,7 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>Notlar</mat-label>
+                                      <mat-label>{{'Notes'|translate}}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="notlar"
@@ -2345,14 +2349,13 @@
                                   </div>
                                 </div>
                                 <div class="row">
-                                  <div
+                                  <div *ngIf="protocolHaveOneMedicalNote();else protocolHaveMedicalNote"
                                     class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3"
                                   >
                                     <button
                                       class="mr-3"
                                       [disabled]="
                                         !(
-                                          medicalForm.valid &&
                                           selectionForAppointment &&
                                           selectedNoteTypeForAdd
                                         )
@@ -2360,14 +2363,13 @@
                                       mat-raised-button
                                       color="primary"
                                     >
-                                      Kaydet
+                                    {{'Save'|translate}}
                                     </button>
                                     <button
                                       class="mr-3"
                                       type="reset"
                                       [disabled]="
                                         !(
-                                          medicalForm.value &&
                                           selectionForAppointment &&
                                           selectedNoteTypeForAdd
                                         )
@@ -2375,16 +2377,30 @@
                                       mat-raised-button
                                       color="accent"
                                     >
-                                      Temizle
+                                    {{'Clear'|translate}}
                                     </button>
                                     <button
                                       (click)="backToNote()"
                                       type="button"
                                       mat-button
                                     >
-                                      İptal
+                                    {{'Cancel'|translate}}
                                     </button>
                                   </div>
+                                  <ng-template #protocolHaveMedicalNote>
+                                    <div
+                                                class="alert alert-danger w-100"
+                                              >
+                                              {{'MustOneNote'|translate}}!
+                                                <strong
+                                                      ><a
+                                                        (click)="backToNote()"
+                                                        class="alert-link"
+                                                        >{{'ClickForBackToNotes'|translate}}</a
+                                                      ></strong
+                                                    >
+                                              </div>
+                                  </ng-template>
                                 </div>
                               </form>
                             </div>
@@ -2488,9 +2504,8 @@
                                                     <div fxLayout="row">
                                                       <button
                                                         (click)="
-                                                          editNoteForDynamicData(
-                                                            dynamicTableDatas,
-                                                            'paste'
+                                                        getNoteForDynamicData(
+                                                            dynamicTableDatas
                                                           )
                                                         "
                                                         mat-raised-button
@@ -2499,7 +2514,7 @@
                                                         <mat-icon
                                                           >arrow_back</mat-icon
                                                         >
-                                                        Anamnez
+                                                        {{'Export'|translate}}
                                                       </button>
                                                       <button
                                                         (click)="
@@ -2593,7 +2608,7 @@
                                                 <div
                                                   class="col-md-12 col-12 b-r"
                                                 >
-                                                  <strong>Şikayet</strong>
+                                                  <strong>{{'Sikayet'|translate}}</strong>
                                                   <br />
                                                   <p class="text-muted">
                                                     {{ medical.sikayet }}
@@ -2602,7 +2617,7 @@
                                                 <div
                                                   class="col-md-12 col-12 b-r"
                                                 >
-                                                  <strong>Hikaye</strong>
+                                                  <strong>{{'Hikaye'|translate}}</strong>
                                                   <br />
                                                   <p class="text-muted">
                                                     {{ medical.hikaye }}
@@ -2611,7 +2626,7 @@
                                                 <div
                                                   class="col-md-12 col-12 b-r"
                                                 >
-                                                  <strong>ICD</strong>
+                                                  <strong>{{'Icd'|translate}}</strong>
                                                   <br />
                                                   <p class="text-muted">
                                                     {{ medical.icd }}
@@ -2620,7 +2635,7 @@
                                                 <div
                                                   class="col-md-12 col-12 b-r"
                                                 >
-                                                  <strong>Soygeçmiş</strong>
+                                                  <strong>{{'Soygecmis'|translate}}</strong>
                                                   <br />
                                                   <p class="text-muted">
                                                     {{ medical.soygecmis }}
@@ -2628,7 +2643,7 @@
                                                 </div>
                                                 <div class="col-md-12 col-12">
                                                   <strong
-                                                    >Baş Boyun Tiroid</strong
+                                                    >{{'BasBoyunTiroid'|translate}}</strong
                                                   >
                                                   <br />
                                                   <p class="text-muted">
@@ -2641,9 +2656,8 @@
                                                 <div fxLayout="row">
                                                   <button
                                                     (click)="
-                                                      editNoteForMedical(
-                                                        medical,
-                                                        'paste'
+                                                    getNoteForMedical(
+                                                        medical
                                                       )
                                                     "
                                                     mat-raised-button
@@ -2652,7 +2666,7 @@
                                                     <mat-icon
                                                       >arrow_back</mat-icon
                                                     >
-                                                    Anamnez
+                                                    {{'Export'|translate}}
                                                   </button>
                                                   <button
                                                     (click)="
@@ -2701,9 +2715,6 @@
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                   <div class="card">
-                    <div class="header">
-                      <h2>Hastanın ilk notu</h2>
-                    </div>
                     <div class="body">
                       <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
@@ -2711,14 +2722,24 @@
                             class="example-full-width"
                             appearance="outline"
                           >
-                            <mat-label>Not Tipi Seçiniz</mat-label>
+                            <mat-label>{{'ChooseNoteType'|translate}}</mat-label>
                             <mat-select
                               #selectForNoteAdd
-                              [(value)]="selectedNoteTypeForAdd"
+                              [(ngModel)]="selectedNoteTypeForAdd"
+                              (selectionChange)="
+                                onOptionsSelectedForm(selectForNoteAdd.value)
+                              "
                             >
-                              <mat-option value="1">Muayene</mat-option>
-                              <mat-option value="2">Test</mat-option>
-                              <mat-option value="3" disabled>Test2</mat-option>
+                              <mat-option value="Muayene">{{'Medical'|translate}}</mat-option>
+                              <mat-option value="Test">Test</mat-option>
+                              <mat-option value="Test2" disabled
+                                >Test2</mat-option
+                              >
+                              <mat-option
+                                *ngFor="let form of dynamicFormArray"
+                                [value]="form.id"
+                                >{{ form.name }}</mat-option
+                              >
                             </mat-select>
                           </mat-form-field>
                         </div>
@@ -2727,11 +2748,12 @@
                             class="example-full-width"
                             appearance="outline"
                           >
-                            <mat-label>Hasta gelişi seçiniz</mat-label>
+                            <mat-label>{{'ChoosePatientArrival'|translate}}</mat-label>
                             <mat-select
                             disabled
                               #selectAppointmentForNoteAdd
                               [(ngModel)]="selectionForAppointment"
+                              disabled
                               (selectionChange)="
                                 onOptionsSelected(
                                   selectAppointmentForNoteAdd.value
@@ -2739,34 +2761,202 @@
                               "
                               required
                             >
-                            <mat-option
-                            *ngFor="let appointment of appointments"
-                            [value]="appointment.appointmentNo"
-                          >
-                            {{ appointment.date | date }} tarihli,{{
-                              appointment.typeName
-                            }}
-                            tipli, {{appointment.departmentName}} departmanı
-                          </mat-option>
+                              <mat-option
+                                *ngFor="let appointment of appointments"
+                                [value]="appointment.appointmentNo"
+                              >
+                                {{ appointment.date | date }} tarihli,{{
+                                  appointment.typeName
+                                }}
+                                tipli, {{appointment.departmentName}} departmanı
+                              </mat-option>
                             </mat-select>
                           </mat-form-field>
                         </div>
                       </div>
                       <div class="row">
-                        <div
-                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3"
-                        >
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                           <ng-container [ngSwitch]="selectForNoteAdd.value">
-                            <ng-container *ngSwitchCase="1">
+                            <ng-container *ngSwitchCase="'Muayene'">
                               <ng-container
                                 *ngTemplateOutlet="addMedical"
                               ></ng-container>
                             </ng-container>
-                            <ng-container *ngSwitchCase="2">
+                            <ng-container *ngSwitchCase="'Test'">
                               <ng-container
                                 *ngTemplateOutlet="addTest"
                               ></ng-container>
                             </ng-container>
+                            <div *ngFor="let form of dynamicFormArray">
+                              <ng-container *ngSwitchCase="form.id">
+                                {{ dynamicFormGroup.value | json }}
+                                <form
+                                  class="m-2 row"
+                                  [formGroup]="dynamicFormGroup"
+                                  (ngSubmit)="onSubmitDynamicForm()"
+                                >
+                                  <ng-container
+                                    *ngFor="let control of form.fields"
+                                  >
+                                    <ng-container [ngSwitch]="control.type">
+                                      <ng-container *ngSwitchCase="'input'">
+                                        <div
+                                          class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                                        >
+                                          <mat-form-field
+                                            class="example-full-width"
+                                            appearance="outline"
+                                          >
+                                            <mat-label>{{
+                                              control.label
+                                            }}</mat-label>
+                                            <input
+                                              matInput
+                                              [formControlName]="
+                                                control.formControlName
+                                              "
+                                            />
+                                          </mat-form-field>
+                                        </div>
+                                      </ng-container>
+                                      <ng-container *ngSwitchCase="'select'">
+                                        <div
+                                          class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                                        >
+                                          <mat-form-field
+                                            class="example-full-width"
+                                            appearance="outline"
+                                          >
+                                            <mat-label>{{
+                                              control.label
+                                            }}</mat-label>
+                                            <mat-select
+                                              [formControlName]="
+                                                control.formControlName
+                                              "
+                                            >
+                                              <mat-option
+                                                *ngFor="
+                                                  let option of control.values
+                                                "
+                                                [value]="option.value"
+                                                >{{ option.value }}</mat-option
+                                              >
+                                            </mat-select>
+                                          </mat-form-field>
+                                        </div>
+                                      </ng-container>
+                                      <ng-container *ngSwitchCase="'radio'">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                          <div class="m-b-20">
+                                            <mat-label class="mr-3">{{control.label}}</mat-label>
+                                            <mat-radio-group
+                                              aria-label="Select gender"
+                                              [formControlName]="
+                                                control.formControlName
+                                              "
+                                            >
+                                              <mat-radio-button *ngFor="
+                                              let option of control.values
+                                            "
+                                            [value]="option.value">{{ option.value }}</mat-radio-button>
+                                            </mat-radio-group>
+                                          </div>
+                                        </div>
+                                      </ng-container>
+                                      <ng-container *ngSwitchCase="'date'">
+                                        <div
+                                          class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                                        >
+                                          <mat-form-field
+                                            class="example-full-width"
+                                            appearance="outline"
+                                          >
+                                            <mat-label>{{
+                                              control.label
+                                            }}</mat-label>
+                                            <input
+                                              matInput
+                                              [matDatepicker]="picker3"
+                                              [formControlName]="
+                                                control.formControlName
+                                              "
+                                            />
+                                            <mat-datepicker-toggle
+                                              matSuffix
+                                              [for]="picker3"
+                                            ></mat-datepicker-toggle>
+                                            <mat-datepicker
+                                              #picker3
+                                            ></mat-datepicker>
+                                          </mat-form-field>
+                                        </div>
+                                      </ng-container>
+                                      <ng-container *ngSwitchCase="'textarea'">
+                                        <div
+                                          class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                                        >
+                                          <mat-form-field
+                                            class="example-full-width"
+                                            appearance="outline"
+                                          >
+                                            <mat-label>{{
+                                              control.label
+                                            }}</mat-label>
+                                            <textarea
+                                              matInput
+                                              [formControlName]="
+                                                control.formControlName
+                                              "
+                                            ></textarea>
+                                          </mat-form-field>
+                                        </div>
+                                      </ng-container>
+                                    </ng-container>
+                                  </ng-container>
+                                  <div class="row">
+                                    <div
+                                      class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <button
+                                        class="mr-3"
+                                        [disabled]="
+                                          !(
+                                            selectionForAppointment &&
+                                            selectedNoteTypeForAdd
+                                          )
+                                        "
+                                        mat-raised-button
+                                        color="primary"
+                                      >
+                                      {{'Save'|translate}}
+                                      </button>
+                                      <button
+                                        class="mr-3"
+                                        type="reset"
+                                        [disabled]="
+                                          !(
+                                            selectionForAppointment &&
+                                            selectedNoteTypeForAdd
+                                          )
+                                        "
+                                        mat-raised-button
+                                        color="accent"
+                                      >
+                                      {{'Clear'|translate}}
+                                      </button>
+                                      <button
+                                        (click)="backToNote()"
+                                        type="button"
+                                        mat-button
+                                      >
+                                      {{'Cancel'|translate}}
+                                      </button>
+                                    </div>
+                                  </div>
+                                </form>
+                              </ng-container>
+                            </div>
                           </ng-container>
                           <ng-template #addMedical>
                             <div class="row">
@@ -2783,7 +2973,7 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>Şikayet</mat-label>
+                                        <mat-label>{{'Sikayet'|translate}}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="sikayet"
@@ -2796,7 +2986,7 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>Hikaye</mat-label>
+                                        <mat-label>{{'Hikaye'|translate}}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="hikaye"
@@ -2811,7 +3001,7 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>Soygeçmiş</mat-label>
+                                        <mat-label>{{'Soygecmis'|translate}}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="soygecmis"
@@ -2824,7 +3014,7 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>ICD</mat-label>
+                                        <mat-label>{{'Icd'|translate}}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="icd"
@@ -2839,7 +3029,7 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>Baş Boyun Tiroid</mat-label>
+                                        <mat-label>{{'BasBoyunTiroid'|translate}}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="basBoyunTiroid"
@@ -2852,7 +3042,7 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>Notlar</mat-label>
+                                        <mat-label>{{'Notes'|translate}}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="notlar"
@@ -2867,7 +3057,7 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>Durum</mat-label>
+                                        <mat-label>{{'Status'|translate}}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="durum"
@@ -2880,7 +3070,7 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>Notlar</mat-label>
+                                        <mat-label>{{'Notes'|translate}}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="notlar"
@@ -2904,7 +3094,7 @@
                                         mat-raised-button
                                         color="primary"
                                       >
-                                        Kaydet
+                                      {{'Save'|translate}}
                                       </button>
                                       <button
                                         class="mr-3"
@@ -2919,14 +3109,14 @@
                                         mat-raised-button
                                         color="accent"
                                       >
-                                        Temizle
+                                      {{'Clear'|translate}}
                                       </button>
                                       <button
                                         (click)="backToNote()"
                                         type="button"
                                         mat-button
                                       >
-                                        İptal
+                                      {{'Cancel'|translate}}
                                       </button>
                                     </div>
                                   </div>
@@ -2952,14 +3142,14 @@
       </div>
 
       <ul class="fab-options">
-        <li routerLink="edit-patient/{{ patient.id }}">
-          <span class="fab-label">Düzenle</span>
+        <li *ngIf="checkClaim('UpdatePatientDataCommand')" routerLink="edit-patient/{{ patient.id }}">
+          <span class="fab-label">{{'Edit'|translate}}</span>
           <div class="fab-icon-holder">
             <i class="fas fa-user-edit"></i>
           </div>
         </li>
-        <li (click)="addProtocolForPatient()">
-          <span class="fab-label">Yeni Protokol</span>
+        <li *ngIf="checkClaim('CreateProtocolCommand')" (click)="addProtocolForPatient()">
+          <span class="fab-label">{{'NewProtocol'|translate}}</span>
           <div class="fab-icon-holder">
             <i class="fas fa-file-medical"></i>
           </div>

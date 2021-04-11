@@ -13,6 +13,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../core/service/system-service/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { TranslationService } from '../core/service/system-service/Translation.service';
+import { MatSelectModule } from '@angular/material/select';
 @NgModule({
   declarations: [
     Page500Component,
@@ -30,7 +35,17 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
-  ]
+    MatSelectModule,
+    MatButtonModule,
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
+  ],
+  providers:[AuthService,TranslateService,TranslationService]
 })
 export class AuthenticationModule {}

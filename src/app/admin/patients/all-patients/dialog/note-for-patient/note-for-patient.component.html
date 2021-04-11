@@ -2,10 +2,9 @@
   <div class="modalHeader">
     <div class="editRowModal">
       <div class="modalHeader clearfix">
-        <img src="assets/images/user/user1.jpg" alt="avatar">
         <div class="modal-about">
           <div class="font-weight-bold p-t-5 p-l-10 font-17">
-            {{ dialogTitle }}
+            {{'PatientNoteForm'|translate}}
           </div>
         </div>
       </div>
@@ -24,7 +23,7 @@
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
           <mat-form-field class="example-full-width mb-3">
-            <mat-label>Hastanın Notu</mat-label>
+            <mat-label>{{'Note'|translate}}</mat-label>
             <textarea matInput [formControl]="note"></textarea>
           </mat-form-field>
         </div>
@@ -39,7 +38,7 @@
               [disabled]="!note.valid"
               (click)="confirmAdd()"
             >
-              Ekle
+            {{'Save'|translate}}
             </button>
             <button
               mat-raised-button
@@ -47,7 +46,7 @@
               (click)="onNoClick()"
               tabindex="-1"
             >
-              İptal
+            {{'Cancel'|translate}}
             </button>
           </div>
         </div>

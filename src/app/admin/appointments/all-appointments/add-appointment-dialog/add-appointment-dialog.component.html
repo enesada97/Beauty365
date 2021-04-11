@@ -1,10 +1,10 @@
-<div class="addContainer" *ngIf="action=='add'||(doctor && department)">
+<div class="addContainer" *ngIf="action=='add'||(doctor && department &&appointment)">
   <div class="modalHeader">
     <div class="editRowModal">
       <div class="modalHeader clearfix">
         <div class="modal-about">
           <div class="font-weight-bold p-t-5 p-l-10 font-17">
-            {{ dialogTitle }}
+            {{'AppointmentForm'|translate}}
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <mat-expansion-panel (click)="openPanel()" [expanded]="panelOpenState">
           <mat-expansion-panel-header>
             <mat-panel-title style="justify-content: center">
-              <p class="font-bold col-teal">Varolan Bir Hasta Randevu Ekle</p>
+              <p class="font-bold col-teal">{{'AddAppointmentForCurrentPatient'|translate}}</p>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <form
@@ -34,14 +34,14 @@
             <div class="row">
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                 <mat-form-field class="example-full-width mb-3">
-                  <mat-label>T.C Kimlik No</mat-label>
+                  <mat-label>{{'IdentityNumber'|translate}}</mat-label>
                   <input matInput formControlName="identityNumber" />
                   <mat-icon matSuffix>person</mat-icon>
                 </mat-form-field>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                 <mat-form-field class="example-full-width mb-3">
-                  <mat-label>Telefon Numarası</mat-label>
+                  <mat-label>{{'PhoneNumber'|translate}}</mat-label>
                   <input matInput formControlName="phoneNumber" type="text" />
                   <mat-icon matSuffix>phone</mat-icon>
                 </mat-form-field>
@@ -50,14 +50,14 @@
             <div class="row">
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                 <mat-form-field class="example-full-width mb-3">
-                  <mat-label>Adı</mat-label>
+                  <mat-label>{{'Name'|translate}}</mat-label>
                   <input matInput formControlName="name" />
                   <mat-icon matSuffix>face</mat-icon>
                 </mat-form-field>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                 <mat-form-field class="example-full-width mb-3">
-                  <mat-label>Soyadı</mat-label>
+                  <mat-label>{{'Surname'|translate}}</mat-label>
                   <input matInput formControlName="surName" type="text" />
                   <mat-icon matSuffix>face</mat-icon>
                 </mat-form-field>
@@ -71,7 +71,7 @@
                   mat-raised-button
                   color="primary"
                 >
-                  Arama
+                {{'Search'|translate}}
                 </button>
               </div>
             </div>
@@ -93,19 +93,19 @@
               <!-- ID Column -->
               <ng-container matColumnDef="id">
                 <mat-header-cell *matHeaderCellDef mat-sort-header
-                  >Id</mat-header-cell
+                  >{{'Id'|translate}}</mat-header-cell
                 >
                 <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef mat-sort-header
-                  >Ad</mat-header-cell
+                  >{{'Name'|translate}}</mat-header-cell
                 >
                 <mat-cell *matCellDef="let row"> {{ row.name }}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="surName">
                 <mat-header-cell *matHeaderCellDef mat-sort-header
-                  >Soyad</mat-header-cell
+                  >{{'SurName'|translate}}</mat-header-cell
                 >
                 <mat-cell *matCellDef="let row"> {{ row.surName }}</mat-cell>
               </ng-container>
@@ -114,7 +114,7 @@
                   [ngClass]="'tbl-col-width-per-11'"
                   *matHeaderCellDef
                   mat-sort-header
-                  >Kimlik No</mat-header-cell
+                  >{{'IdentityNumber'|translate}}</mat-header-cell
                 >
                 <mat-cell
                   [ngClass]="'tbl-col-width-per-11'"
@@ -128,7 +128,7 @@
                   [ngClass]="'tbl-col-width-per-11'"
                   *matHeaderCellDef
                   mat-sort-header
-                  >Telefon</mat-header-cell
+                  >{{'PhoneNumber'|translate}}</mat-header-cell
                 >
                 <mat-cell
                   [ngClass]="'tbl-col-width-per-11'"
@@ -140,7 +140,7 @@
               <!-- actions -->
               <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef class="pr-0"
-                  >Eylemler</mat-header-cell
+                  >{{'Actions'|translate}}</mat-header-cell
                 >
                 <mat-cell *matCellDef="let row; let i = index" class="pr-0">
                   <button
@@ -174,7 +174,7 @@
       <div class="row">
         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Randevu Tarihi</mat-label>
+            <mat-label>{{'Date'|translate}}</mat-label>
             <input
               *ngIf="data.action == 'edit'; else newAppointment"
               matInput
@@ -194,11 +194,19 @@
               [for]="picker"
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
+            <mat-error
+                *ngIf="
+                appointmentForm.get('date').hasError('required') &&
+                appointmentForm.get('date').touched
+                "
+              >
+              {{'Date'|translate}} {{'Required'|translate}}
+              </mat-error>
           </mat-form-field>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Bölüm</mat-label>
+            <mat-label>{{'Department'|translate}}</mat-label>
             <input *ngIf="action=='edit';else depForNew" matInput disabled value="{{ department.departmentName }}" />
             <ng-template #depForNew>
               <mat-select
@@ -220,14 +228,14 @@
               appointmentForm.get('departmentId').touched
               "
             >
-              Departman Girilmelidir
+            {{'Department'|translate}} {{'Required'|translate}}
             </mat-error>
             </ng-template>
           </mat-form-field>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Doktor</mat-label>
+            <mat-label>{{'Doctor'|translate}}</mat-label>
             <input *ngIf="action=='edit';else docForNew"
               matInput
               disabled
@@ -246,17 +254,17 @@
                 appointmentForm.get('doctorId').touched
                 "
               >
-                Doktor Seçilmelidir
+              {{'Doctor'|translate}} {{'Required'|translate}}
               </mat-error>
             </ng-template>
             <mat-icon matSuffix>supervised_user_circle</mat-icon>
           </mat-form-field>
         </div>
       </div>
-      <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+      <div *ngIf="optionalSettingForIdentityRequired" class="row">
+        <div *ngIf="optionalSettingForIdentityRequired.isOpen;else noRequired" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>TC Kimlik No</mat-label>
+            <mat-label>{{'IdentityNumber'|translate}}</mat-label>
             <input
               maxlength="11"
               minlength="11"
@@ -268,21 +276,43 @@
             <mat-error
               *ngIf="appointmentForm.get('identityNumber').hasError('required')"
             >
-              TC Kimlik gereklidir
+            {{'IdentityNumber'|translate}} {{'Required'|translate}}
             </mat-error>
             <mat-error
               *ngIf="
                 appointmentForm.get('identityNumber').hasError('minlength')
               "
             >
-              T.C alanı 11 haneli olmalıdır Mevcut:
+            {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentLength'|translate}}:
               {{ appointmentForm.get("identityNumber").value.length }}
             </mat-error>
           </mat-form-field>
         </div>
+        <ng-template #noRequired>
+          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>{{'IdentityNumber'|translate}}</mat-label>
+              <input
+                maxlength="11"
+                minlength="11"
+                matInput
+                formControlName="identityNumber"
+              />
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error
+                *ngIf="
+                  appointmentForm.get('identityNumber').hasError('minlength')
+                "
+              >
+              {{'IfEnter'|translate}} {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentLength'|translate}}:
+                {{ appointmentForm.get("identityNumber").value.length }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </ng-template>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Telefon Numarası</mat-label>
+            <mat-label>{{'PhoneNumber'|translate}}</mat-label>
             <input
               matInput
               mask="(000) 000-0000"
@@ -297,7 +327,7 @@
                 appointmentForm.get('phoneNumber').touched
               "
             >
-              Telefon numarasının girilmesi gereklidir
+            {{'PhoneNumber'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
@@ -305,21 +335,21 @@
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Adı</mat-label>
+            <mat-label>{{'PatientName'|translate}}</mat-label>
             <input matInput formControlName="name" type="text" />
             <mat-error *ngIf="appointmentForm.get('name').hasError('required')">
-              Hasta Adı gereklidir
+              {{'PatientName'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Soyadı</mat-label>
+            <mat-label>{{'SurName'|translate}}</mat-label>
             <input matInput formControlName="surName" type="text" />
             <mat-error
               *ngIf="appointmentForm.get('surName').hasError('required')"
             >
-              Soyadı gereklidir
+            {{'SurName'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
@@ -327,7 +357,7 @@
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Protokol Tipi</mat-label>
+            <mat-label>{{'TypeName'|translate}}</mat-label>
             <mat-select formControlName="protocolTypeId" required>
               <mat-option
                 *ngFor="let protocolType of protocolTypes"
@@ -342,17 +372,17 @@
                 appointmentForm.get('protocolTypeId').touched
               "
             >
-              Protokol Tipi Seçilmelidir
+            {{'TypeName'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Saat</mat-label>
+            <mat-label>{{'Time'|translate}}</mat-label>
             <input matInput formControlName="time" type="time" />
             <mat-icon matSuffix>av_timer</mat-icon>
             <mat-error *ngIf="appointmentForm.get('time').hasError('required')">
-              Saat gereklidir
+              {{'Time'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
@@ -360,7 +390,7 @@
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-2" appearance="outline">
-            <mat-label>Hastanın Notu</mat-label>
+            <mat-label>{{'Description'|translate}}</mat-label>
             <textarea matInput formControlName="description"></textarea>
           </mat-form-field>
         </div>
@@ -373,10 +403,8 @@
               color="primary"
               [type]="submit"
               [disabled]="!appointmentForm.valid"
-              [mat-dialog-close]="1"
-              (click)="confirmAdd()"
             >
-              Kaydet
+            {{'Save'|translate}}
             </button>
             <button
               mat-raised-button
@@ -384,7 +412,7 @@
               (click)="onNoClick()"
               tabindex="-1"
             >
-              Cancel
+              {{'Cancel'|translate}}
             </button>
           </div>
         </div>

@@ -1,10 +1,10 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormFieldSelectionValue } from 'src/app/core/models/form-field-selection-value.model';
 import { FormField } from 'src/app/core/models/form-field.model';
 import { FormFieldSelectionValueService } from 'src/app/core/service/form-field-selection-value.service';
 import { FormFieldService } from 'src/app/core/service/form-field.service';
+import { SweetalertService } from 'src/app/core/service/sweetalert.service';
 
 @Component({
   selector: 'app-delete-field',
@@ -18,6 +18,7 @@ export class DeleteFieldComponent{
     @Inject(MAT_DIALOG_DATA) public data: FormField,
     private formFieldService: FormFieldService,
     private formFieldSelectionValueService: FormFieldSelectionValueService,
+    private sweetAlert:SweetalertService
   ) {
     this.getFormFieldValue();
   }
@@ -27,7 +28,6 @@ export class DeleteFieldComponent{
     })
   }
   onNoClick(): void {
-    console.log(this.data);
     this.dialogRef.close();
   }
   confirmDelete(): void {
@@ -36,10 +36,8 @@ export class DeleteFieldComponent{
       this.formFieldSelectionValueService.delete(element.id).subscribe(p=>{});
     }
     this.formFieldService.delete(this.data.id).subscribe(c=>{
-      this.formFieldService._sweetAlert.delete("Form Alanı");
       this.dialogRef.close(1);
-    },(error: HttpErrorResponse) => {
-           console.log(error.name + " " + error.message);
-       });
+      this.sweetAlert.delete(c.toString());
+    });
 }
 }

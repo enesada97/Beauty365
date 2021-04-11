@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from "@angular/common/http";
+
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DateAdapter } from "@angular/material/core";
@@ -15,7 +15,6 @@ import { AddProtocolDialogComponent } from "../search-patient/add-protocol-dialo
 })
 export class AddPatientComponent {
   patient: Patient;
-  id: number;
   patientForm: FormGroup;
   constructor(public dialog: MatDialog,private fb: FormBuilder, private patientService: PatientService,private router:Router,private dateAdapter: DateAdapter<any>) {
     this.dateAdapter.setLocale("tr");
@@ -51,20 +50,13 @@ export class AddPatientComponent {
   public onSubmit(): void {
     if (this.patientForm.valid) {
       this.patient = Object.assign({}, this.patientForm.value);
-      // this.patient.userId=this.authService.getCurrentUserId();
-      this.patientService.save(this.patient).subscribe(data=>{
-        this.patientService._sweetAlert.success(data['name']);
+      this.patientService.add(this.patient).subscribe(data=>{
         this.addProtocolForPatient(data);
-        },
-        (error: HttpErrorResponse) => {
-          this.patientService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
         }
         );
     }
   }
   addProtocolForPatient(row:Patient) {
-    this.id = row.id;
     const dialogRef = this.dialog.open(AddProtocolDialogComponent, {
       data: {
         patient: row,

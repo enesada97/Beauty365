@@ -1,24 +1,24 @@
 <div class="container">
-    <h3 mat-dialog-title>Emin misiniz?</h3>
+    <h3 mat-dialog-title>{{'AreYouSure'|translate}}</h3>
     <div mat-dialog-content>
       <ul class="clearfix">
         <li>
-          <p><span class="font-weight-bold">Protokol Tipi: </span>{{ data.typeName }}</p>
+          <p><span class="font-weight-bold">{{'TypeName'|translate}}: </span>{{ data.row.typeName }}</p>
         </li>
         <li>
-            <p><span class="font-weight-bold">Hasta Adı Soyadı: </span>{{ data.patientName }} {{ data.patientSurname }}</p>
-        </li> 
-        <li>
-          <p><span class="font-weight-bold">Bölüm: </span>{{ data.departmentName }}</p>
+            <p><span class="font-weight-bold">{{'PatientName'|translate}} {{'SurName'|translate}}: </span>{{ data.row.patientName }} {{ data.row.patientSurname }}</p>
         </li>
         <li>
-          <p><span class="font-weight-bold">Saat: </span>{{ data.time }}</p>
+          <p><span class="font-weight-bold">{{'DepartmentName'|translate}}: </span>{{ data.row.departmentName }}</p>
         </li>
         <li>
-          <p><span class="font-weight-bold">Randevu Tarihi: </span>{{ data.date}}</p>
+          <p><span class="font-weight-bold">{{'Time'|translate}}: </span>{{ data.row.time }}</p>
         </li>
         <li>
-          <p><span class="font-weight-bold">Durum: </span>{{ data.patientHasArrive}}</p>
+          <p><span class="font-weight-bold">{{'Date'|translate}}: </span>{{ data.row.date}}</p>
+        </li>
+        <li>
+          <p><span class="font-weight-bold">{{'Status'|translate}}: </span>{{ data.row.patientHasArrive}}</p>
         </li>
       </ul>
     </div>
@@ -26,12 +26,10 @@
       <button
         mat-flat-button
         color="warn"
-        [mat-dialog-close]="1"
         (click)="confirmDelete()"
       >
-        Sil
+      {{'Delete'|translate}}
       </button>
-      <button mat-flat-button (click)="onNoClick()" tabindex="-1">İptal</button>
+      <button mat-flat-button (click)="onNoClick()" tabindex="-1">{{'Cancel'|translate}}</button>
     </div>
   </div>
-  

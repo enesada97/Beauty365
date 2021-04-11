@@ -2,60 +2,73 @@
     <div class="container-fluid">
         <div class="block-header">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <ul class="breadcrumb breadcrumb-style ">
-                        <li class="breadcrumb-item">
-                            <h4 class="page-title">Opsiyonel İşlem Ayarları</h4>
-                        </li>
-                        <li class="breadcrumb-item bcrumb-1">
-                            <a routerLink="/admin/dashboard/main">
-                                <i class="fas fa-home"></i> Anasayfa</a>
-                        </li>
-                        <li class="breadcrumb-item bcrumb-2">
-                            <a href="#" onClick="return false;">Ayarlar</a>
-                        </li>
-                        <li class="breadcrumb-item active">Opsiyonel İşlem Ayarları</li>
-                    </ul>
-                </div>
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="breadcrumb breadcrumb-style">
+                  <li class="breadcrumb-item">
+                    <h4 class="page-title">{{'OptionalSettingList'|translate}}</h4>
+                  </li>
+                  <li class="breadcrumb-item bcrumb-1">
+                    <a routerLink="/admin/dashboard/main">
+                      <i class="fas fa-home"></i>{{'Homepage'|translate}}</a
+                    >
+                  </li>
+                  <li class="breadcrumb-item bcrumb-2">
+                    <a onClick="return false;"
+                      >{{'OptionalSettings'|translate}}</a
+                    >
+                  </li>
+                  <li class="breadcrumb-item active">{{'OptionalSettingList'|translate}}</li>
+                </ul>
+              </div>
             </div>
         </div>
         <div *ngIf="optionalSettings.length>0" class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
-                    <div class="header">
-                        <h2>Opsiyonel İşlem Ayarları</h2>
+                  <div class="header">
+                    <h2>{{'OptionalSettingList'|translate}}</h2>
+                </div>
+                  <div class="body table-responsive">
+                    <form [formGroup]="optionalSettingsForm" (ngSubmit)="passParameter()" ngNativeValidate>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>{{'ID'|translate}}</th>
+                          <th>{{'Alias'|translate}}</th>
+                          <th>{{'Status'|translate}}</th>
+                          <th>-</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let isOpen of getIsOpensFormControls(); let i = index">
+                          <th scope="row">{{i+1}}</th>
+                          <td>{{optionalSettings[i].alias}}</td>
+                          <td *ngIf="isOpen.value==true;else noIsOpen">{{'Open'|translate}}</td>
+                          <ng-template #noIsOpen>
+                            <td>{{'Close'|translate}}</td>
+                          </ng-template>
+                          <td> <mat-slide-toggle [disabled]="!checkClaim('UpdateOptionalSettingCommand')" [formControl]="isOpen"></mat-slide-toggle></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div *ngIf="checkClaim('UpdateOptionalSettingCommand')" class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <div class="example-button-row">
+                          <button
+                          class="pull-right btn-block"
+                          style="width: 100px;"
+                            mat-raised-button
+                            color="primary"
+                            type="submit"
+                            [disabled]="!optionalSettingsForm.valid"
+                          >
+                          {{'Save'|translate}}
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="body">
-                        <form [formGroup]="optionalSettingsForm" (ngSubmit)="passParameter()" ngNativeValidate>
-                            <div class="row" *ngFor="let isOpen of getIsOpensFormControls(); let i = index">
-                              <hr>
-                                <div class="col-9">
-                                    <h6>{{optionalSettings[i].alias}}</h6>
-                                </div>
-                                <div class="col-3">
-                                    <mat-slide-toggle [formControl]="isOpen"><span *ngIf="isOpen.value==true;else notOpen">{{isOpen.value}}</span>
-                                    <ng-template #notOpen>
-                                      <span>{{isOpen.value}}</span>
-                                    </ng-template></mat-slide-toggle>
-                              </div>
-                                <hr>
-                            </div>
-                            <div class="row">
-                              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-                                <div class="example-button-row">
-                                  <button
-                                    mat-raised-button
-                                    color="primary"
-                                    type="submit"
-                                    [disabled]="!optionalSettingsForm.valid"
-                                  >
-                                    Kaydet
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                        </form>
-                    </div>
+                  </form>
+                  </div>
                 </div>
             </div>
         </div>

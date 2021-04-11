@@ -1,7 +1,7 @@
 export class FormTable {
-  id: number;
-  name: string;
-  addedBy:string;
+  id?: number;
+  name?: string;
+  addedBy?:string;
   isOpen:boolean;
   constructor(formTable) {
     {

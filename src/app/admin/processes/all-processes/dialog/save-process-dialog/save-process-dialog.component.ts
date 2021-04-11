@@ -4,7 +4,6 @@ import { Process } from './../../../../../core/models/process.model';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-save-process-dialog',
@@ -58,18 +57,17 @@ export class SaveProcessDialogComponent {
     this.dialogRef.close();
   }
    public confirmAdd(): void {
-     if (this.processForm.valid) {
-       this.process = Object.assign({}, this.processForm.value);
-       // this.patient.userId=this.authService.getCurrentUserId();
-       this.processService.save(this.process).subscribe(data=>{
-         this.processService.isTblLoading = false;
-         this.processService._sweetAlert.success(data['name']);
-         },
-         (error: HttpErrorResponse) => {
-           this.processService.isTblLoading = false;
-           console.log(error.name + " " + error.message);
-         }
-         );
-     }
+    //  if (this.processForm.valid) {
+    //    this.process = Object.assign({}, this.processForm.value);
+    //    if(this.process.id==0){
+    //      this.processService.add(this.process).subscribe(data=>{
+
+    //      })
+    //    }
+    //    this.processService.save(this.process).subscribe(data=>{
+    //      this.processService.isTblLoading = false;
+    //      }
+    //      );
+    //  }
    }
 }

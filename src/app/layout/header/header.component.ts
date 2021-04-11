@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfigService } from 'src/app/config/config.service';
-import { AuthService } from 'src/app/core/service/auth.service';
 import { RightSidebarService } from 'src/app/core/service/rightsidebar.service';
+import { AuthService } from 'src/app/core/service/system-service/auth.service';
 const document: any = window.document;
 
 @Component({
@@ -78,18 +78,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   ];
   ngOnInit() {
     this.config = this.configService.configData;
-    const userRole = this.authService.currentUserValue.role;
-    this.userImg = this.authService.currentUserValue.img;
-
-    if (userRole === 'Admin') {
+    this.userImg = "assets/images/user/admin.jpg";
       this.homePage = 'admin/dashboard/main';
-    } else if (userRole === 'Patient') {
-      this.homePage = 'patient/dashboard';
-    } else if (userRole === 'Doctor') {
-      this.homePage = 'doctor/dashboard';
-    } else {
-      this.homePage = 'admin/dashboard/main';
-    }
   }
 
   ngAfterViewInit() {
@@ -193,10 +183,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     );
   }
   logout() {
-    this.authService.logout().subscribe((res) => {
-      if (!res.success) {
-        this.router.navigate(['/authentication/signin']);
-      }
-    });
+    this.authService.logOut();
+    this.router.navigate(['/authentication/signin']);
   }
 }

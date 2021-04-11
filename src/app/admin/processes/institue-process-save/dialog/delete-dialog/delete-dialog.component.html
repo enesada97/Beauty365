@@ -7,7 +7,7 @@
         </li>
         <li>
             <p><span class="font-weight-bold">İşlem Adı: </span>{{ data.processName }}</p>
-        </li> 
+        </li>
         <li>
           <p><span class="font-weight-bold">Kurum: </span>{{ data.institutionName }}</p>
         </li>
@@ -20,7 +20,6 @@
       <button
         mat-flat-button
         color="warn"
-        [mat-dialog-close]="1"
         (click)="confirmDelete()"
       >
         Sil
@@ -28,4 +27,3 @@
       <button mat-flat-button (click)="onNoClick()" tabindex="-1">İptal</button>
     </div>
   </div>
-  

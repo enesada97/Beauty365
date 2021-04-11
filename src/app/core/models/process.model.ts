@@ -1,14 +1,14 @@
 export class Process{
-    id:number;
-    name:string;
-    processGroupId:number;
-    unit:number;
-    doctorRatio:number;
-    cost:number;
-    taxRatio:number;
-    isLab:boolean;
-    isRad:boolean;
-    status:boolean;
+  id?:number;
+  name?:string;
+  processGroupId?:number;
+  status:boolean;
+  unit?:number;
+  doctorRatio?:number;
+  cost?:number;
+  taxRatio?:number;
+  isLab:boolean;
+  isRad:boolean;
     constructor(process) {
         {
           this.id = process.id || 0;

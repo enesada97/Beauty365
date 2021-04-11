@@ -5,19 +5,19 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Doktor İşlemleri</h4>
+              <h4 class="page-title">{{'DoctorList'|translate}}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i> Anasayfa</a
+                <i class="fas fa-home"></i>{{'Homepage'|translate}}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
               <a routerLink="/admin/doctor/all-doctors" onClick="return false;"
-                >Doktorlar</a
+                >{{'Doctors'|translate}}</a
               >
             </li>
-            <li class="breadcrumb-item active">Listele</li>
+            <li class="breadcrumb-item active">{{'DoctorList'|translate}}</li>
           </ul>
         </div>
       </div>
@@ -26,14 +26,14 @@
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
           <div class="body">
-            <div class="table-responsive">
+            <div class="table-responsive" *ngIf="dataSource">
               <div class="materialTableHeader">
                 <div class="row">
                   <div class="col-8">
                     <ul class="header-buttons-left ml-0">
                       <li class="dropdown">
                         <h2>
-                          <strong>Doktorlar</strong>
+                          <strong>{{'DoctorList'|translate}}</strong>
                         </h2>
                       </li>
                       <li class="dropdown m-l-20">
@@ -43,7 +43,7 @@
                           ></label
                         >
                         <input
-                          placeholder="Arama"
+                          placeholder="{{'Filter'|translate}}"
                           type="text"
                           #filter
                           class="browser-default search-field"
@@ -54,6 +54,7 @@
                         <div
                           class="icon-button-demo m-l-10"
                           [hidden]="!selection.hasValue()"
+                          *ngIf="checkClaim('DeleteDoctorCommand')"
                         >
                           <button
                             mat-mini-fab
@@ -73,6 +74,7 @@
                           <button
                             mat-mini-fab
                             color="primary"
+                            *ngIf="checkClaim('CreateDoctorCommand')"
                             (click)="addNew()"
                           >
                             <mat-icon class="col-white">add</mat-icon>
@@ -130,13 +132,13 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="doctor.id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Id</mat-header-cell
+                    >{{'ID'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">{{ row.doctor.id }}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="doctor.identityNumber">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >T.C Kimlik No</mat-header-cell
+                    >{{'IdentityNumber'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.doctor.identityNumber }}</mat-cell
@@ -144,7 +146,7 @@
                 </ng-container>
                 <ng-container matColumnDef="doctor.speciality">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Ünvan</mat-header-cell
+                    >{{'Speciality'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.doctor.speciality }}</mat-cell
@@ -152,7 +154,7 @@
                 </ng-container>
                 <ng-container matColumnDef="doctor.name">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Ad</mat-header-cell
+                    >{{'Name'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.doctor.name }}</mat-cell
@@ -160,7 +162,7 @@
                 </ng-container>
                 <ng-container matColumnDef="doctor.surName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Soyad</mat-header-cell
+                    >{{'SurName'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.doctor.surName }}</mat-cell
@@ -169,7 +171,7 @@
 
                 <ng-container matColumnDef="department.departmentName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Bölüm</mat-header-cell
+                    >{{'Department'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.department.departmentName }}</mat-cell
@@ -177,7 +179,7 @@
                 </ng-container>
                 <ng-container matColumnDef="doctor.phone">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Telefon</mat-header-cell
+                    >{{'PhoneNumber'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     {{ row.doctor.phone }}</mat-cell
@@ -186,13 +188,14 @@
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef class="pr-0"
-                    >Actions</mat-header-cell
+                    >{{'Actions'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row; let i = index" class="pr-0">
                     <button
                       mat-icon-button
                       color="accent"
                       class="btn-tbl-edit"
+                      *ngIf="checkClaim('UpdateDoctorCommand')"
                       (click)="$event.stopPropagation()"
                       (click)="editCall(row)"
                     >
@@ -205,6 +208,7 @@
                       routerLink="doctor-detail/{{ row.doctor.id }}"
                       color="accent"
                       class="btn-tbl-description"
+                      *ngIf="checkClaim('GetDoctorQuery')"
                       (click)="$event.stopPropagation()"
                     >
                       <mat-icon aria-label="Detail" class="col-white"
@@ -215,6 +219,7 @@
                       mat-icon-button
                       color="accent"
                       class="btn-tbl-delete"
+                      *ngIf="checkClaim('DeleteDoctorCommand')"
                       (click)="$event.stopPropagation()"
                       (click)="deleteItem(i, row)"
                     >
@@ -230,7 +235,6 @@
                 <!-- <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row> -->
                 <mat-row
                   *matRowDef="let row; columns: displayedColumns"
-                  (click)="editCall(row)"
                   [style.cursor]="'pointer'"
                   matRipple
                 >
@@ -238,7 +242,7 @@
               </mat-table>
               <!-- Loading spinner -->
               <div
-                *ngIf="depForDoctorsDataBase.isTblLoading"
+                *ngIf="depForDoctorsService.isTblLoading"
                 class="tbl-spinner"
               >
                 <mat-progress-spinner
@@ -249,17 +253,17 @@
                 </mat-progress-spinner>
               </div>
               <div
-                *ngIf="!depForDoctorsDataBase.isTblLoading"
+                *ngIf="!depForDoctorsService.isTblLoading"
                 class="no-results"
                 [style.display]="
-                  dataSource.renderedData.length == 0 ? '' : 'none'
+                  dataSource.data.length == 0 ? '' : 'none'
                 "
               >
-              <p class="alert alert-danger">Sistem herhangi bir kayıt bulunamadı</p>
+              <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
               </div>
               <mat-paginator
                 #paginator
-                [length]="dataSource.filteredData.length"
+                [length]="dataSource.data.length"
                 [pageIndex]="0"
                 [pageSize]="10"
                 [pageSizeOptions]="[5, 10, 25, 100]"

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
@@ -8,6 +8,7 @@ import { PatientService } from "src/app/core/service/patient.service";
 import { MatDialog } from "@angular/material/dialog";
 import { AddProtocolDialogComponent } from "./add-protocol-dialog/add-protocol-dialog.component";
 import { MatProgressButtonOptions } from "mat-progress-buttons";
+import { AuthService } from "src/app/core/service/system-service/auth.service";
 @Component({
   selector: "app-search-patient",
   templateUrl: "./search-patient.component.html",
@@ -27,11 +28,11 @@ export class SearchPatientComponent {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   dataSource: MatTableDataSource<Patient>;
-  id: any;
   constructor(
     private fb: FormBuilder,
     private patientService: PatientService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService:AuthService
   ) {
     this.patientForm = this.fb.group({
       identityNumber: [null],
@@ -55,14 +56,13 @@ export class SearchPatientComponent {
       fontIcon: "add_circle_outline",
     },
   };
+  checkClaim(claim: string): boolean {
+    return this.authService.claimGuard(claim);
+  }
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  // showProtocol(){
-
-  // }
   addProtocolForPatient(row) {
-    this.id = row.id;
     const dialogRef = this.dialog.open(AddProtocolDialogComponent, {
       data: {
         patient: row,
@@ -76,7 +76,6 @@ export class SearchPatientComponent {
     // this.patient.userId=this.authService.getCurrentUserId();
     this.patientService.getSearchedPatients(this.patient).subscribe((data) => {
       this.searchedPatients = data;
-      this.patientService._sweetAlert.getListSuccess("Aranan Hastalar");
       this.dataSource = new MatTableDataSource<Patient>(this.searchedPatients);
       setTimeout(() => (this.dataSource.sort = this.sort));
       setTimeout(() => (this.dataSource.paginator = this.paginator));

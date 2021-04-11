@@ -38,6 +38,9 @@ import { ProcessgroupService } from 'src/app/core/service/processgroup.service';
 import { AddCollectionsDialogComponent } from './working-processes/dialog/add-collections-dialog/add-collections-dialog.component';
 import { FilterPipe } from 'src/app/core/pipe/filter.pipe';
 import { CollectionService } from 'src/app/core/service/collection.service';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
 
 
 @NgModule({
@@ -72,7 +75,15 @@ import { CollectionService } from 'src/app/core/service/collection.service';
     MatMomentDateModule,
     MatExpansionModule,
     MatTooltipModule,
-    MatListModule
+    MatListModule,
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers: [WorkingService,ProcessService,ProcessgroupService,CollectionService],
 })

@@ -1,26 +1,26 @@
 <div class="container">
-  <h3 mat-dialog-title>Emin misiniz?</h3>
+  <h3 mat-dialog-title>{{'DeleteConfirm'|translate}}</h3>
   <div mat-dialog-content>
     <ul class="clearfix">
       <li>
-        <p><span class="font-weight-bold">Bulunduğu Form Id: </span>{{ data.formTableId }}</p>
+        <p><span class="font-weight-bold">{{'FormTableId'|translate}}: </span>{{ data.formTableId }}</p>
       </li>
       <li>
-        <p><span class="font-weight-bold">Durum: </span>
+        <p><span class="font-weight-bold">{{'Status'|translate}}: </span>
           <ng-container *ngIf="data.isOpen == true; else elseTemplate">
-           Açık
+            {{'Open'|translate}}
           </ng-container>
-          <ng-template #elseTemplate>Kapalı</ng-template></p>
+          <ng-template #elseTemplate>{{'Close'|translate}}</ng-template></p>
       </li>
       <li>
-        <p><span class="font-weight-bold">Alan Başlığı: </span>{{ data.label }}</p>
+        <p><span class="font-weight-bold">{{'Label'|translate}}: </span>{{ data.label }}</p>
       </li>
       <li>
-        <p><span class="font-weight-bold">Alan Tipi: </span>{{ data.type }}</p>
+        <p><span class="font-weight-bold">{{'Type'|translate}}: </span>{{ data.type }}</p>
       </li>
       <li *ngFor="let fieldValue of formFieldSelectionValue; index as i">
         <p>
-          <span class="font-weight-bold">Alan Seçenekleri {{i+1}}: </span
+          <span class="font-weight-bold">{{'FormFieldProcesses'|translate}} {{i+1}}: </span
           >{{ fieldValue.value }}
         </p>
       </li>
@@ -32,8 +32,8 @@
       color="warn"
       (click)="confirmDelete()"
     >
-      Sil
+    {{'Delete'|translate}}
     </button>
-    <button mat-flat-button (click)="onNoClick()" tabindex="-1">İptal</button>
+    <button mat-flat-button (click)="onNoClick()" tabindex="-1">{{'Cancel'|translate}}</button>
   </div>
 </div>

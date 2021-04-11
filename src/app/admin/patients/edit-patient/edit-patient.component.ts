@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DateAdapter } from "@angular/material/core";
@@ -39,13 +38,8 @@ export class EditPatientComponent {
     if (this.patientForm.valid) {
       this.patient = Object.assign({}, this.patientForm.value);
       // this.patient.userId=this.authService.getCurrentUserId();
-      this.patientService.save(this.patient).subscribe(data=>{
-        this.patientService._sweetAlert.success(data['name']);
+      this.patientService.update(this.patient).subscribe(data=>{
         this.router.navigateByUrl('/admin/patients/all-patients');
-        },
-        (error: HttpErrorResponse) => {
-          this.patientService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
         }
         );
     }

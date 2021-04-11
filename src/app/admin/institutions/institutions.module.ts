@@ -25,6 +25,9 @@ import { InstitutionService } from 'src/app/core/service/institution.service';
 import { AllInstitutionsComponent } from './all-institutions/all-institutions.component';
 import { FormDialogComponent } from './all-institutions/dialog/form-dialog/form-dialog.component';
 import { DeleteComponent } from './all-institutions/dialog/delete/delete.component';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
 
 
 @NgModule({
@@ -52,6 +55,14 @@ import { DeleteComponent } from './all-institutions/dialog/delete/delete.compone
     MatProgressSpinnerModule,
     MatIconModule,
     NgxMaskModule,
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers: [InstitutionService],
 })

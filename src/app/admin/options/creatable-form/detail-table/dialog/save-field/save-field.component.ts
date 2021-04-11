@@ -1,27 +1,25 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormField } from 'src/app/core/models/form-field.model';
-import { FormFieldService } from 'src/app/core/service/form-field.service';
+import { Component, Inject } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { FormField } from "src/app/core/models/form-field.model";
+import { FormFieldService } from "src/app/core/service/form-field.service";
 
 @Component({
-  selector: 'app-save-field',
-  templateUrl: './save-field.component.html',
-  styleUrls: ['./save-field.component.sass']
+  selector: "app-save-field",
+  templateUrl: "./save-field.component.html",
+  styleUrls: ["./save-field.component.sass"],
 })
-export class SaveFieldComponent{
+export class SaveFieldComponent {
   action: string;
-  dialogTitle: string;
   fieldForm: FormGroup;
-  formField:FormField;
-  formTableId:number;
+  formField: FormField;
+  formTableId: number;
   types = [
-    { name: "Küçük Yazı Alanı", value: "input" },
-    { name: "İşaretleme Kutusu", value: "radio" },
-    { name: "Tarih Seçici", value: "date" },
-    { name: "Seçim Kutusu", value: "select" },
-    { name: "Büyük Yazı Alanı", value: "textarea" },
+    { name: "Input", value: "input" },
+    { name: "CheckBox", value: "radio" },
+    { name: "DatePicker", value: "date" },
+    { name: "SelectBox", value: "select" },
+    { name: "TextArea", value: "textarea" },
   ];
   constructor(
     public dialogRef: MatDialogRef<SaveFieldComponent>,
@@ -30,14 +28,12 @@ export class SaveFieldComponent{
     private fb: FormBuilder
   ) {
     this.action = data.action;
-    this.formTableId=data.formTableId;;
+    this.formTableId = data.formTableId;
     if (this.action === "edit") {
-      this.dialogTitle = data.formField.label+" Alanını Düzenle";
       this.formField = data.formField;
     } else {
-      this.dialogTitle = "Yeni Form Alanı";
       this.formField = new FormField({});
-      this.formField.formTableId=this.formTableId;
+      this.formField.formTableId = this.formTableId;
     }
     this.fieldForm = this.createTableContactForm();
   }
@@ -46,32 +42,32 @@ export class SaveFieldComponent{
       id: [this.formField.id],
       formTableId: [this.formField.formTableId],
       label: [this.formField.label, [Validators.required]],
-      formControlName: [this.formField.formControlName, [Validators.required]],
+      formControlName: [this.formField.formControlName],
       type: [this.formField.type, [Validators.required]],
-      isOpen: [this.formField.isOpen]
+      isOpen: [this.formField.isOpen],
     });
   }
-  submit() {
-  }
+  submit() {}
   onNoClick(): void {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
     if (this.fieldForm.valid) {
       this.formField = Object.assign({}, this.fieldForm.value);
-      console.log("form:" +JSON.stringify(this.formField));
-      this.formFieldService.save(this.formField).subscribe(data=>{
-        if(data){
-          this.action=="add"?this.dialogRef.close(data):this.dialogRef.close(1);
-          console.log("gelen data:" +data);
-          this.formFieldService._sweetAlert.success(data['type'] +"Tipi Alan");
-        }
-        },
-        (error: HttpErrorResponse) => {
-          this.formFieldService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
-        }
-        );
+      this.formField.formControlName = this.formField.label.toLocaleLowerCase();
+      this.formField.formControlName = this.formField.formControlName.replace(
+        /\s+/g,
+        "_"
+      );
+      if (this.formField.id == 0) {
+        this.formFieldService.add(this.formField).subscribe((data) => {
+          this.dialogRef.close(data);
+        });
+      } else {
+        this.formFieldService.update(this.formField).subscribe((data) => {
+          this.dialogRef.close(1);
+        });
+      }
     }
   }
 }

@@ -2,30 +2,20 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { CrudService } from "../crud/crud-service";
+import { CrudService } from "../ceneric-service/crud-service";
 import { Process } from "../models/process.model";
-import { SweetalertService } from "./sweetalert.service";
 
 @Injectable()
-export class ProcessService extends CrudService<Process,null, number> {
+export class ProcessService extends CrudService<Process,null,number> {
   constructor(
-    protected _http: HttpClient,
-    public _sweetAlert: SweetalertService
+    protected httpClient: HttpClient,
   ) {
-    super(_http, `${environment.apiUrl}/Process`, _sweetAlert);
+    super(httpClient, `${environment.apiUrl}/processes/`);
   }
-  getProcessesForCategory(id): Observable<Process[]> {
-    let newPath= `${environment.apiUrl}/Process/GetList`;
-    if(id){ 
-      newPath += "?processGroupId=" +id
-    }
-    return this._http.get<Process[]>(
-      newPath + "/Process/GetList"
-    );
-  }
-  getSearchedProcesses(id): Observable<Process[]> {
-    return this._http.get<Process[]>(
-      environment.apiUrl + "/Process/Search/"+
+
+  getListByGroupId(id): Observable<Process[]> {
+    return this.httpClient.get<Process[]>(
+      environment.apiUrl + "/processes/getlistbygroupid?id="+
       id
     );
   }

@@ -32,7 +32,7 @@ export class AllProcessesComponent implements OnInit{
        });
     }
     ngOnInit():void{
-      this.processGroupService.getAll().subscribe((data)=>{
+      this.processGroupService.getList().subscribe((data)=>{
         this.processGroups=data
       })
     }
@@ -58,16 +58,15 @@ export class AllProcessesComponent implements OnInit{
     });
     dialogRef.afterClosed();
   }
-  
+
      onSubmit(): void {
-       
+
       this.processes = Object.assign({}, this.processForm.value);
       var  test=this.processForm.get('processGroupId').value;
       test.forEach(element => {
-        this.processService.getSearchedProcesses(element).subscribe(data=>{
+        this.processService.getListByGroupId(element).subscribe(data=>{
           this.searchedProcesses=data;
           this.processService.isTblLoading=false;
-          this.processService._sweetAlert.getListSuccess('Aranan İşlemler'); 
           this.dataSource = new MatTableDataSource<Process>(this.searchedProcesses);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator=this.paginator;
@@ -75,7 +74,6 @@ export class AllProcessesComponent implements OnInit{
       })
     }
   }
-    
-    
-  
-  
+
+
+

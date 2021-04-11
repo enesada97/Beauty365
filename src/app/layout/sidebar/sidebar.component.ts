@@ -10,8 +10,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { ROUTES } from './sidebar-items';
-import { AuthService } from 'src/app/core/service/auth.service';
-import { Role } from 'src/app/core/models/role';
+import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from 'src/app/core/service/system-service/auth.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -36,8 +36,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     public elementRef: ElementRef,
-    private authService: AuthService,
-    private router: Router
+    private router: Router,
+    public translateService:TranslateService,
+    private authService:AuthService
   ) {
     const body = this.elementRef.nativeElement.closest('body');
     this.routerObj = this.router.events.subscribe((event) => {
@@ -98,32 +99,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.level3Menu = element;
     }
   }
-  ngOnInit() {
-    if (this.authService.currentUserValue) {
-      const userRole = this.authService.currentUserValue.role;
-      this.userFullName =
-        this.authService.currentUserValue.firstName +
-        ' ' +
-        this.authService.currentUserValue.lastName;
-      this.userImg = this.authService.currentUserValue.img;
-
-      this.sidebarItems = ROUTES.filter(
-        (x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
-      );
-      if (userRole === Role.Admin) {
-        this.userType = Role.Admin;
-      } else if (userRole === Role.Patient) {
-        this.userType = Role.Patient;
-      } else if (userRole === Role.Doctor) {
-        this.userType = Role.Doctor;
-      } else {
-        this.userType = Role.Admin;
-      }
+  checkClaim(claim:string):boolean{
+    if(claim==''){
+      return true;
+    }else{
+      return this.authService.claimGuard(claim);
     }
+  }
+  ngOnInit() {
+      this.userFullName ="Sarah";
+      this.userImg =  "assets/images/user/admin.jpg";
+
+      this.sidebarItems = ROUTES
 
     // this.sidebarItems = ROUTES.filter((sidebarItem) => sidebarItem);
     this.initLeftSidebar();
     this.bodyTag = this.document.body;
+    var lang=localStorage.getItem('lang') || 'tr-TR'
+    this.translateService.use(lang);
   }
   ngOnDestroy() {
     this.routerObj.unsubscribe();

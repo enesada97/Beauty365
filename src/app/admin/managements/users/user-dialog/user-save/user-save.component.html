@@ -1,0 +1,93 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="font-weight-bold p-t-5 p-l-10 font-17">
+            {{'UserForm'|translate}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form
+      class="register-form m-4"
+      [formGroup]="userForm"
+      (ngSubmit)="submit()"
+    >
+          <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+              <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>{{'FullName'|translate}}</mat-label>
+                <input matInput formControlName="fullName" type="text" />
+                <mat-error *ngIf="userForm.get('fullName').hasError('required')">
+                  {{'FullName'|translate}} {{'Required'| translate}}
+                </mat-error>
+              </mat-form-field>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>{{'Email'|translate}}</mat-label>
+                  <input matInput formControlName="email" type="text" />
+                  <mat-error *ngIf="userForm.get('email').hasError('required')">
+                    {{'Email'|translate}} {{'Required'| translate}}
+                  </mat-error>
+                </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>{{'MobilePhones'|translate}}</mat-label>
+                  <input matInput formControlName="mobilePhones" type="text" />
+                </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>{{'Address'|translate}}</mat-label>
+                    <input matInput formControlName="address" type="text" />
+                  </mat-form-field>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{'Notes'|translate}}</mat-label>
+                    <textarea matInput formControlName="notes"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button
+              mat-raised-button
+              color="primary"
+              [type]="submit"
+              [disabled]="!userForm.valid"
+            >
+            {{'Save' |translate}}
+            </button>
+            <button
+            type="button"
+              mat-raised-button
+              color="warn"
+              (click)="onNoClick()"
+              tabindex="-1"
+            >
+            {{'Cancel'|translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

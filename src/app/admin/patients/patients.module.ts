@@ -48,8 +48,9 @@ import {MatCardModule} from '@angular/material/card';
 import { CollectionService } from 'src/app/core/service/collection.service';
 import { ProtocolTypeProcessService } from 'src/app/core/service/protocol-type-process.service';
 import { WorkingService } from 'src/app/core/service/working.service';
-import { GlobalErrorHandler } from 'src/app/core/error/global-error-handler';
-import { TestComponent } from './test/test.component';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
 
 @NgModule({
   declarations: [
@@ -64,8 +65,7 @@ import { TestComponent } from './test/test.component';
     PhonePipe,
     NoteForPatientComponent,
     DetailPatientComponent,
-    MedicalAlertComponent,
-    TestComponent
+    MedicalAlertComponent
   ],
   imports: [
     CommonModule,
@@ -96,7 +96,15 @@ import { TestComponent } from './test/test.component';
     MatTabsModule,
     MatExpansionModule,
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers: [PatientService,MedicalAlertService,AppointmentService,ProtocolService,MedicalService,CollectionService,WorkingService,ProtocolTypeProcessService],
 })

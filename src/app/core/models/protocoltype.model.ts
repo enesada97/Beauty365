@@ -1,7 +1,7 @@
 export class ProtocolType {
-  id: number;
-  typeName: string;
-  status: boolean;
+  id?:number;
+  typeName?:string;
+  status:boolean;
   constructor(protocolType) {
     {
       this.id = protocolType.id || 0;

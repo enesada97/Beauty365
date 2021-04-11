@@ -1,5 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Department } from 'src/app/core/models/department.model';
@@ -37,13 +36,8 @@ export class EditDepartmentComponent{
       this.department = Object.assign({}, this.departmentForm.value);
       console.log(this.department);
       // this.patient.userId=this.authService.getCurrentUserId();
-      this.departmentService.save(this.department).subscribe(data=>{
+      this.departmentService.update(this.department).subscribe(data=>{
         this.departmentService.isTblLoading=false;
-        this.departmentService._sweetAlert.success(data['name']);
-        },
-        (error: HttpErrorResponse) => {
-          this.departmentService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
         }
         );
     }

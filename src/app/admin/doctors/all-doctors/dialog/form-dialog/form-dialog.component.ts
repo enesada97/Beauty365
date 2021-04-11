@@ -11,6 +11,7 @@ import { DepForDoctorsService } from 'src/app/core/service/depfordoctors.service
 import { Department } from 'src/app/core/models/department.model';
 import { DepartmentService } from 'src/app/core/service/department.service';
 import { DepForDocDto } from 'src/app/core/models/depfordoctors.model';
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
 
 @Component({
   selector: "app-form-dialog",
@@ -30,7 +31,8 @@ export class FormDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public depForDoctorsService: DepForDoctorsService,
     private fb: FormBuilder,
-    private departmentService:DepartmentService
+    private departmentService:DepartmentService,
+    private sweetAlert:SweetalertService
   ) {
     // Set the defaults
     this.action = data.action;
@@ -56,7 +58,7 @@ export class FormDialogComponent {
       : "";
   }
   ngOnInit(): void {
-    this.departmentService.getAll().subscribe((data) => (this.departments = data));
+    this.departmentService.getList().subscribe((data) => (this.departments = data));
   }
   createContactForm(): FormGroup {
     return this.fb.group({
@@ -79,8 +81,19 @@ export class FormDialogComponent {
   public confirmAdd(): void {
     if (this.doctorForm.valid) {
       this.doctor = Object.assign({}, this.doctorForm.value);
-      // this.Doctor.userId=this.authService.getCurrentUserId();
-      this.depForDoctorsService.addDoctor(this.doctor);
+      if(this.doctor.id==0){
+        this.depForDoctorsService.add(this.doctor).subscribe(data=>{
+          this.dialogRef.close(1);
+          this.sweetAlert.success(data.toString());
+          }
+          );
+      }else{
+        this.depForDoctorsService.update(this.doctor).subscribe(data=>{
+          this.dialogRef.close(1);
+          this.sweetAlert.info(data.toString());
+          }
+          );
+      }
     }
   }
 }

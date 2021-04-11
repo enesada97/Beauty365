@@ -5,17 +5,19 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Hasta Arama</h4>
+              <h4 class="page-title">{{'SearchPatient'|translate}}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i> Anasayfa</a
+                <i class="fas fa-home"></i>{{'Homepage'|translate}}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
-              <a href="#" onClick="return false;">Hastalar</a>
+              <a onClick="return false;"
+                >{{'Patients'|translate}}</a
+              >
             </li>
-            <li class="breadcrumb-item active">Arama</li>
+            <li class="breadcrumb-item active">{{'SearchPatient'|translate}}</li>
           </ul>
         </div>
       </div>
@@ -24,21 +26,21 @@
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
           <div class="header">
-            <h2><strong>Arama</strong> Sayfası</h2>
+            <h2><strong>{{'Search'|translate}}</strong> {{'Page'|translate}}</h2>
           </div>
           <div class="body">
             <form class="m-4" [formGroup]="patientForm" (ngSubmit)="onSubmit()">
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>T.C Kimlik No</mat-label>
+                    <mat-label>{{'IdentityNumber'|translate}}</mat-label>
                     <input matInput formControlName="identityNumber" />
                     <mat-icon matSuffix>person</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Telefon Numarası</mat-label>
+                    <mat-label>{{'PhoneNumber'|translate}}</mat-label>
                     <input matInput formControlName="phoneNumber" type="text" />
                     <mat-icon matSuffix>phone</mat-icon>
                   </mat-form-field>
@@ -47,14 +49,14 @@
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Adı</mat-label>
+                    <mat-label>{{'Name'|translate}}</mat-label>
                     <input matInput formControlName="name" />
                     <mat-icon matSuffix>face</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>Soyadı</mat-label>
+                    <mat-label>{{'SurName'|translate}}</mat-label>
                     <input matInput formControlName="surName" type="text" />
                     <mat-icon matSuffix>face</mat-icon>
                   </mat-form-field>
@@ -68,7 +70,7 @@
                     mat-raised-button
                     color="primary"
                   >
-                    Arama
+                  {{'Search'|translate}}
                   </button>
                 </div>
               </div>
@@ -80,7 +82,7 @@
                       <ul class="header-buttons-left ml-0">
                         <li class="dropdown">
                           <h2>
-                            <strong>Bulunan Hastalar</strong>
+                            <strong>{{'Patients'|translate}}</strong>
                           </h2>
                         </li>
                         <li class="dropdown m-l-20">
@@ -90,7 +92,7 @@
                             ></label
                           >
                           <input
-                            placeholder="Arama"
+                            placeholder="{{'Filter'|translate}}"
                             type="text"
                             (keyup)="applyFilter($event.target.value)"
                             class="browser-default search-field"
@@ -110,25 +112,25 @@
                   <!-- ID Column -->
                   <ng-container matColumnDef="id">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Id</mat-header-cell
+                      >{{'ID'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Ad</mat-header-cell
+                      >{{'Name'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row"> {{ row.name }}</mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="surName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Soyad</mat-header-cell
+                      >{{'SurName'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row"> {{ row.surName }}</mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="identityNumber">
                     <mat-header-cell [ngClass]="'tbl-col-width-per-11'" *matHeaderCellDef mat-sort-header
-                      >Kimlik No</mat-header-cell
+                      >{{'IdentityNumber'|translate}}</mat-header-cell
                     >
                     <mat-cell [ngClass]="'tbl-col-width-per-11'" *matCellDef="let row">
                       {{ row.identityNumber }}</mat-cell
@@ -136,7 +138,7 @@
                   </ng-container>
                   <ng-container matColumnDef="phoneNumber">
                     <mat-header-cell [ngClass]="'tbl-col-width-per-11'" *matHeaderCellDef mat-sort-header
-                      >Telefon</mat-header-cell
+                      >{{'PhoneNumber'|translate}}</mat-header-cell
                     >
                     <mat-cell [ngClass]="'tbl-col-width-per-11'" *matCellDef="let row">
                       {{ row.phoneNumber }}</mat-cell
@@ -145,7 +147,7 @@
                   <!-- actions -->
                   <ng-container matColumnDef="actions">
                     <mat-header-cell *matHeaderCellDef class="pr-0"
-                      >Eylemler</mat-header-cell
+                      >{{'Actions'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row; let i = index" class="pr-0">
                       <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -154,18 +156,19 @@
                       <mat-menu #menu="matMenu">
                         <button mat-menu-item [matMenuTriggerFor]="protocolProcesses">
                           <mat-icon>group</mat-icon>
-                          <span>Protokol İşlemleri</span>
+                          <span>{{'ProtocolProcesses'|translate}}</span>
                         </button>
                         <button mat-menu-item [matMenuTriggerFor]="patientProcesses">
                           <mat-icon>user</mat-icon>
-                          <span>Hasta İşlemleri</span>
+                          <span>{{'PatientProcesses'|translate}}</span>
                         </button>
                       </mat-menu>
                       <mat-menu #protocolProcesses="matMenu">
                         <button mat-menu-item
+                        *ngIf="checkClaim('CreateProtocolCommand')"
                         (click)="addProtocolForPatient(row)">
                           <mat-icon>add</mat-icon>
-                          <span>Ekle</span>
+                          <span>{{'Add'|translate}}</span>
                         </button>
                         <!-- <button mat-menu-item>
                           <mat-icon>remove_red_eye</mat-icon>
@@ -174,14 +177,16 @@
                       </mat-menu>
                       <mat-menu #patientProcesses="matMenu">
                         <button mat-menu-item
+                        *ngIf="checkClaim('UpdatePatientDataCommand')"
                         routerLink="edit-patient/{{row.id}}">
                           <mat-icon>edit</mat-icon>
-                          <span>Düzenle</span>
+                          <span>{{'Edit'|translate}}</span>
                         </button>
                         <button mat-menu-item
+                        *ngIf="checkClaim('GetPatientDataQuery')"
                         routerLink="patient-detail/{{ row.id }}">
                           <mat-icon>description</mat-icon>
-                          <span>Detay</span>
+                          <span>{{'Detail'|translate}}</span>
                         </button>
                       </mat-menu>
                       <!-- <button

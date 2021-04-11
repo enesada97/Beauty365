@@ -2,11 +2,9 @@
     <div class="modalHeader">
       <div class="editRowModal">
         <div class="modalHeader clearfix">
-          <!-- <img [src]="patient.photoUrl" alt="avatar" /> -->
-          <img src="assets/images/user/user1.jpg" alt="avatar">
           <div class="modal-about">
             <div class="font-weight-bold p-t-5 p-l-10 font-17">
-              {{ dialogTitle }}
+              {{'ProcessGroupForm'|translate}}
             </div>
           </div>
         </div>
@@ -25,16 +23,16 @@
         [formGroup]="processGroupForm"
         (ngSubmit)="submit()"
       >
-        
-        
+
+
         <div class="row">
           <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
             <mat-form-field class="example-full-width" appearance="outline">
-              <mat-label>İşlem Grubu Adı</mat-label>
+              <mat-label>{{'ProcessGroupName'|translate}}</mat-label>
               <input matInput formControlName="name" type="text" />
               <mat-icon matSuffix>location_city</mat-icon>
               <mat-error *ngIf="processGroupForm.get('name').hasError('required')">
-                İşlem grubu adı gereklidir
+                {{'Name'|translate}} {{'Required'|translate}}
               </mat-error>
             </mat-form-field>
             </div>
@@ -50,7 +48,7 @@
                 [mat-dialog-close]="1"
                 (click)="confirmAdd()"
               >
-                Kaydet
+              {{'Save'|translate}}
               </button>
               <button
                 mat-raised-button
@@ -58,7 +56,7 @@
                 (click)="onNoClick()"
                 tabindex="-1"
               >
-                İptal
+              {{'Cancel'|translate}}
               </button>
             </div>
           </div>
@@ -66,4 +64,3 @@
       </form>
     </div>
   </div>
-  

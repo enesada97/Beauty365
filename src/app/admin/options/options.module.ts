@@ -45,6 +45,9 @@ import { DetailTableComponent } from './creatable-form/detail-table/detail-table
 import { SaveFieldComponent } from './creatable-form/detail-table/dialog/save-field/save-field.component';
 import { DeleteFieldComponent } from './creatable-form/detail-table/dialog/delete-field/delete-field.component';
 import { SaveFieldValueComponent } from './creatable-form/detail-table/dialog/save-field-value/save-field-value.component';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
 
 
 @NgModule({
@@ -74,7 +77,15 @@ import { SaveFieldValueComponent } from './creatable-form/detail-table/dialog/sa
     NgxMaskModule,
     MatListModule,
     MatSlideToggleModule,
-    MatStepperModule
+    MatStepperModule,
+    TranslateModule.forChild({
+      loader: {
+          provide: TranslateLoader,
+          //useFactory:layoutHttpLoaderFactory,
+          useClass: TranslationService,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers:[ProtocolTypeProcessService,ProcessInstitueService,InstitutionService,ProtocoltypeService,DepForDoctorsService,OptionalSettingService,FormTableService,
     FormFieldService,

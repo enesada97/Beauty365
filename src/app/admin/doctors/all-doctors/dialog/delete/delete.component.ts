@@ -1,6 +1,7 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
 import { DepForDoctorsService } from 'src/app/core/service/depfordoctors.service';
+import { SweetalertService } from 'src/app/core/service/sweetalert.service';
 
 @Component({
   selector: 'app-delete',
@@ -11,14 +12,17 @@ export class DeleteComponent {
   constructor(
     public dialogRef: MatDialogRef<DeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public depForDoctorsService: DepForDoctorsService
+    public depForDoctorsService: DepForDoctorsService,
+    private sweetAlert:SweetalertService
   ) {}
   onNoClick(): void {
     this.dialogRef.close();
   }
   confirmDelete(): void {
-    this.data.status=true;
-    console.log(this.data.doctor.id);
-    this.depForDoctorsService.deleteDoctor(this.data.doctor.id);
+    this.data.doctor.status=false;
+    this.depForDoctorsService.update(this.data.doctor).subscribe(data=>{
+      this.dialogRef.close(1);
+      this.sweetAlert.delete(data.toString());
+    })
   }
 }

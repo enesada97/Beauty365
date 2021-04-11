@@ -1,22 +1,21 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { CrudService } from '../crud/crud-service';
 import { SweetalertService } from './sweetalert.service';
 import { FormFieldSelectionValue } from '../models/form-field-selection-value.model';
+import { CrudService } from '../ceneric-service/crud-service';
 
 @Injectable()
 export class FormFieldSelectionValueService extends CrudService<FormFieldSelectionValue,null,number> {
   constructor(
-    protected _http: HttpClient,
-    public _sweetAlert: SweetalertService
+    protected httpClient: HttpClient,
   ) {
-    super(_http, `${environment.apiUrl}/FormFieldSelectionValue`, _sweetAlert);
+    super(httpClient, `${environment.apiUrl}/formFieldSelectionValues/`);
   }
   getListByFormFieldId(formFieldId:number): Observable<FormFieldSelectionValue[]> {
-    return this._http.get<FormFieldSelectionValue[]>(
-      environment.apiUrl + "/FormFieldSelectionValue/getListByFormFieldId/"+
+    return this.httpClient.get<FormFieldSelectionValue[]>(
+      environment.apiUrl + "/formFieldSelectionValues/getallbyformfieldid?id="+
       formFieldId
     );
   }

@@ -1,18 +1,18 @@
 <div class="container">
-  <h3 mat-dialog-title>Emin misiniz?</h3>
+  <h3 mat-dialog-title>{{'DeleteConfirm'|translate}}</h3>
   <div mat-dialog-content>
     <ul class="clearfix">
       <li>
-        <p><span class="font-weight-bold">Protokol Tipi: </span>{{ data.row.typeName }}</p>
+        <p><span class="font-weight-bold">{{'TypeName'|translate}}: </span>{{ data.row.typeName }}</p>
       </li>
       <li>
-          <p><span class="font-weight-bold">Kurum Adı: </span>{{ data.row.institueName }}</p>
+          <p><span class="font-weight-bold">{{'InstitutionName'|translate}}: </span>{{ data.row.institueName }}</p>
       </li>
       <li>
-        <p><span class="font-weight-bold">Doktor Adı Soyadı: </span>{{ data.row.doctorName }} {{ data.row.doctorSurName }}</p>
+        <p><span class="font-weight-bold">{{'DoctorName'|translate}} {{'SurName'|translate}}: </span>{{ data.row.doctorName }} {{ data.row.doctorSurName }}</p>
       </li>
       <li>
-        <p><span class="font-weight-bold">İşlem Adı: </span>{{ data.row.processName }}</p>
+        <p><span class="font-weight-bold">{{'ProcessName'|translate}}: </span>{{ data.row.processName }}</p>
       </li>
     </ul>
   </div>
@@ -22,8 +22,8 @@
       color="warn"
       (click)="confirmDelete()"
     >
-      Sil
+    {{'Delete'|translate}}
     </button>
-    <button mat-flat-button (click)="onNoClick()" tabindex="-1">İptal</button>
+    <button mat-flat-button (click)="onNoClick()" tabindex="-1">{{'Cancel'|translate}}</button>
   </div>
 </div>

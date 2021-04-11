@@ -1,5 +1,7 @@
 export class AppointmentDto {
     appointmentNo: number;
+    protocolNo:number;
+    institutionName:string;
     patientName:string;
     patientSurname:string;
     departmentName:string;

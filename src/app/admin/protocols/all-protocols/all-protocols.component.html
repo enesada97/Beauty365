@@ -5,19 +5,19 @@
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <ul class="breadcrumb breadcrumb-style">
               <li class="breadcrumb-item">
-                <h4 class="page-title">Protokol İşlemleri</h4>
+                <h4 class="page-title">{{'ProtocolList'|translate}}</h4>
               </li>
               <li class="breadcrumb-item bcrumb-1">
                 <a routerLink="/admin/dashboard/main">
-                  <i class="fas fa-home"></i> Anasayfa</a
+                  <i class="fas fa-home"></i>{{'Homepage'|translate}}</a
                 >
               </li>
               <li class="breadcrumb-item bcrumb-2">
-                <a routerLink="/admin/protocols/all-protocols" onClick="return false;"
-                  >Protokoller</a
+                <a onClick="return false;"
+                  >{{'Protocols'|translate}}</a
                 >
               </li>
-              <li class="breadcrumb-item active">Listele</li>
+              <li class="breadcrumb-item active">{{'ProtocolList'|translate}}</li>
             </ul>
           </div>
         </div>
@@ -33,7 +33,7 @@
                       <ul class="header-buttons-left ml-0">
                         <li class="dropdown">
                           <h2>
-                            <strong>Protokoller</strong>
+                            <strong>{{'ProtocolList'|translate}}</strong>
                           </h2>
                         </li>
                         <li class="dropdown m-l-20">
@@ -43,7 +43,7 @@
                             ></label
                           >
                           <input
-                            placeholder="Arama"
+                            placeholder="{{'Filter'| translate}}"
                             type="text"
                             (keyup)="applyFilter($event.target.value)"
                             class="browser-default search-field"
@@ -52,6 +52,7 @@
                         </li>
                         <li>
                           <div
+                          *ngIf="checkClaim('DeleteProtocolCommand')"
                             class="icon-button-demo m-l-10"
                             [hidden]="!selection.hasValue()"
                           >
@@ -119,13 +120,13 @@
                   <!-- ID Column -->
                   <ng-container matColumnDef="protocolNo">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Id</mat-header-cell
+                      >{{'ID'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">{{ row.protocolNo }}</mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="patientName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Hasta Ad</mat-header-cell
+                      >{{'PatientName'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">
                       {{ row.patientName }}</mat-cell
@@ -133,7 +134,7 @@
                   </ng-container>
                   <ng-container matColumnDef="patientSurname">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Soyad</mat-header-cell
+                      >{{'PatientSurName'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">
                       {{ row.patientSurname }}</mat-cell
@@ -141,7 +142,7 @@
                   </ng-container>
                   <ng-container matColumnDef="departmentName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Bölüm</mat-header-cell
+                      >{{'DepartmentName'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">
                       {{ row.departmentName }}</mat-cell
@@ -149,7 +150,7 @@
                   </ng-container>
                   <ng-container matColumnDef="doctorName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Doktor Ad</mat-header-cell
+                      >{{'DoctorName'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">
                       {{ row.doctorName }}</mat-cell
@@ -158,7 +159,7 @@
 
                   <ng-container matColumnDef="doctorSurname">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Soyad</mat-header-cell
+                      >{{'DoctorSurName'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">
                       {{ row.doctorSurname }}</mat-cell
@@ -166,7 +167,7 @@
                   </ng-container>
                   <ng-container matColumnDef="institutionName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Kurum</mat-header-cell
+                      >{{'InstitutionName'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">
                       {{ row.institutionName }}</mat-cell
@@ -174,7 +175,7 @@
                   </ng-container>
                   <ng-container matColumnDef="typeName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Protokol Tip</mat-header-cell
+                      >{{'TypeName'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">
                       {{ row.typeName }}</mat-cell
@@ -185,21 +186,21 @@
                       *matHeaderCellDef
                       mat-sort-header
                       [ngClass]="'tbl-col-width-per-8'"
-                      >Durum
+                      >{{'Status'|translate}}
                     </mat-header-cell>
                     <mat-cell
                       *matCellDef="let row"
                       [ngClass]="'tbl-col-width-per-8'"
                     >
                       <ng-container *ngIf="row.isOpen == true; else elseTemplate">
-                        <span class="badge col-green">Açık</span>
+                        <span class="badge col-green">{{'Open'|translate}}</span>
                       </ng-container>
-                      <ng-template #elseTemplate><span class="badge col-purple">Kapalı</span></ng-template>
+                      <ng-template #elseTemplate><span class="badge col-purple">{{'Close'|translate}}</span></ng-template>
                     </mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="dateOfCome">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Geliş Tarihi</mat-header-cell
+                      >{{'DateOfCome'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">
                       {{ row.dateOfCome | date:"dd/MM/yyyy" }}</mat-cell
@@ -207,7 +208,7 @@
                   </ng-container>
                   <ng-container matColumnDef="dateOfLeave">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >Ayrılma Tarihi</mat-header-cell
+                      >{{'DateOfLeave'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">
                       {{ row.dateOfLeave | date:"dd/MM/yyyy" }}</mat-cell
@@ -216,13 +217,14 @@
                   <!-- actions -->
                   <ng-container matColumnDef="actions">
                     <mat-header-cell *matHeaderCellDef class="pr-0"
-                      >Eylemler</mat-header-cell
+                      >{{'Actions'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row; let i = index" class="pr-0">
                       <button
                         mat-icon-button
                         color="accent"
                         class="btn-tbl-edit"
+                        *ngIf="checkClaim('UpdateProtocolCommand')"
                         (click)="$event.stopPropagation()"
                         (click)="editCall(row)"
                       >
@@ -232,6 +234,7 @@
                       </button>
                       <button
                       mat-icon-button
+                      *ngIf="checkClaim('GetProtocolQuery')"
                       routerLink="/admin/working/working-processes/{{ row.protocolNo }}"
                       color="accent"
                       class="btn-tbl-description"
@@ -245,8 +248,9 @@
                         mat-icon-button
                         color="accent"
                         class="btn-tbl-delete"
+                        *ngIf="checkClaim('DeleteProtocolCommand')"
                         (click)="$event.stopPropagation()"
-                        (click)="deleteItem(i, row)"
+                        (click)="deleteItem(row)"
                       >
                         <mat-icon aria-label="Delete" class="col-white"
                           >delete</mat-icon
@@ -260,7 +264,6 @@
                   <!-- <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row> -->
                   <mat-row
                     *matRowDef="let row; columns: displayedColumns"
-                    (click)="editCall(row)"
                     [style.cursor]="'pointer'"
                     matRipple
                   >
@@ -285,7 +288,7 @@
                     dataSource.data.length == 0 ? '' : 'none'
                   "
                 >
-                <p class="alert alert-danger">Sistem herhangi bir kayıt bulunamadı</p>
+                <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
                 </div>
                 <mat-paginator
                   #paginator

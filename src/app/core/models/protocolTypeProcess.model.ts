@@ -1,12 +1,12 @@
 export class ProtocolTypeProcess {
-  id: number;
-  protocolTypeId: number;
-  doctorId:number;
-  processId:number;
-  institueId:number;
-  price:number;
-  doctorRatio:number;
-  taxRatio:number;
+  id?:number;
+  protocolTypeId?:number;
+  doctorId?:number;
+  processId?:number;
+  institueId?:number;
+  price?:number;
+  doctorRatio?:number;
+  taxRatio?:number;
   constructor(protocolTypeProcess) {
     {
       this.id = protocolTypeProcess.id || 0;

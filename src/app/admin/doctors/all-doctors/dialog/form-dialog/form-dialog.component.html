@@ -4,7 +4,7 @@
       <div class="modalHeader clearfix">
         <div class="modal-about">
           <div class="font-weight-bold p-t-5 p-l-10 font-17">
-            {{ dialogTitle }}
+            {{'DoctorForm'|translate}}
           </div>
         </div>
       </div>
@@ -26,7 +26,7 @@
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>TC Kimlik No</mat-label>
+            <mat-label>{{'IdentityNumber'|translate}}</mat-label>
             <input
               maxlength="11"
               minlength="11"
@@ -38,13 +38,13 @@
             <mat-error
               *ngIf="doctorForm.get('identityNumber').hasError('required')"
             >
-              TC Kimlik gereklidir
+            {{'IdentityNumber'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Telefon Numarası</mat-label>
+            <mat-label>{{'PhoneNumber'|translate}}</mat-label>
             <input
               matInput
               mask="(000) 000-0000"
@@ -59,7 +59,7 @@
               doctorForm.get('phone').touched
               "
             >
-              Telefon numarasının girilmesi gereklidir
+            {{'PhoneNumber'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
@@ -67,21 +67,21 @@
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Adı</mat-label>
+            <mat-label>{{'Name'|translate}}</mat-label>
             <input matInput formControlName="name" type="text" />
             <mat-icon matSuffix>face</mat-icon>
             <mat-error *ngIf="doctorForm.get('name').hasError('required')">
-              Adı gereklidir
+              {{'DoctorName'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Soyadı</mat-label>
+            <mat-label>{{'SurName'|translate}}</mat-label>
             <input matInput formControlName="surName" type="text" />
             <mat-icon matSuffix>face</mat-icon>
             <mat-error *ngIf="doctorForm.get('surName').hasError('required')">
-              Soyadı gereklidir
+              {{'DoctorSurName'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
@@ -89,17 +89,17 @@
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Branş</mat-label>
+            <mat-label>{{'Speciality'|translate}}</mat-label>
             <input matInput formControlName="speciality" type="text" />
             <mat-icon matSuffix>face</mat-icon>
             <mat-error *ngIf="doctorForm.get('speciality').hasError('required')">
-              Branş gereklidir
+              {{'Speciality'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Bölüm</mat-label>
+            <mat-label>{{'Department'|translate}}</mat-label>
             <mat-select formControlName="departmentId" required>
               <mat-option *ngFor="let department of departments" [value]="department.id"> {{department.departmentName}} </mat-option>
             </mat-select>
@@ -107,7 +107,7 @@
               *ngIf="doctorForm.get('departmentId').hasError('required')&&
               doctorForm.get('departmentId').touched"
             >
-              Departman Girilmelidir
+            {{'Department'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>
@@ -120,18 +120,18 @@
               color="primary"
               [type]="submit"
               [disabled]="!doctorForm.valid"
-              [mat-dialog-close]="1"
               (click)="confirmAdd()"
             >
-              Kaydet
+            {{'Save'|translate}}
             </button>
             <button
               mat-raised-button
+              type="button"
               color="warn"
               (click)="onNoClick()"
               tabindex="-1"
             >
-              Cancel
+            {{'Cancel'|translate}}
             </button>
           </div>
         </div>

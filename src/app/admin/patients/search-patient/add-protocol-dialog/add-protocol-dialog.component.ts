@@ -1,4 +1,4 @@
-import { ProtocolTypeProcessDto } from './../../../../core/models/protocolTypeProcessDto.model';
+import { ProtocolTypeProcessDto } from "./../../../../core/models/protocolTypeProcessDto.model";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, Inject } from "@angular/core";
 import {
@@ -23,11 +23,10 @@ import { ProtocolDto } from "src/app/core/models/protocoldto";
 import { AppointmentService } from "src/app/core/service/appointment.service";
 import { Appointment } from "src/app/core/models/appointment.model";
 import { DateAdapter } from "@angular/material/core";
-import { HttpErrorResponse } from "@angular/common/http";
 import { ProtocolTypeProcessService } from "src/app/core/service/protocol-type-process.service";
-import { Working } from 'src/app/core/models/working.model';
-import { ProtocolTypeProcess } from 'src/app/core/models/protocolTypeProcess.model';
-import { WorkingService } from 'src/app/core/service/working.service';
+import { Working } from "src/app/core/models/working.model";
+import { ProtocolTypeProcess } from "src/app/core/models/protocolTypeProcess.model";
+import { WorkingService } from "src/app/core/service/working.service";
 
 @Component({
   selector: "app-add-protocol-dialog",
@@ -45,7 +44,6 @@ import { WorkingService } from 'src/app/core/service/working.service';
 })
 export class AddProtocolDialogComponent {
   action: string;
-  dialogTitle: string;
   protocolForm: FormGroup;
   protocol: Protocol;
   protocolTypes: ProtocolType[];
@@ -54,6 +52,7 @@ export class AddProtocolDialogComponent {
   doctors: Doctor[];
   institutions: Institution[];
   appointment: Appointment;
+  addWithAppointment: Appointment;
   protocolDto: ProtocolDto;
   working: Working;
   constructor(
@@ -68,20 +67,24 @@ export class AddProtocolDialogComponent {
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
     private dateAdapter: DateAdapter<any>,
-    private protocolTypeProcessService:ProtocolTypeProcessService,
-    private workingService:WorkingService
+    private protocolTypeProcessService: ProtocolTypeProcessService,
+    private workingService: WorkingService
   ) {
     // Set the defaults
     this.dateAdapter.setLocale("tr");
     this.action = data.action;
     if (this.action === "add") {
       this.data.patient.gender == true
-        ? (this.dialogTitle =
-            data.patient.name + " Bey" + " için yeni protokol")
-        : (this.dialogTitle =
-            data.patient.name + " Hanım" + " için yeni protokol");
       this.protocol = new Protocol({});
       this.patient = data.patient;
+    } else if (this.action === "addFromAppointment") {
+      this.protocol = new Protocol({});
+      this.addWithAppointment = data.appointment;
+      this.patient = data.patient;
+      this.protocol.protocolTypeId = this.addWithAppointment.protocolTypeId;
+      this.protocol.departmentId = this.addWithAppointment.departmentId;
+      this.onOptionsSelected(this.protocol.departmentId);
+      this.protocol.patientDataId = this.addWithAppointment.patientDataId;
     } else {
       this.protocolDto = data.protocolDto;
       this.protocolService
@@ -92,7 +95,6 @@ export class AddProtocolDialogComponent {
         .getById(this.protocol.patientDataId)
         .subscribe((data) => (this.patient = data));
       console.log(this.patient);
-      this.dialogTitle = "Protokolü Düzenle";
     }
     this.protocolForm = this.createContactForm();
   }
@@ -100,30 +102,35 @@ export class AddProtocolDialogComponent {
     console.log("the selected value is " + value);
     this.depForDoctorsService.getDoctorListByDepId(value).subscribe((data) => {
       this.doctors = data;
-      if (this.action == "add"&&this.doctors[0].id) {
+      if (this.action == "add" && this.doctors[0].id) {
         this.protocolForm.get("doctorId").setValue(this.doctors[0].id);
+      }
+      if (this.action == "addFromAppointment") {
+        this.protocolForm
+          .get("doctorId")
+          .setValue(this.addWithAppointment.doctorId);
       }
     });
   }
   ngOnInit(): void {
-    this.protocolTypeService.getAllProtocolTypesForAny().subscribe((data) => {
+    this.protocolTypeService.getList().subscribe((data) => {
       this.protocolTypes = data;
-      if (this.action == "add"&&this.protocolTypes[0].id) {
+      if (this.action == "add" && this.protocolTypes[0].id) {
         this.protocolForm
           .get("protocolTypeId")
           .setValue(this.protocolTypes[0].id);
       }
     });
-    this.departmentService.getAll().subscribe((data) => {
+    this.departmentService.getList().subscribe((data) => {
       this.departments = data;
-      if (this.action == "add"&&this.departments[0].id) {
+      if (this.action == "add" && this.departments[0].id) {
         this.protocolForm.get("departmentId").setValue(this.departments[0].id);
         this.onOptionsSelected(this.departments[0].id);
       }
     });
-    this.institutionService.getAll().subscribe((data) => {
+    this.institutionService.getList().subscribe((data) => {
       this.institutions = data;
-      if (this.action == "add"&&this.institutions[0].id) {
+      if (this.action != "edit" && this.institutions[0].id) {
         this.protocolForm
           .get("institutionId")
           .setValue(this.institutions[0].id);
@@ -145,6 +152,7 @@ export class AddProtocolDialogComponent {
       dateOfCome: [this.protocol.dateOfCome],
       dateOfLeave: [this.protocol.dateOfLeave],
       status: [this.protocol.status],
+      isOpen: [this.protocol.isOpen],
     });
   }
   submit() {
@@ -153,160 +161,85 @@ export class AddProtocolDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
-  // public confirmAdd(): void {
-  //   if (this.protocolForm.valid) {
-  //     this.appointment = new Appointment({});
-  //     this.protocol.patientDataId = this.patient.id;
-  //     this.protocol = Object.assign({}, this.protocolForm.value);
-  //     this.protocol.dateOfCome = new Date();
-  //     this.protocol.dateOfLeave = new Date();
-  //     // this.patient.userId=this.authService.getCurrentUserId();
-  //     this.protocolService.addProtocol(this.protocol).subscribe((m) => {
-  //       this.appointmentService
-  //         .getByIdentity(this.patient.identityNumber, this.protocol.doctorId)
-  //         .subscribe((data) => {
-  //           data ? (this.appointment = data) : null;
-  //           this.appointment.protocolId = m.id;
-  //           if (
-  //             this.appointment.id != 0 &&
-  //             new Date(this.appointment.date).getDate() == new Date().getDate()
-  //           ) {
-  //             this.appointment.status = true;
-  //             this.appointment.surName = this.patient.surName;
-  //             this.appointment.name = this.patient.name;
-  //             this.appointment.phoneNumber = "" + this.patient.phoneNumber;
-  //             this.appointment.identityNumber =
-  //               "" + this.patient.identityNumber;
-  //             this.appointmentService
-  //               .save(this.appointment)
-  //               .subscribe((data) => {
-  //                 console.log(data);
-  //                 console.log(this.appointment);
-  //                 this.appointmentService._sweetAlert.success(
-  //                   "" +
-  //                     data["protocolId"] +
-  //                     " numaralı protokole daha önceden oluşturulmuş randevu ile eşleştirildi"
-  //                 );
-  //               });
-  //           } else {
-  //             this.appointment.createdAppointmentDateTime = this.protocol.dateOfCome;
-  //             this.appointment.arriveDateTime = new Date();
-  //             //this.appointment.date=this.protocol.dateOfCome;
-  //             this.appointment.date = this.protocol.dateOfCome;
-  //             this.appointment.departmentId = this.protocol.departmentId;
-  //             this.appointment.doctorId = this.protocol.doctorId;
-  //             this.appointment.identityNumber =
-  //               "" + this.patient.identityNumber;
-  //             this.appointment.name = this.patient.name;
-  //             this.appointment.patientDataId = this.patient.id;
-  //             this.appointment.patientHasArrive = true;
-  //             this.appointment.phoneNumber = "" + this.patient.phoneNumber;
-  //             this.appointment.protocolTypeId = this.protocol.protocolTypeId;
-  //             this.appointment.status = true;
-  //             this.appointment.surName = this.patient.surName;
-  //             this.appointment.time = new Date().toLocaleTimeString();
-  //             //DateTime? olmalı backend null gidebilmeli
-  //             this.appointment.inspectionStartDateTime = new Date();
-  //             this.appointment.inspectionEndDateTime = new Date();
-  //             this.appointmentService
-  //               .save(this.appointment)
-  //               .subscribe((data) => {
-  //                 console.log(data);
-  //                 console.log(this.appointment);
-  //                 this.appointmentService._sweetAlert.success(
-  //                   "" +
-  //                     data["protocolId"] +
-  //                     " numaralı protokole randevu açıldı"
-  //                 );
-  //               });
-  //           }
-  //         });
-  //     });
-  //   }
-  // }
   public confirmAdd(): void {
     if (this.protocolForm.valid) {
       this.protocol.patientDataId = this.patient.id;
       this.protocol = Object.assign({}, this.protocolForm.value);
-      // this.patient.userId=this.authService.getCurrentUserId();
-
-      this.protocolService.save(this.protocol).subscribe((m) => {
+      this.protocolService.add(this.protocol).subscribe((m) => {
         if (m) {
+          this.protocol=new Protocol({});
+          this.protocol=JSON.parse(m).data;
           console.log(JSON.stringify(m));
           //working kısmı
-          this.protocolTypeProcessService.GetListForDefaultProcesses(m.data.protocolTypeId,m.data.doctorId).subscribe(ptp=>{
-            this.working=new Working({});
-            const protocolTypeProcesses:ProtocolTypeProcess[]=ptp;
-            protocolTypeProcesses.forEach(item=>{
-              this.working.doctorId=item.doctorId;
-              this.working.doctorRatio=item.doctorRatio;
-              this.working.price=item.price;
-              this.working.processId=item.processId;
-              this.working.protocolId=m.data.id;
-              this.working.taxRatio=item.taxRatio;
-              this.working.quantity = 1;
-              this.working.paidValue = 0;
-              this.working.arrearsValue = item.price;
-              this.workingService.save(this.working).subscribe(
-                (wr) => {
-                },
-                (error: HttpErrorResponse) => {
-                  console.log(error.name + " " + error.message);
+          this.protocolTypeProcessService
+            .GetListForDefaultProcesses(
+              this.protocol.protocolTypeId,
+              this.protocol.doctorId
+            )
+            .subscribe((ptp) => {
+              this.working = new Working({});
+              const protocolTypeProcesses: ProtocolTypeProcess[] = ptp;
+              protocolTypeProcesses.forEach((item) => {
+                this.working.doctorId = item.doctorId;
+                this.working.doctorRatio = item.doctorRatio;
+                this.working.price = item.price;
+                this.working.processId = item.processId;
+                this.working.protocolId = m.data.id;
+                this.working.taxRatio = item.taxRatio;
+                this.working.quantity = 1;
+                this.working.paidValue = 0;
+                this.working.arrearsValue = item.price;
+                if (this.working.id == 0) {
+                  this.workingService.add(this.working).subscribe((data) => {});
+                } else {
+                  this.workingService
+                    .update(this.working)
+                    .subscribe((data) => {});
                 }
-              );
-            })
-          });
+              });
+            });
           this.appointmentService
-            .getByIdentity(this.patient.identityNumber, this.protocol.doctorId)
+            .getByIdentity(this.patient.phoneNumber, this.protocol.doctorId)
             .subscribe((data) => {
               console.log(JSON.stringify(data));
               this.appointment = new Appointment({});
               if (data) {
                 this.appointment = data;
-                this.appointment.protocolId = m.data.id;
+                this.appointment.protocolId = this.protocol.id;
                 this.appointment.arriveDateTime = new Date();
                 this.appointment.patientHasArrive = true;
-              }
-              this.appointmentService.save(this.appointment).subscribe(
-                (ap) => {
-                  this.dialogRef.close(m.data.id);
-                }
-              );
-            },
-            (error: HttpErrorResponse) => {
-              this.appointment = new Appointment({});
-              console.log(error.name + " " + error.message);
-              console.log(this.appointment.date);
-              let test=new Date();
-              console.log("test"+test);
-                this.appointment.time = this.appointment.date
-                  .getHours()
-                  .toString()+":00";
+
+                this.appointmentService
+                  .update(this.appointment)
+                  .subscribe((ap) => {
+                    this.dialogRef.close(this.protocol.id);
+                  });
+              } else {
+                let test = new Date();
+                console.log("test" + test);
+                this.appointment.time =
+                  this.appointment.date.getHours().toString() + ":00";
                 this.appointment.identityNumber = this.patient.identityNumber;
                 this.appointment.name = this.patient.name;
                 this.appointment.surName = this.patient.surName;
                 this.appointment.phoneNumber = this.patient.phoneNumber;
                 this.appointment.patientDataId = this.patient.id;
-                this.appointment.protocolId = m.data.id;
-                this.appointment.doctorId = m.data.doctorId;
-                this.appointment.departmentId = m.data.departmentId;
-                this.appointment.protocolTypeId = m.data.protocolTypeId;
+                this.appointment.protocolId = this.protocol.id;
+                this.appointment.doctorId = this.protocol.doctorId;
+                this.appointment.departmentId = this.protocol.departmentId;
+                this.appointment.protocolTypeId = this.protocol.protocolTypeId;
                 this.appointment.createdAppointmentDateTime = this.appointment.date;
                 this.appointment.arriveDateTime = this.appointment.date;
                 this.appointment.patientHasArrive = true;
-                this.appointmentService.save(this.appointment).subscribe(
-                  (ap) => {
-                    this.dialogRef.close(m.data.id);
-                  }
-                );
+                this.appointmentService
+                  .add(this.appointment)
+                  .subscribe((ap) => {
+                    this.dialogRef.close(this.protocol.id);
+                  });
               }
-          );
+            });
         }
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error.name + " " + error.message);
-      }
-    );
+      });
     }
   }
 }

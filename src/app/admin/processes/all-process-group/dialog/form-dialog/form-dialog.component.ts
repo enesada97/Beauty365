@@ -1,5 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProcessGroup } from 'src/app/core/models/processgroup.model';
@@ -12,7 +11,6 @@ import { ProcessgroupService } from 'src/app/core/service/processgroup.service';
 })
 export class FormDialogComponent{
   action: string;
-  dialogTitle: string;
   processGroupForm: FormGroup;
   processGroup: ProcessGroup;
   constructor(
@@ -24,10 +22,8 @@ export class FormDialogComponent{
     // Set the defaults
     this.action = data.action;
     if (this.action === "edit") {
-      this.dialogTitle = data.processGroup.name;
       this.processGroup = data.ProcessGroup;
     } else {
-      this.dialogTitle = "Yeni İşlem Grubu";
       this.processGroup = new ProcessGroup({});
     }
     this.processGroupForm = this.createContactForm();
@@ -52,15 +48,17 @@ export class FormDialogComponent{
   public confirmAdd(): void {
     if (this.processGroupForm.valid) {
       this.processGroup = Object.assign({}, this.processGroupForm.value);
-      // this.patient.userId=this.authService.getCurrentUserId();
-      this.processGroupService.save(this.processGroup).subscribe(data=>{
-        this.processGroupService._sweetAlert.success(data['name']);
-        },
-        (error: HttpErrorResponse) => {
-          this.processGroupService.isTblLoading = false;
-          console.log(error.name + " " + error.message);
-        }
-        );
+      if(this.processGroup.id==0){
+        this.processGroupService.add(this.processGroup).subscribe(data=>{
+          this.dialogRef.close(1);
+          }
+          );
+      }else{
+        this.processGroupService.update(this.processGroup).subscribe(data=>{
+          this.dialogRef.close(1);
+          }
+          );
+      }
     }
   }
 }

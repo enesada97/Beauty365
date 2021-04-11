@@ -1,4 +1,4 @@
-import { ProtocoltypeService } from './../../../core/service/protocoltype.service';
+import { ProtocoltypeService } from "./../../../core/service/protocoltype.service";
 import { DepForDoctorsService } from "src/app/core/service/depfordoctors.service";
 import { DepartmentService } from "./../../../core/service/department.service";
 import { AppointmentService } from "./../../../core/service/appointment.service";
@@ -6,12 +6,11 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { DateAdapter } from "@angular/material/core";
-import { HttpErrorResponse } from "@angular/common/http";
 import { Department } from "src/app/core/models/department.model";
 import { Doctor } from "src/app/core/models/doctor.model";
-import * as moment from "moment";
-import { ProtocolType } from 'src/app/core/models/protocoltype.model';
-import { AppointmentCreateDto } from 'src/app/core/models/create-appointments.model';
+import { ProtocolType } from "src/app/core/models/protocoltype.model";
+import { AppointmentCreateDto } from "src/app/core/models/create-appointments.model";
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
 
 @Component({
   selector: "app-add-appointment-list",
@@ -31,7 +30,8 @@ export class AddAppointmentListComponent implements OnInit {
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
     private router: Router,
-    private dateAdapter: DateAdapter<any>
+    private dateAdapter: DateAdapter<any>,
+    private sweetAlert: SweetalertService
   ) {
     this.dateAdapter.setLocale("tr");
     this.createAppointmentsForm = this.fb.group({
@@ -46,17 +46,17 @@ export class AddAppointmentListComponent implements OnInit {
     });
   }
   onOptionsSelected(value: any) {
-    console.log("the selected value is " + value);
-    this.depForDoctorsService
-      .getDoctorListByDepId(value)
-      .subscribe((data) => (this.doctors = data));
+    this.depForDoctorsService.getDoctorListByDepId(value).subscribe((data) => {
+      this.doctors = data;
+      this.doctors.length>0?this.createAppointmentsForm.controls['doctorId'].setValue(this.doctors[0].id):null;
+    });
   }
   ngOnInit(): void {
     this.departmentService
-      .getAll()
+      .getList()
       .subscribe((data) => (this.departments = data));
     this.protocoltypeService
-      .getAll()
+      .getList()
       .subscribe((data) => (this.protocolTypes = data));
   }
   public onSubmit(): void {
@@ -65,8 +65,12 @@ export class AddAppointmentListComponent implements OnInit {
         {},
         this.createAppointmentsForm.value
       );
-      // this.patient.userId=this.authService.getCurrentUserId();
-      this.appointmentService.CreateAppointmentList(this.appointmentCreateDto);
+      this.appointmentService
+        .CreateAppointmentList(this.appointmentCreateDto)
+        .subscribe((data) => {
+          this.sweetAlert.success(data.toString());
+          this.router.navigateByUrl("/admin/appointments/all-appointments");
+        });
     }
   }
 }

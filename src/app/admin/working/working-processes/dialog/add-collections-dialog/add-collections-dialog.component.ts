@@ -1,6 +1,5 @@
 import { CollectionService } from "src/app/core/service/collection.service";
 import { SelectionModel } from "@angular/cdk/collections";
-import { HttpErrorResponse } from "@angular/common/http";
 import {
   Component,
   ElementRef,
@@ -266,69 +265,6 @@ export class AddCollectionsDialogComponent implements OnInit {
     this.onChange();
     this.formControl = new FormControl("", [Validators.max(this.arrears),Validators.min(1)]);
   }
-  // addCollections(){
-  //   const totalSelect = this.selection.selected;
-  //   this.workingForCollection = new Working({});
-  //   this.collection = new Collection({});
-  //   this.collection.addedBy="";
-  //     this.collection.addedDate=new Date();
-  //     this.collection.discount=this.clickDiscount;
-  //     if(this.collection.discount==true){
-  //     if(this.discount>0){
-  //       this.collection.discountValue=this.reminderTotal - this.selectedPay;
-  //     }else if(this.latestPrice>0){
-  //       this.collection.discountValue=this.latestPrice;
-  //     }else{
-  //       this.collection.discountValue=this.saleValue;
-  //     }
-  //   }else{
-  //     this.collection.discountValue=0;
-  //   }
-  //   this.collection.paymentType=this.selectedPayType;
-  //   this.collection.paymentValue=this.selectedPay;
-  //   this.collection.price=this.reminderTotal;
-  //   this.collection.protocolId=this.protocolId;
-  //   this.collection.updatedBy="";
-  //   this.collection.updatedDate=new Date();
-  //   this.collectionService.save(this.collection).subscribe(data=>{
-  //     this.workingForCollection.collectionId=data.id;
-  //   });
-  //   this.workingForCollection.payType=this.selectedPayType;
-  //   for (let i = 0; i < this.selectedId.length; i++) {//0-100tl
-  //     if(this.selectedPays[i]>0){
-  //     this.workingService.getById(this.selectedId[i]).subscribe(working=>{
-  //       console.log("gelen veri"+ JSON.stringify(working));
-  //     this.workingForCollection.arrearsValue=working.price-this.selectedPays[i];
-  //     this.workingForCollection.billNo=working.billNo;
-  //     this.workingForCollection.doctorId=working.doctorId;
-  //     this.workingForCollection.doctorRatio=working.doctorRatio;
-  //     this.workingForCollection.metarialId=working.metarialId;
-  //     this.workingForCollection.priceIncludeTax=working.priceIncludeTax;
-  //     this.workingForCollection.processId=working.processId;
-  //     this.workingForCollection.quantity=working.quantity;
-  //     this.workingForCollection.receiptNo=working.receiptNo;
-  //     this.workingForCollection.taxRatio=working.taxRatio;
-  //     this.workingForCollection.user=working.user;
-  //     this.workingForCollection.protocolId=working.protocolId;
-  //     this.workingForCollection.workingDateTime=new Date(working.workingDateTime);
-  //     this.workingForCollection.price=working.price;
-  //     this.workingForCollection.id=this.selectedId[i];
-  //     this.workingForCollection.paidValue=this.selectedPays[i];
-  //     console.log("kaydedilecek :"+JSON.stringify(this.workingForCollection));
-  //      this.workingService.save(this.workingForCollection).subscribe(
-  //        (data) => {
-  //          this.selectedPayType = undefined;
-  //          this.workingService._sweetAlert.success("Tahsilat");
-  //        },
-  //        (error: HttpErrorResponse) => {
-  //          console.log(error.name + " " + error.message);
-  //        }
-  //      );
-  //     });
-  //   }
-  //   }
-  //   this.selection = new SelectionModel<WorkingDto>(true, []);
-  // }
   refresh() {
     this.discount = undefined;
     this.saleValue = undefined;
@@ -414,69 +350,29 @@ export class AddCollectionsDialogComponent implements OnInit {
           console.log(
             "kaydedilecek :" + JSON.stringify(this.workingForCollection)
           );
-          this.workingService.save(this.workingForCollection).subscribe(
-            (data) => {
+          if(this.workingForCollection.id==0){
+            this.workingService.add(this.workingForCollection).subscribe(data=>{
               this.dialogRef.close(1);
               this.selectedPayType = undefined;
-              this.workingService._sweetAlert.success("Tahsilat");
-            },
-            (error: HttpErrorResponse) => {
-              console.log(error.name + " " + error.message);
-            }
-          );
+              }
+              );
+          }else{
+            this.workingService.update(this.workingForCollection).subscribe(data=>{
+              this.dialogRef.close(1);
+              this.selectedPayType = undefined;
+              }
+              );
+          }
         });
       }
     }
     this.selection = new SelectionModel<WorkingDto>(true, []);
     this.dataSourceForCollection.data.forEach((item) => {
-      this.collectionService.save(item).subscribe(
-        (data) => {},
-        (error: HttpErrorResponse) => {
-          console.log(error.name + " " + error.message);
-        }
+      this.collectionService.add(item).subscribe(
+        (data) => {}
       );
-      this.workingService._sweetAlert.success("Tahsilat");
     });
   }
-  // addCollections(){
-  //   const totalSelect = this.selection.selected;
-  //   this.workingForCollection = new Working({});
-  //   this.workingForCollection.payType=this.selectedPayType;
-  //   for (let i = 0; i < this.selectedId.length; i++) {//0-100tl
-  //     if(this.selectedPays[i]>0){
-  //     this.workingService.getById(this.selectedId[i]).subscribe(working=>{
-  //       console.log("gelen veri"+ JSON.stringify(working));
-  //     this.workingForCollection.arrearsValue=working.price-this.selectedPays[i];
-  //     this.workingForCollection.billNo=working.billNo;
-  //     this.workingForCollection.doctorId=working.doctorId;
-  //     this.workingForCollection.doctorRatio=working.doctorRatio;
-  //     this.workingForCollection.metarialId=working.metarialId;
-  //     this.workingForCollection.priceIncludeTax=working.priceIncludeTax;
-  //     this.workingForCollection.processId=working.processId;
-  //     this.workingForCollection.quantity=working.quantity;
-  //     this.workingForCollection.receiptNo=working.receiptNo;
-  //     this.workingForCollection.taxRatio=working.taxRatio;
-  //     this.workingForCollection.user=working.user;
-  //     this.workingForCollection.protocolId=working.protocolId;
-  //     this.workingForCollection.workingDateTime=new Date(working.workingDateTime);
-  //     this.workingForCollection.price=working.price;
-  //     this.workingForCollection.id=this.selectedId[i];
-  //     this.workingForCollection.paidValue=this.selectedPays[i];
-  //     console.log("kaydedilecek :"+JSON.stringify(this.workingForCollection));
-  //      this.workingService.save(this.workingForCollection).subscribe(
-  //        (data) => {
-  //          this.selectedPayType = undefined;
-  //          this.workingService._sweetAlert.success("Tahsilat");
-  //        },
-  //        (error: HttpErrorResponse) => {
-  //          console.log(error.name + " " + error.message);
-  //        }
-  //      );
-  //     });
-  //   }
-  //   }
-  //   this.selection = new SelectionModel<WorkingDto>(true, []);
-  // }
   deletePayment(i: number, row) {
     const value: number = row.paymentValue;
     const index = i;

@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,6 +18,8 @@ import { DepForDoctorsService } from 'src/app/core/service/depfordoctors.service
 import { OptionalSettingService } from 'src/app/core/service/optional-setting.service';
 import { PatientService } from 'src/app/core/service/patient.service';
 import { ProtocoltypeService } from 'src/app/core/service/protocoltype.service';
+import { SweetalertService } from 'src/app/core/service/sweetalert.service';
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-add-appointment-dialog',
@@ -51,7 +53,7 @@ export class AddAppointmentDialogComponent implements OnInit{
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   dataSource: MatTableDataSource<Patient>;
-  optionalSettingForIdentityRequired:OptionalSetting;
+  optionalSettingForCreatePatient:OptionalSetting;
   constructor(
     public dialogRef: MatDialogRef<AddAppointmentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -62,7 +64,8 @@ export class AddAppointmentDialogComponent implements OnInit{
     private patientService:PatientService,
     private fb: FormBuilder,
     private dateAdapter: DateAdapter<any>,
-    private optionalSettingService:OptionalSettingService
+    private optionalSettingService:OptionalSettingService,
+    private sweetAlert:SweetalertService
   ) {
     this.dateAdapter.setLocale("tr");
     this.action = data.action;
@@ -72,9 +75,10 @@ export class AddAppointmentDialogComponent implements OnInit{
       this.optionalSetting=data.optionalSetting;
       this.appointment = new Appointment({});
       this.appointment.protocolId=0;
-      this.appointment.arriveDateTime=new Date();
-      this.appointment.inspectionEndDateTime=new Date();
-      this.appointment.inspectionStartDateTime=new Date();
+      this.appointment.createdAppointmentDateTime=new Date();
+      // this.appointment.arriveDateTime=new Date();
+      // this.appointment.inspectionEndDateTime=new Date();
+      // this.appointment.inspectionStartDateTime=new Date();
     }
     this.appointmentForm = this.createContactForm();
     this.patientForm = this.createContactFormForSearch();
@@ -103,9 +107,8 @@ export class AddAppointmentDialogComponent implements OnInit{
       });
     }
     getOptionalSetting(){
-      this.optionalSettingService.getById(3).subscribe(data=>{
-        this.optionalSettingForIdentityRequired=data;
-        console.log(this.optionalSettingForIdentityRequired);
+      this.optionalSettingService.getById(1).subscribe(data=>{
+        this.optionalSettingForCreatePatient=data;
       })
     }
     createContactFormForSearch(): FormGroup {
@@ -155,63 +158,162 @@ export class AddAppointmentDialogComponent implements OnInit{
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 }
-  formControl = new FormControl("", [
-    Validators.required,
-    // Validators.email,
-  ]);
 
   submit() {
     if (this.appointmentForm.valid) {
       this.appointment = Object.assign({}, this.appointmentForm.value);
-      this.appointment.createdAppointmentDateTime = new Date();
-      // this.patient.userId=this.authService.getCurrentUserId();
       //Hasta kontrol
       this.patient=new Patient({});
       this.patient.phoneNumber=this.appointment.phoneNumber;
       this.patient.identityNumber=this.appointment.identityNumber;
-      this.patientService.getSearchedPatients(this.patient).subscribe(res=>{
-        if(res.length){
-          this.patient=res[0];
-          this.appointment.patientDataId=this.patient.id;
-          console.log("Hasta kaydı var");
-          this.appointmentService.add(this.appointment).subscribe(data=>{
-            console.log(this.appointment);
-            this.dialogRef.close(1);
-            }
-            );
-        }else{
-          this.patient.name=this.appointment.name;
-          this.patient.surName=this.appointment.surName;
-          this.patientService.add(this.patient).subscribe(p=>{
-            this.patient=p
-            this.appointment.patientDataId=this.patient.id;
-            this.appointmentService.add(this.appointment).subscribe(data=>{
-              console.log(this.appointment);
-              this.dialogRef.close(1);
+      if(this.appointment.id==0){
+        this.patientService.getSearchedPatients(this.patient).subscribe(res=>{
+          if(res&&res.length){
+            //Hasta varsa alert telefon numarası bu olan hasta var randevuyu mu buna açmak istersiniz ?
+            const swalWithBootstrapButtons = Swal.mixin({
+              customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger",
+              },
+              buttonsStyling: false,
+            });
+            swalWithBootstrapButtons
+              .fire({
+                title: "Bu telefon numarası ile zaten kayıtlı bir hasta bulundu,randevu bu hasta üzerine eklensin mi?",
+                showClass: {
+                  popup: "animate__animated animate__fadeInDown",
+                },
+                hideClass: {
+                  popup: "animate__animated animate__fadeOutUp",
+                },
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Evet ",
+                cancelButtonText: " Hayır",
+                reverseButtons: true,
+              })
+              .then((result) => {
+                if (result.isConfirmed) {
+                  this.patient=res[0];
+                  this.appointment.patientDataId=this.patient.id;
+                  console.log("Hasta kaydı var");
+                  this.appointmentService.add(this.appointment).subscribe(data=>{
+                    this.dialogRef.close(1);
+                    });
+                  swalWithBootstrapButtons.fire("Varolan hasta için randevu eklendi", "", "success");
+                }else{
+                  this.appointment.patientDataId=0;
+                  this.appointmentService.add(this.appointment).subscribe(data=>{
+                    this.dialogRef.close(1);
+                    this.sweetAlert.success(data);
+                    });
+                }
+              });
+          }else{
+            if(this.optionalSettingForCreatePatient.isOpen==true){
+              this.patient.name=this.appointment.name;
+              this.patient.surName=this.appointment.surName;
+              this.patient.phoneNumber=this.appointment.phoneNumber;
+              this.patient.identityNumber=this.appointment.identityNumber;
+              this.patientService.add(this.patient).subscribe(p=>{
+                this.patient=JSON.parse(p).data;
+                this.appointment.patientDataId=this.patient.id;
+                this.appointmentService.add(this.appointment).subscribe(data=>{
+                  this.dialogRef.close(1);
+                  this.sweetAlert.success(data);
+                  }
+                  );
+              });
+            }else{
+              this.appointment.patientDataId=0;
+                this.appointmentService.add(this.appointment).subscribe(data=>{
+                  this.dialogRef.close(1);
+                  this.sweetAlert.success(data);
+                  });
               }
-              );
-            console.log(p);
-          });
+            }
+          }
+        );
+      }else{
+        if (this.appointment.patientDataId!=0) {
+          this.appointmentService.update(this.appointment).subscribe(data=>{
+            this.dialogRef.close(1);
+            this.sweetAlert.success(data);
+            });
+        } else {
+          this.patientService.getSearchedPatients(this.patient).subscribe(res=>{
+            if(res&&res.length){
+              //Hasta varsa alert telefon numarası bu olan hasta var randevuyu mu buna açmak istersiniz ?
+              const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: "btn btn-success",
+                  cancelButton: "btn btn-danger",
+                },
+                buttonsStyling: false,
+              });
+              swalWithBootstrapButtons
+                .fire({
+                  title: "Bu telefon numarası ile zaten kayıtlı bir hasta bulundu,randevu bu hasta üzerine güncellensin mi?",
+                  showClass: {
+                    popup: "animate__animated animate__fadeInDown",
+                  },
+                  hideClass: {
+                    popup: "animate__animated animate__fadeOutUp",
+                  },
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Evet ",
+                  cancelButtonText: " Hayır",
+                  reverseButtons: true,
+                })
+                .then((result) => {
+                  if (result.isConfirmed) {
+                    this.patient=res[0];
+                    this.appointment.patientDataId=this.patient.id;
+                    console.log("Hasta kaydı var");
+                    this.appointmentService.update(this.appointment).subscribe(data=>{
+                      this.dialogRef.close(1);
+                      });
+                    swalWithBootstrapButtons.fire("Varolan hasta için randevu güncellendi", "", "success");
+                  }else{
+                    this.appointment.patientDataId=0;
+                    this.appointmentService.update(this.appointment).subscribe(data=>{
+                      this.dialogRef.close(1);
+                      this.sweetAlert.success(data);
+                      });
+                  }
+                });
+            }else{
+              if(this.optionalSettingForCreatePatient.isOpen==true){
+                this.patient.name=this.appointment.name;
+                this.patient.surName=this.appointment.surName;
+                this.patient.phoneNumber=this.appointment.phoneNumber;
+                this.patient.identityNumber=this.appointment.identityNumber;
+                this.patientService.add(this.patient).subscribe(p=>{
+                  this.patient=JSON.parse(p).data;
+                  this.appointment.patientDataId=this.patient.id;
+                  this.appointmentService.update(this.appointment).subscribe(data=>{
+                    this.dialogRef.close(1);
+                    this.sweetAlert.success(data);
+                    }
+                    );
+                });
+              }else{
+                  this.appointmentService.update(this.appointment).subscribe(data=>{
+                    this.dialogRef.close(1);
+                    this.sweetAlert.success(data);
+                    });
+                }
+              }
+            }
+          );
         }
-      },
-      // (error: HttpErrorResponse) => {
-      //   this.patient.name=this.appointment.name;
-      //     this.patient.surName=this.appointment.surName;
-      //     this.patientService.add(this.patient).subscribe(pa=>{
-      //       this.patient=pa;
-      //       this.appointment.patientDataId=this.patient.id;
-      //       this.appointmentService.add(this.appointment).subscribe(data=>{
-      //         console.log(this.appointment);
-      //         this.dialogRef.close(1);
-      //         },
-      //         (error: HttpErrorResponse) => {
-      //           this.patientService.isTblLoading = false;
-      //           console.log(error.name + " " + error.message);
-      //         }
-      //         );
-      //     });
-      // },
-      )
+
+      }
     }
   }
   onNoClick(): void {
@@ -219,7 +321,8 @@ export class AddAppointmentDialogComponent implements OnInit{
   }
   onSearchSubmit(): void {
     this.patient = Object.assign({}, this.patientForm.value);
-    // this.patient.userId=this.authService.getCurrentUserId();
+    this.patient.identityNumber==null?this.patient.identityNumber=0:null;
+    this.patient.phoneNumber==null?this.patient.phoneNumber=0:null;
     this.patientService.getSearchedPatients(this.patient).subscribe(data=>{
       this.searchedPatients=data;
       this.dataSource = new MatTableDataSource<Patient>(

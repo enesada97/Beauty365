@@ -39,7 +39,7 @@
                     <p>Selected: {{processForm.get('processGroupId').value}}</p>
                   </div>
                 </div>
-  
+
                 <div class="row">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                     <button
@@ -159,7 +159,7 @@
                       <mat-cell *matCellDef="let row; let i = index" class="pr-0">
                         <button
                         mat-icon-button
-                        routerLink="edit-patient/{{row.id}}"
+                        (click)="editCall(row)"
                         color="accent"
                         class="btn-tbl-edit"
                       >
@@ -174,7 +174,7 @@
                           class="btn-tbl-description"
                         >
                           <mat-icon aria-label="Detail" class="col-white"
-                            >description</mat-icon
+                            >delete</mat-icon
                           >
                         </button>
                       </mat-cell>
@@ -193,6 +193,5 @@
           </div>
         </div>
       </div>
-    
+
   </section>
-  

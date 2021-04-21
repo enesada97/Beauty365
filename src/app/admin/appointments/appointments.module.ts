@@ -39,6 +39,7 @@ import { WorkingService } from 'src/app/core/service/working.service';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
+import { PatientService } from 'src/app/core/service/patient.service';
 
 @NgModule({
   declarations: [AllAppointmentsComponent, AddAppointmentDialogComponent, DeleteComponent, AddAppointmentListComponent],
@@ -79,6 +80,6 @@ import { TranslationService } from 'src/app/core/service/system-service/Translat
       }
   })
   ],
-  providers: [ProtocoltypeService,AppointmentService,DepForDoctorsService,DepartmentService,OptionalSettingService,ProtocolTypeProcessService,WorkingService],
+  providers: [PatientService,ProtocoltypeService,AppointmentService,DepForDoctorsService,DepartmentService,OptionalSettingService,ProtocolTypeProcessService,WorkingService],
 })
 export class AppointmentsModule { }

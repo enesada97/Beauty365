@@ -73,7 +73,8 @@ export class SearchPatientComponent {
   }
   public onSubmit(): void {
     this.patient = Object.assign({}, this.patientForm.value);
-    // this.patient.userId=this.authService.getCurrentUserId();
+    this.patient.identityNumber==null?this.patient.identityNumber=0:null;
+    this.patient.phoneNumber==null?this.patient.phoneNumber=0:null;
     this.patientService.getSearchedPatients(this.patient).subscribe((data) => {
       this.searchedPatients = data;
       this.dataSource = new MatTableDataSource<Patient>(this.searchedPatients);

@@ -281,9 +281,9 @@
                     </mat-menu>
                     <mat-menu #protocolProcesses="matMenu">
                       <button mat-menu-item
-                      (click)="$event.stopPropagation()"
-                      (click)="addProtocolForPatient(row)">
                       *ngIf="checkClaim('CreateProtocolCommand')"
+                      (click)="$event.stopPropagation()"
+                      (click)="protocolController(row)">
                         <mat-icon>add</mat-icon>
                         <span>{{'Add'|translate}}</span>
                       </button>

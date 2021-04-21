@@ -1,6 +1,5 @@
-import { ProtocolTypeProcessDto } from "./../../../../core/models/protocolTypeProcessDto.model";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import {
   FormControl,
   Validators,
@@ -27,6 +26,7 @@ import { ProtocolTypeProcessService } from "src/app/core/service/protocol-type-p
 import { Working } from "src/app/core/models/working.model";
 import { ProtocolTypeProcess } from "src/app/core/models/protocolTypeProcess.model";
 import { WorkingService } from "src/app/core/service/working.service";
+import { AuthService } from "src/app/core/service/system-service/auth.service";
 
 @Component({
   selector: "app-add-protocol-dialog",
@@ -42,7 +42,7 @@ import { WorkingService } from "src/app/core/service/working.service";
     AppointmentService,
   ],
 })
-export class AddProtocolDialogComponent {
+export class AddProtocolDialogComponent implements OnInit {
   action: string;
   protocolForm: FormGroup;
   protocol: Protocol;
@@ -55,6 +55,7 @@ export class AddProtocolDialogComponent {
   addWithAppointment: Appointment;
   protocolDto: ProtocolDto;
   working: Working;
+  userName:string;
   constructor(
     public dialogRef: MatDialogRef<AddProtocolDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -68,7 +69,8 @@ export class AddProtocolDialogComponent {
     private appointmentService: AppointmentService,
     private dateAdapter: DateAdapter<any>,
     private protocolTypeProcessService: ProtocolTypeProcessService,
-    private workingService: WorkingService
+    private workingService: WorkingService,
+    private authService:AuthService
   ) {
     // Set the defaults
     this.dateAdapter.setLocale("tr");
@@ -78,6 +80,7 @@ export class AddProtocolDialogComponent {
       this.protocol = new Protocol({});
       this.patient = data.patient;
     } else if (this.action === "addFromAppointment") {
+      this.userName=data.userName;
       this.protocol = new Protocol({});
       this.addWithAppointment = data.appointment;
       this.patient = data.patient;
@@ -113,6 +116,7 @@ export class AddProtocolDialogComponent {
     });
   }
   ngOnInit(): void {
+    console.log(this.userName);
     this.protocolTypeService.getList().subscribe((data) => {
       this.protocolTypes = data;
       if (this.action == "add" && this.protocolTypes[0].id) {
@@ -137,10 +141,6 @@ export class AddProtocolDialogComponent {
       }
     });
   }
-  formControl = new FormControl("", [
-    Validators.required,
-    // Validators.email,
-  ]);
   createContactForm(): FormGroup {
     return this.fb.group({
       id: [this.protocol.id],
@@ -162,7 +162,7 @@ export class AddProtocolDialogComponent {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    if (this.protocolForm.valid) {
+    if (this.protocolForm.valid&&this.userName) {
       this.protocol.patientDataId = this.patient.id;
       this.protocol = Object.assign({}, this.protocolForm.value);
       this.protocolService.add(this.protocol).subscribe((m) => {
@@ -177,25 +177,21 @@ export class AddProtocolDialogComponent {
               this.protocol.doctorId
             )
             .subscribe((ptp) => {
-              this.working = new Working({});
               const protocolTypeProcesses: ProtocolTypeProcess[] = ptp;
               protocolTypeProcesses.forEach((item) => {
+                this.working = new Working({});
                 this.working.doctorId = item.doctorId;
                 this.working.doctorRatio = item.doctorRatio;
                 this.working.price = item.price;
                 this.working.processId = item.processId;
-                this.working.protocolId = m.data.id;
+                this.working.protocolId = this.protocol.id;
                 this.working.taxRatio = item.taxRatio;
                 this.working.quantity = 1;
                 this.working.paidValue = 0;
                 this.working.arrearsValue = item.price;
-                if (this.working.id == 0) {
+                this.working.doctorRatio=item.doctorRatio;
+                this.working.user=this.userName;
                   this.workingService.add(this.working).subscribe((data) => {});
-                } else {
-                  this.workingService
-                    .update(this.working)
-                    .subscribe((data) => {});
-                }
               });
             });
           this.appointmentService

@@ -15,7 +15,7 @@ export class ProtocolTypeProcessService extends CrudService<ProtocolTypeProcess,
   }
   GetListForDefaultProcesses(protocolTypeId:number,doctorId:number): Observable<ProtocolTypeProcess[]> {
     return this.httpClient.get<ProtocolTypeProcess[]>(
-      environment.apiUrl + "/protocolTypeProcesses/getdefaultdtos?protocolTypeId="+protocolTypeId+"&doctorId="+doctorId
+      environment.apiUrl + "/protocolTypeProcesses/getdefaults?protocolTypeId="+protocolTypeId+"&doctorId="+doctorId
     );
   }
 }

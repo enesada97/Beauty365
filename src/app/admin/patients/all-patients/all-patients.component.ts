@@ -73,11 +73,15 @@ export class AllPatientsComponent implements OnInit {
       this.optionalSettingForIdentityRequired=data;
     })
   }
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
   addNew() {
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
         patient: this.patient,
         action: "add",
+        optionalSettingForIdentityRequired:this.optionalSettingForIdentityRequired
       },
     });
     dialogRef.afterClosed().subscribe((result:Patient) => {
@@ -138,6 +142,7 @@ export class AllPatientsComponent implements OnInit {
           data: {
             patient: row,
             action: "edit",
+            optionalSettingForIdentityRequired:this.optionalSettingForIdentityRequired
           },
         });
         dialogRef.afterClosed().subscribe((result:Patient) => {
@@ -175,6 +180,7 @@ export class AllPatientsComponent implements OnInit {
       data: {
         patient: row,
         action: "edit",
+        optionalSettingForIdentityRequired:this.optionalSettingForIdentityRequired
       },
     });
     dialogRef.afterClosed().subscribe((result) => {

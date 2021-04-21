@@ -1,4 +1,4 @@
-import { ErrorHandler, NgModule } from "@angular/core";
+import { NgModule } from "@angular/core";
 
 import { CoreModule } from "./core/core.module";
 import { SharedModule } from "./shared/shared.module";
@@ -13,7 +13,6 @@ import { SidebarComponent } from "./layout/sidebar/sidebar.component";
 import { RightSidebarComponent } from "./layout/right-sidebar/right-sidebar.component";
 import { AuthLayoutComponent } from "./layout/app-layout/auth-layout/auth-layout.component";
 import { MainLayoutComponent } from "./layout/app-layout/main-layout/main-layout.component";
-import { ErrorInterceptor } from "./core/interceptor/error.interceptor";
 import { LocationStrategy, HashLocationStrategy } from "@angular/common";
 import {
   PerfectScrollbarModule,
@@ -23,10 +22,8 @@ import {
 import { ClickOutsideModule } from "ng-click-outside";
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapter";
-import { GlobalErrorHandler } from "./core/error/global-error-handler";
 import { AuthInterceptorService } from "./core/interceptor/auth-interceptor.service";
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslationService } from './core/service/system-service/Translation.service';
 import { JwtModule } from "@auth0/angular-jwt";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';

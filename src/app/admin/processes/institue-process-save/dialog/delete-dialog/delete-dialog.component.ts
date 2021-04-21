@@ -1,6 +1,7 @@
 import { ProcessInstitueService } from './../../../../../core/service/process-institue.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SweetalertService } from 'src/app/core/service/sweetalert.service';
 
 @Component({
   selector: 'app-delete-dialog',
@@ -11,7 +12,8 @@ export class DeleteDialogComponent{
   constructor(
     public dialogRef: MatDialogRef<DeleteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public processInstitueService: ProcessInstitueService
+    public processInstitueService: ProcessInstitueService,
+    private sweetAlert:SweetalertService
   ) {}
   onNoClick(): void {
     this.dialogRef.close();
@@ -20,6 +22,7 @@ export class DeleteDialogComponent{
     this.processInstitueService.delete(this.data.id).subscribe(
       (data) => {
         this.dialogRef.close(1);
+        this.sweetAlert.delete(data.toString());
       }
     );
 }

@@ -41,6 +41,7 @@ import { CollectionService } from 'src/app/core/service/collection.service';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
+import { ProtocolService } from 'src/app/core/service/protocol.service';
 
 
 @NgModule({
@@ -85,6 +86,6 @@ import { TranslationService } from 'src/app/core/service/system-service/Translat
       }
   })
   ],
-  providers: [WorkingService,ProcessService,ProcessgroupService,CollectionService],
+  providers: [WorkingService,ProcessService,ProcessgroupService,CollectionService,ProtocolService],
 })
 export class WorkingModule { }

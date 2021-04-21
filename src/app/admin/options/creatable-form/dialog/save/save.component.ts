@@ -42,7 +42,7 @@ export class SaveComponent{
     });
   }
   submit() {
-    if (this.tableForm.valid) {
+    if (this.tableForm.valid&&this.userName) {
       this.formTable = Object.assign({}, this.tableForm.value);
       this.formTable.addedBy=this.userName;
       if(this.formTable.id==0){

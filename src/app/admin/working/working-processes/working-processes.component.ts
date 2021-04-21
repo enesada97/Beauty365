@@ -1,12 +1,9 @@
 import { ProcessDtoForWorking } from "./../../../core/models/process-dto-for-working.model";
 import { MatDialog } from "@angular/material/dialog";
-import { ProcessService } from "./../../../core/service/process.service";
-import { Process } from "./../../../core/models/process.model";
 import { ActivatedRoute } from "@angular/router";
 import { PatientForWorkingDto } from "./../../../core/models/patient-for-working-dto.model";
 import { WorkingService } from "./../../../core/service/working.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Working } from "src/app/core/models/working.model";
 import { WorkingDto } from "src/app/core/models/workingdto.model";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
@@ -48,7 +45,6 @@ export class WorkingProcessesComponent implements OnInit {
   patientForWorkingDto: PatientForWorkingDto;
   processDtoForWorking: ProcessDtoForWorking[];
   workingForCollectionDtos: WorkingDto[];
-  working: Working;
   protocolId: number;
   //Hizmetler
   dataSource: MatTableDataSource<WorkingDto>;
@@ -112,14 +108,9 @@ export class WorkingProcessesComponent implements OnInit {
     TableUtil.exportToPdf("Table");
   }
   editCall(row) {
-    this.workingService
-      .getById(row.id)
-      .subscribe((data) => (this.working = data));
-    if (this.working) {
-      console.log(this.working);
       const dialogRef = this.dialog.open(EditDialogComponent, {
         data: {
-          working: this.working,
+          workingDto: row,
         },
       });
       dialogRef.afterClosed().subscribe((result) => {
@@ -127,7 +118,6 @@ export class WorkingProcessesComponent implements OnInit {
           this.refresh();
         }
       });
-    }
   }
   getProcessesDialog() {
     if (this.processDtoForWorking) {
@@ -151,7 +141,7 @@ export class WorkingProcessesComponent implements OnInit {
   getCollectionsDialog() {
       this.workingForCollectionDtos=this.workingDtos.filter((workingDtos) => workingDtos.arrearsValue > 0)
       this.workingForCollectionDtos.sort(function(a, b) {
-        return a.id - b.id;
+        return a.workingNo - b.workingNo;
       });
       console.log(this.workingForCollectionDtos);
     if (this.workingForCollectionDtos) {
@@ -179,13 +169,15 @@ export class WorkingProcessesComponent implements OnInit {
       : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
   removeSelectedRows() {
-    const alertCounter = this.selection.selected[this.selection.selected.length-1].id;
+    const alertCounter = this.selection.selected[this.selection.selected.length-1].workingNo;
     this.selection.selected.forEach((item) => {
-      const index: number = item.id;
+      const index: number = item.workingNo;
       this.workingService.delete(index).subscribe(
         (data) => {
-          index==alertCounter?this.sweetAlert.delete(data.toString()):null;
-          this.refresh();
+          if(index==alertCounter){
+            this.refresh();
+            this.sweetAlert.delete(data.toString());
+          }
         }
       );
       this.selection = new SelectionModel<WorkingDto>(true, []);

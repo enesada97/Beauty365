@@ -1,4 +1,3 @@
-import { OptionsModule } from './options/options.module';
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 

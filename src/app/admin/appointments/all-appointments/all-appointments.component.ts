@@ -20,6 +20,9 @@ import { PatientService } from "src/app/core/service/patient.service";
 import { ProtocolService } from "src/app/core/service/protocol.service";
 import { Patient } from "src/app/core/models/patient.model";
 import { AuthService } from "src/app/core/service/system-service/auth.service";
+import Swal from "sweetalert2";
+import { FormDialogComponent } from "../../patients/all-patients/dialog/form-dialog/form-dialog.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-all-appointments",
@@ -49,6 +52,7 @@ export class AllAppointmentsComponent implements OnInit {
   events: string[] = [];
   fixDate: string;
   patient:Patient;
+  userName:string;
   constructor(
     public httpClient: HttpClient,
     private sweetAlert: SweetalertService,
@@ -56,14 +60,17 @@ export class AllAppointmentsComponent implements OnInit {
     public appointmentService: AppointmentService,
     private optionalSettingService: OptionalSettingService,
     private patientService :PatientService,
-    private authService:AuthService
+    private authService:AuthService,
+    private router:Router
   ) {}
   dataSource: MatTableDataSource<AppointmentDto>;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild("filter", { static: true }) filter: ElementRef;
-  optionalSetting: OptionalSetting;
+  optionalSettings: OptionalSetting[];
   ngOnInit() {
+    this.userName=this.authService.getUserName();
+    console.log(this.userName);
     this.date = new Date();
     this.getAppointments();
     this.getOptionalSettings();
@@ -72,8 +79,8 @@ export class AllAppointmentsComponent implements OnInit {
 		return this.authService.claimGuard(claim)
 	}
   getOptionalSettings() {
-    this.optionalSettingService.getById(1).subscribe((data) => {
-      this.optionalSetting = data;
+    this.optionalSettingService.getList().subscribe((data) => {
+      this.optionalSettings = data;
     });
   }
   getAppointments() {
@@ -113,7 +120,7 @@ export class AllAppointmentsComponent implements OnInit {
       data: {
         appointment: this.appointment,
         action: "add",
-        optionalSetting: this.optionalSetting,
+        optionalSetting: this.optionalSettings.find(m=>m.id==1)
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -131,6 +138,7 @@ export class AllAppointmentsComponent implements OnInit {
           data: {
             appointment: this.appointment,
             action: "edit",
+            optionalSetting: this.optionalSettings.find(m=>m.id==1)
           },
         });
         dialogRef.afterClosed().subscribe((result) => {
@@ -174,27 +182,164 @@ export class AllAppointmentsComponent implements OnInit {
       }
     });
   }
-  addProtocolForPatient(row:AppointmentDto) {
+  protocolController(row:AppointmentDto){
     this.addForProtocolAppointment=new Appointment({});
     this.appointmentService.getById(row.appointmentNo).subscribe(data=>{
       this.addForProtocolAppointment=data;
-      if(this.addForProtocolAppointment.id!=0){
-        this.patientService.getById(this.addForProtocolAppointment.patientDataId).subscribe(p=>{
-          this.patient=p;
-            const dialogRef = this.dialog.open(AddProtocolDialogComponent, {
-              data: {
-                patient: this.patient,
-                appointment: this.addForProtocolAppointment,
-                action: "addFromAppointment",
-              },
-            });
-            dialogRef.afterClosed();
-          })
+      console.log(this.addForProtocolAppointment.patientDataId);
+        this.addForProtocolAppointment.patientDataId!=0?this.addProtocolForAppointment(this.addForProtocolAppointment):this.passParameter(this.addForProtocolAppointment);
+    })
+  }
+  addProtocolForAppointment(appointment:Appointment,patient?:Patient) {
+    if(patient){
+      if(appointment.id!=0){
+        const dialogRef = this.dialog.open(AddProtocolDialogComponent, {
+          data: {
+            patient: patient,
+            appointment: appointment,
+            action: "addFromAppointment",
+            userName:this.userName
+          },
+        });
+        dialogRef.afterClosed().subscribe((result:number) => {
+          console.log("result:" +result);
+          if(result){
+            this.router.navigateByUrl("admin/working/working-processes/"+result);
+            }
+            this.refresh();
+        });
       }
+    }else{
+      if(appointment.id!=0){
+           this.patientService.getById(appointment.patientDataId).subscribe(p=>{
+             this.patient=p;
+             if(this.optionalSettings.find(m=>m.id==2).isOpen==true&&!this.patient.identityNumber){
+               this.passParameterForIdentity(this.patient,appointment);
+             }else{
+              const dialogRef = this.dialog.open(AddProtocolDialogComponent, {
+                data: {
+                  patient: this.patient,
+                  appointment: appointment,
+                  action: "addFromAppointment",
+                  userName:this.userName
+                },
+              });
+              dialogRef.afterClosed().subscribe((result:number) => {
+                console.log("result:" +result);
+                if(result){
+                  this.router.navigateByUrl("admin/working/working-processes/"+result);
+                  }
+                  this.refresh();
+              });
+             }
+             });
+        }else{
+          this.patientService.getById(appointment.patientDataId).subscribe(p=>{
+            this.patient=p;
+            console.log(this.patient);
+              const dialogRef = this.dialog.open(AddProtocolDialogComponent, {
+                data: {
+                  patient: this.patient,
+                  appointment: appointment,
+                  action: "addFromAppointment",
+                  userName:this.userName
+                },
+              });
+              dialogRef.afterClosed().subscribe((result:number) => {
+                console.log("result:" +result);
+                if(result){
+                  this.router.navigateByUrl("admin/working/working-processes/"+result);
+                  }
+                  this.refresh();
+              });
+            });
+        }
+      }
+  }
+  passParameter(appointment:Appointment) {
+    Swal.fire({
+      title: 'Randevudaki ilgili hastanın,hasta kayıdını oluşturmak ister misiniz ?',
+      text: appointment.name+" "+appointment.surName+" hasta kayıdı bulunamadı!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Hayır',
+      confirmButtonText: 'Evet',
+      showLoaderOnConfirm: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let patient=new Patient({});
+        patient.name=appointment.name;
+        patient.surName=appointment.surName;
+        patient.identityNumber=appointment.identityNumber;
+        patient.phoneNumber=appointment.phoneNumber;
+        this.addPatientOnAppointment(patient,appointment);
+      }
+    })
+  }
+  passParameterForIdentity(patient:Patient,appointment) {
+    Swal.fire({
+      title: 'Randevudaki ilgili hastanın kimlik numarasını eklemek ister misiniz ?',
+      text: patient.name+" "+patient.surName+" kimlik numarası bulunamadı!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Hayır',
+      confirmButtonText: 'Evet',
+      showLoaderOnConfirm: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.addIdentityForPatient(patient,appointment);
+      }
+    })
+  }
+  addIdentityForPatient(row:Patient,appointment:Appointment) {
+    const dialogRef = this.dialog.open(FormDialogComponent, {
+      data: {
+        patient: row,
+        action: "edit",
+        optionalSettingForIdentityRequired:this.optionalSettings.find(m=>m.id==2)
+      },
+    });
+    dialogRef.afterClosed().subscribe((result:Patient) => {
+      console.log("result:");
+      console.log(result);
+      if(result){
+        this.patientService.getById(row.id).subscribe(p=>{
+          row=p;
+          this.addProtocolForAppointment(appointment,row);
+        })
+        }
+        this.refresh();
+    });
+  }
+  addPatientOnAppointment(row:Patient,appointment:Appointment) {
+    const dialogRef = this.dialog.open(FormDialogComponent, {
+      data: {
+        patient: row,
+        action: "edit",
+        optionalSettingForIdentityRequired:this.optionalSettings.find(m=>m.id==2)
+      },
+    });
+    dialogRef.afterClosed().subscribe((result:Patient) => {
+      console.log("result:");
+      console.log(result);
+      if(result){
+        appointment.patientDataId=result.id;
+        console.log(appointment.patientDataId);
+        this.appointmentService.update(appointment).subscribe(data=>{
+          this.refresh();
+          this.addProtocolForAppointment(JSON.parse(data).data,result);
+        })
+        }
+        this.refresh();
     });
   }
   refresh() {
     this.getAppointments();
+    this.getOptionalSettings();
   }
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     this.events.push(`${type}: ${event.value}`);

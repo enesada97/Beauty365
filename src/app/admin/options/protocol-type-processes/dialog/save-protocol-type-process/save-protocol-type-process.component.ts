@@ -15,6 +15,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Doctor } from 'src/app/core/models/doctor.model';
 import { SweetalertService } from 'src/app/core/service/sweetalert.service';
+import { ProcessService } from 'src/app/core/service/process.service';
 
 @Component({
   selector: 'app-save-protocol-type-process',
@@ -41,7 +42,8 @@ export class SaveProtocolTypeProcessComponent implements OnInit {
     private protocolTypeServices: ProtocoltypeService,
     private depForDoctorsService: DepForDoctorsService,
     public protocolTypeProcessService: ProtocolTypeProcessService,
-    private sweetAlert:SweetalertService
+    private sweetAlert:SweetalertService,
+    private processService:ProcessService
   ) {
     }
   dataSource: MatTableDataSource<ProcessInstitueDto>;
@@ -117,14 +119,21 @@ export class SaveProtocolTypeProcessComponent implements OnInit {
       this.protocolTypeProcess.institueId=this.selectedInstitutionId[0];
       this.protocolTypeProcess.processId=index;
       this.protocolTypeProcess.protocolTypeId=this.selectedProtocolTypeId[0];
-      this.protocolTypeProcessService.add(this.protocolTypeProcess).subscribe(
-        (data) => {
-          if (index==alertCounter) {
-            this.dialogRef.close(1);
-            this.sweetAlert.success(data);
-          }
-        }
-      );
+      this.protocolTypeProcess.price=item.price;
+      this.processInstitueService.getById(item.processInstitueNo).subscribe(pi=>{
+        this.processService.getById(pi.processId).subscribe(pr=>{
+          this.protocolTypeProcess.doctorRatio=pr.doctorRatio;
+          this.protocolTypeProcess.taxRatio=pr.taxRatio;
+          this.protocolTypeProcessService.add(this.protocolTypeProcess).subscribe(
+            (data) => {
+              if (index==alertCounter) {
+                this.dialogRef.close(1);
+                this.sweetAlert.success(data);
+              }
+            }
+          );
+        })
+      })
     });
     this.selection = new SelectionModel<ProcessInstitueDto>(true, []);
   }

@@ -3,13 +3,14 @@ import { ProcessService } from './../../../../../core/service/process.service';
 import { ProcessInstitueService } from './../../../../../core/service/process-institue.service';
 import { ProcessgroupService } from './../../../../../core/service/processgroup.service';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProcessInstitueDto } from 'src/app/core/models/process-institue-dto.model';
 import { ProcessInstitue } from 'src/app/core/models/process-institue.model';
 import { Process } from 'src/app/core/models/process.model';
 import { ProcessGroup } from 'src/app/core/models/processgroup.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InstitutionService } from 'src/app/core/service/institution.service';
+import { SweetalertService } from 'src/app/core/service/sweetalert.service';
 
 @Component({
   selector: 'app-add-dialog',
@@ -34,6 +35,7 @@ export class AddDialogComponent implements OnInit {
     private institutionService:InstitutionService,
     private processService: ProcessService,
     private fb: FormBuilder,
+    private sweetAlert:SweetalertService
   ) {
     this.action = data.action;
     if (this.action === "edit") {
@@ -74,11 +76,6 @@ export class AddDialogComponent implements OnInit {
     this.processgroupService.getList().subscribe((data)=>(this.processGroups=data));
     this.institutionService.getList().subscribe((data)=>(this.institutions=data));
   }
-  formControl = new FormControl("", [
-    Validators.required,
-    // Validators.email,
-  ]);
-
   public submit() {
     if (this.processForm.valid) {
       this.process = Object.assign({}, this.processForm.value);
@@ -86,15 +83,17 @@ export class AddDialogComponent implements OnInit {
         this.processService.add(this.process).subscribe(data=>{
           if(this.processInstitueForm.valid){
             this.processInstitue = Object.assign({}, this.processInstitueForm.value);
-            this.processInstitue.processId=data['id'];
+            this.processInstitue.processId=JSON.parse(data).data.id;
             if(this.processInstitue.id==0){
               this.processInstitueService.add(this.processInstitue).subscribe(data=>{
                 this.dialogRef.close(1);
+                this.sweetAlert.success(data);
                 }
                 );
             }else{
               this.processInstitueService.update(this.processInstitue).subscribe(data=>{
                 this.dialogRef.close(1);
+                this.sweetAlert.info(data);
                 }
                 );
             }
@@ -105,15 +104,17 @@ export class AddDialogComponent implements OnInit {
         this.processService.update(this.process).subscribe(data=>{
           if(this.processInstitueForm.valid){
             this.processInstitue = Object.assign({}, this.processInstitueForm.value);
-            this.processInstitue.processId=data['id'];
+            this.processInstitue.processId=JSON.parse(data).data.id;
             if(this.processInstitue.id==0){
               this.processInstitueService.add(this.processInstitue).subscribe(data=>{
                 this.dialogRef.close(1);
+                this.sweetAlert.success(data);
                 }
                 );
             }else{
               this.processInstitueService.update(this.processInstitue).subscribe(data=>{
                 this.dialogRef.close(1);
+                this.sweetAlert.info(data);
                 }
                 );
             }

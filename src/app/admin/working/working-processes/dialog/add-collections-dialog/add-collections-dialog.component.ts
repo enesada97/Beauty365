@@ -19,6 +19,7 @@ import { AddWorkingsDialogComponent } from "../add-workings-dialog/add-workings-
 import Swal from "sweetalert2";
 import { FormControl, Validators } from "@angular/forms";
 import { MatExpansionPanel } from "@angular/material/expansion";
+import { AuthService } from "src/app/core/service/system-service/auth.service";
 
 @Component({
   selector: "app-add-collections-dialog",
@@ -68,16 +69,18 @@ export class AddCollectionsDialogComponent implements OnInit {
   discountFinder: number = undefined;
   discountValue:number=undefined;
   discountValueArray:number[]=[];
+  userName:string;
   constructor(
     public dialogRef: MatDialogRef<AddWorkingsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public workingService: WorkingService,
-    public collectionService: CollectionService
+    public collectionService: CollectionService,
+    private authService:AuthService,
   ) {
     this.workingForCollectionDtos = data.workingForCollectionDtos;
     this.protocolId = data.protocolId;
-    this.dialogTitle = "Tahsilat Ekle";
     this.selectedPayType = "1";
+    this.getUserName();
   }
   dataSource: MatTableDataSource<WorkingDto>;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -91,6 +94,9 @@ export class AddCollectionsDialogComponent implements OnInit {
     this.getCollections();
     this.totalPrice = this.selectedPay;
   }
+  getUserName(){
+    this.userName=this.authService.getUserName();
+  }
   getCollections() {
     this.dataSource = new MatTableDataSource<WorkingDto>(
       this.workingForCollectionDtos
@@ -100,11 +106,14 @@ export class AddCollectionsDialogComponent implements OnInit {
     this.dataSource.data.forEach((row) => this.selection.select(row));
     for (let i = 0; i < this.selection.selected.length; i++) {
       if (this.selection.selected[i].arrearsValue != 0) {
-        this.selectedId[i] = this.selection.selected[i].id;
+        this.selectedId[i] = this.selection.selected[i].workingNo;
         this.selectedPays[i] = this.selection.selected[i].arrearsValue;
         this.selectedPay = this.selectedPay + this.selectedPays[i];
         this.addPay = this.selectedPay;
         this.arrears = this.selectedPay;
+        console.log(this.selectedId);
+        console.log(this.selectedPays);
+        console.log(this.selectedPay);
       }
     }
     this.formControl = new FormControl("", [Validators.max(this.arrears),Validators.min(1)]);
@@ -144,7 +153,7 @@ export class AddCollectionsDialogComponent implements OnInit {
       });
       console.log(this.selection.selected);
       this.selection.selected.sort(function (a, b) {
-        return a.id - b.id;
+        return a.workingNo - b.workingNo;
       });
       console.log(this.selection.selected);
       for (let i = 0; i < this.selection.selected.length; i++) {
@@ -153,7 +162,7 @@ export class AddCollectionsDialogComponent implements OnInit {
           (this.selectedPays[i] != 0 || this.selectedPays != undefined)
         ) {
           this.selectedPays[i] = this.selection.selected[i].arrearsValue;
-          this.selectedId[i] = this.selection.selected[i].id;
+          this.selectedId[i] = this.selection.selected[i].workingNo;
           this.selectedPay = this.selectedPay + this.selectedPays[i];
           this.arrears = this.selectedPay;
         }
@@ -166,7 +175,7 @@ export class AddCollectionsDialogComponent implements OnInit {
     console.log(event);
     this.id = row.id; //5,2
     let arrearsValue = row.arrearsValue;
-    let firstDataId = this.dataSource.data[0].id;
+    let firstDataId = this.dataSource.data[0].workingNo;
     let findIndex = this.selectedId.findIndex((m) => m == this.id);
     if (!event.checked) {
       console.log(row);
@@ -277,7 +286,7 @@ export class AddCollectionsDialogComponent implements OnInit {
   }
   addPayment() {
     this.collection = new Collection({});
-    this.collection.addedBy = "";
+    this.collection.addedBy = this.userName;
     this.collection.addedDate = new Date();
     this.collection.discount = this.clickDiscount;
     if (this.collection.discount == true) {
@@ -340,7 +349,7 @@ export class AddCollectionsDialogComponent implements OnInit {
           this.workingForCollection.quantity = working.quantity;
           this.workingForCollection.receiptNo = working.receiptNo;
           this.workingForCollection.taxRatio = working.taxRatio;
-          this.workingForCollection.user = working.user;
+          this.workingForCollection.user = this.userName;
           this.workingForCollection.protocolId = working.protocolId;
           this.workingForCollection.workingDateTime = new Date(
             working.workingDateTime

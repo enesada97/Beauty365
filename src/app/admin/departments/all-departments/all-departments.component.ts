@@ -24,7 +24,6 @@ export class AllDepartmentsComponent implements OnInit {
   dataSource: MatTableDataSource<Department>;
   department: Department | null;
   constructor(
-    public httpClient: HttpClient,
     public dialog: MatDialog,
     public departmentService: DepartmentService,
     private authService:AuthService,

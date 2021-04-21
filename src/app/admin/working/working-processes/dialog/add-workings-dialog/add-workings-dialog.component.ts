@@ -13,9 +13,13 @@ import { MatTableDataSource } from "@angular/material/table";
 import { ProcessDtoForWorking } from "src/app/core/models/process-dto-for-working.model";
 import { Process } from "src/app/core/models/process.model";
 import { ProcessGroup } from "src/app/core/models/processgroup.model";
+import { Protocol } from "src/app/core/models/protocol.model";
 import { Working } from "src/app/core/models/working.model";
 import { ProcessService } from "src/app/core/service/process.service";
 import { ProcessgroupService } from "src/app/core/service/processgroup.service";
+import { ProtocolService } from "src/app/core/service/protocol.service";
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
+import { AuthService } from "src/app/core/service/system-service/auth.service";
 import { WorkingService } from "src/app/core/service/working.service";
 
 @Component({
@@ -24,7 +28,7 @@ import { WorkingService } from "src/app/core/service/working.service";
   styleUrls: ["./add-workings-dialog.component.sass"],
 })
 export class AddWorkingsDialogComponent implements OnInit {
-  filterText:string = '';
+  filterText: string = "";
   selectedOptions = [];
   selectedOption = "all";
   displayedProcessColumns = [
@@ -54,17 +58,24 @@ export class AddWorkingsDialogComponent implements OnInit {
   dialogTitle: string;
   id: any;
   categories: ProcessGroup[];
+  userName: string;
+  protocol: Protocol;
   constructor(
     public dialogRef: MatDialogRef<AddWorkingsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public workingService: WorkingService,
     private processService: ProcessService,
-    private processGroupService: ProcessgroupService
+    private processGroupService: ProcessgroupService,
+    private authService: AuthService,
+    private protocolService: ProtocolService,
+    private sweetAlert: SweetalertService
   ) {
     this.processDtoForWorking = data.processDtoForWorking;
     this.protocolId = data.protocolId;
     console.log(this.processDtoForWorking);
     this.dialogTitle = "Yeni Hizmet Ekle";
+    this.userName = this.authService.getUserName();
+    this.getProtocol();
   }
   dataSource: MatTableDataSource<ProcessDtoForWorking>;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -81,6 +92,11 @@ export class AddWorkingsDialogComponent implements OnInit {
       console.log(JSON.stringify(data));
     });
     this.getProcesses(this.selectedOption);
+  }
+  getProtocol() {
+    this.protocolService.getById(this.protocolId).subscribe((data) => {
+      this.protocol = data;
+    });
   }
   getProcesses(selectedOption: string) {
     if (selectedOption == "all") {
@@ -107,7 +123,7 @@ export class AddWorkingsDialogComponent implements OnInit {
     setTimeout(() => (this.dataSource.paginator = this.paginatorAdd));
   }
   addNewProcess(i, row) {
-    this.id = row.id;
+    this.id = row.processId;
     console.log(row);
     this.processService.getById(this.id).subscribe((data) => {
       this.process = data;
@@ -119,28 +135,34 @@ export class AddWorkingsDialogComponent implements OnInit {
       this.working.price = row.price;
       this.working.paidValue = 0;
       this.working.arrearsValue = row.price;
-      if(this.working.id==0){
-        this.workingService.add(this.working).subscribe(data=>{
-          this.processesForAdd.splice(i, 1);
-        this.getProcessesAdd();
-          }
-          );
-      }else{
-        this.workingService.update(this.working).subscribe(data=>{
-          this.processesForAdd.splice(i, 1);
-        this.getProcessesAdd();
-          }
-          );
+      this.working.doctorId = this.protocol.doctorId;
+      this.working.user = this.userName;
+      if (this.working.doctorId && this.working.user) {
+        if (this.working.id == 0) {
+          this.workingService.add(this.working).subscribe((data) => {
+            this.processesForAdd.splice(i, 1);
+            this.getProcessesAdd();
+          });
+        } else {
+          this.workingService.update(this.working).subscribe((data) => {
+            this.processesForAdd.splice(i, 1);
+            this.getProcessesAdd();
+          });
+        }
       }
     });
   }
   scroll(el: HTMLElement) {
-    el.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+    el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
   }
   addSelectedRowProcesses() {
+    const alertCounter = this.dataSourceForProcess.data[
+      this.dataSourceForProcess.data.length - 1
+    ].processId;
     this.dataSourceForProcess.data.forEach((item) => {
       const index: number = item.processId;
       this.working = new Working({});
+      this.working.user = this.userName;
       this.working.processId = item.processId;
       this.working.protocolId = this.protocolId;
       this.working.workingDateTime = new Date();
@@ -148,15 +170,13 @@ export class AddWorkingsDialogComponent implements OnInit {
       this.working.price = item.price;
       this.working.paidValue = 0;
       this.working.arrearsValue = item.price;
-      if(this.working.id==0){
-        this.workingService.add(this.working).subscribe(data=>{
-          }
-          );
-      }else{
-        this.workingService.update(this.working).subscribe(data=>{
-          }
-          );
-      }
+      this.working.doctorId = this.protocol.doctorId;
+      this.workingService.add(this.working).subscribe((data) => {
+        if (index == alertCounter) {
+          this.dialogRef.close(1);
+          this.sweetAlert.success(data);
+        }
+      });
     });
   }
   addNewProcesses(row) {
@@ -164,13 +184,12 @@ export class AddWorkingsDialogComponent implements OnInit {
     this.getProcessesAdd();
   }
   deleteNewProcess(i: number, row) {
-    const index = i;
     this.id = row.id;
-    this.processesForAdd.splice(i,1);
+    this.processesForAdd.splice(i, 1);
     this.getProcessesAdd();
   }
   deleteAllNewProcess() {
-    this.processesForAdd=[];
+    this.processesForAdd = [];
     this.getProcessesAdd();
   }
   addSelectedRowsForProcess() {

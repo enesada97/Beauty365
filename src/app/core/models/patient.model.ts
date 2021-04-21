@@ -25,6 +25,7 @@ export class Patient {
   isTrobule: boolean;
   photoUrl?: string;
   status:boolean;
+  isForeign:boolean;
   constructor(patient) {
     {
       this.id = patient.id || 0;
@@ -53,6 +54,7 @@ export class Patient {
       this.isTrobule = patient.isTrobule || false;
       this.photoUrl = patient.avatar || 'assets/images/user/user1.jpg';
       this.status = patient.status || true;
+      this.isForeign=patient.isForeign || false;
     }
   }
 }

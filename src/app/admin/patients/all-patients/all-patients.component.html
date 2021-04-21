@@ -43,9 +43,9 @@
                           ></label
                         >
                         <input
-                          placeholder="{{'Filter'|translate}}"
+                          placeholder="{{ 'Filter' | translate }}"
                           type="text"
-                          #filter
+                          (keyup)="applyFilter($event.target.value)"
                           class="browser-default search-field"
                           aria-label="Search box"
                         />
@@ -234,7 +234,6 @@
                     <mat-menu #protocolProcesses="matMenu">
                       <button mat-menu-item
                       *ngIf="checkClaim('CreateProtocolCommand')"
-                      (click)="$event.stopPropagation()"
                       (click)="protocolControl(row)">
                         <mat-icon>add</mat-icon>
                         <span>{{'Add'|translate}}</span>

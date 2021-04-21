@@ -14,6 +14,7 @@ import { SharedService } from './shared.service';
 })
 
 export class AuthService {
+  name:string[]=[];
   userName: string;
   isLoggin: boolean;
   decodedToken: any;
@@ -26,27 +27,39 @@ export class AuthService {
     this.setClaims();
   }
 
-  async login(loginUser: LoginUser):Promise<boolean> {
+  login(loginUser: LoginUser) {
 
     let headers = new HttpHeaders();
     headers = headers.append("Content-Type", "application/json")
-    var data= await this.httpClient.post<TokenModel>(environment.apiUrl + "/Auth/login", loginUser, { headers: headers }).toPromise();
+    var request=this.httpClient.post<TokenModel>(environment.apiUrl + "/Auth/login", loginUser, { headers: headers }).toPromise();
+    this.httpClient.post<TokenModel>(environment.apiUrl + "/Auth/login", loginUser, { headers: headers }).subscribe(data => {
 
 
       if (data.success) {
 
         this.storageService.setToken(data.data.token);
         this.claims=data.data.claims;
-        console.log(data.data.claims.length,'claims');
+        localStorage.setItem("claim",data.data.claims.toString());
+        this.name=data.data.claims;
+        console.log(this.name);
+        console.log(this.claims);
+
+
          var decode = this.jwtHelper.decodeToken(this.storageService.getToken());
+
+
         var propUserName = Object.keys(decode).filter(x => x.endsWith("/name"))[0];
         this.userName = decode[propUserName];
         this.sharedService.sendChangeUserNameEvent();
-        return true;
+
+        this.router.navigate(["/admin/dashboard/main"]);
       }
       else {
-        return false;
+        alert(data.message);
       }
+
+    }
+    );
   }
 
   getUserName(): string {
@@ -89,7 +102,11 @@ export class AuthService {
   }
 
   claimGuard(claim: string): boolean {
-    var check =  this.claims.some(function (item) {
+    if(this.claims.length==0){
+      this.claims=localStorage.getItem("claim").split(',');
+      console.log("a");
+    }
+    var check = this.claims.some(function (item) {
       return item == claim;
     })
     return check;

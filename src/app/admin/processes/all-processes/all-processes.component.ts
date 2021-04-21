@@ -25,7 +25,6 @@ export class AllProcessesComponent implements OnInit{
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     dataSource: MatTableDataSource<Process>;
-    id: any;
     constructor(private fb: FormBuilder,private processGroupService:ProcessgroupService,private processService: ProcessService,public dialog: MatDialog) {
        this.processForm = this.fb.group({
         processGroupId:[null]
@@ -33,7 +32,7 @@ export class AllProcessesComponent implements OnInit{
     }
     ngOnInit():void{
       this.processGroupService.getList().subscribe((data)=>{
-        this.processGroups=data
+        this.processGroups=data;
       })
     }
     applyFilter(filterValue: string) {
@@ -49,7 +48,6 @@ export class AllProcessesComponent implements OnInit{
     dialogRef.afterClosed();
   }
   editCall(row) {
-    this.id = row.id;
     const dialogRef = this.dialog.open(SaveProcessDialogComponent, {
       data: {
         process: row,

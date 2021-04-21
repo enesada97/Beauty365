@@ -9,6 +9,7 @@ import { AuthService } from "src/app/core/service/system-service/auth.service";
 import { TranslateService } from "@ngx-translate/core";
 import { LocalStorageService } from "src/app/core/service/system-service/local-storage.service";
 import { LookUpService } from "src/app/core/service/system-service/lookUp.service";
+import { SweetalertService } from "src/app/core/service/sweetalert.service";
 @Component({
   selector: "app-signin",
   templateUrl: "./signin.component.html",
@@ -24,6 +25,8 @@ export class SigninComponent implements OnInit {
     private lookupService:LookUpService,
     private httpClient:HttpClient,
     public translateService:TranslateService,
+    private sweetAlertService:SweetalertService,
+    private router:Router
   ) {}
   ngOnInit() {
     this.username=this.auth.userName;
@@ -38,7 +41,10 @@ export class SigninComponent implements OnInit {
   }
 
   login(){
-    this.auth.login(this.loginUser);
+    let result =this.auth.login(this.loginUser);
+    result.then((value)=>{
+      value?this.router.navigate(["/admin/dashboard/main"]):this.sweetAlertService.warning("Invalid User Informations")
+    })
   }
 
   logOut(){

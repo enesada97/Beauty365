@@ -1,5 +1,5 @@
 export class WorkingDto {
-    id:number;
+    workingNo:number;
     workingDateTime:Date;
     groupName:string;
     processName:string;
@@ -9,5 +9,4 @@ export class WorkingDto {
     arrearsValue:number;
     saleValue:number;
   }
-  
-  
+

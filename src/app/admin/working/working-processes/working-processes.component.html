@@ -335,10 +335,9 @@
                             <mat-icon>edit</mat-icon>
                             <span>{{'Edit'|translate}}</span>
                           </button>
-                          <button *ngIf="row.arrearsValue===0&&checkClaim('DeleteWorkingCommand');else notZero" mat-menu-item matTooltip="{{'CantDeletePaidWorking'|translate}}"  matTooltipClass="tooltip-red"
+                          <button *ngIf="row.arrearsValue===0;else notZero" mat-menu-item matTooltip="{{'CantDeletePaidWorking'|translate}}"  matTooltipClass="tooltip-red"
                           disabled
                           (click)="$event.stopPropagation()"
-                          (click)="deleteItem(row)"
                           >
                           <mat-icon>delete</mat-icon
                           >
@@ -348,7 +347,7 @@
                             <button mat-menu-item
                             *ngIf="checkClaim('DeleteWorkingCommand')"
                           (click)="$event.stopPropagation()"
-                          (click)="deleteItem(i, row)">
+                          (click)="deleteItem(row)">
                           <mat-icon>delete</mat-icon
                         >
                         {{'Delete'|translate}}

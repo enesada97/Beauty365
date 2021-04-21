@@ -48,6 +48,7 @@ import { SaveFieldValueComponent } from './creatable-form/detail-table/dialog/sa
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
+import { ProcessService } from 'src/app/core/service/process.service';
 
 
 @NgModule({
@@ -89,6 +90,7 @@ import { TranslationService } from 'src/app/core/service/system-service/Translat
   ],
   providers:[ProtocolTypeProcessService,ProcessInstitueService,InstitutionService,ProtocoltypeService,DepForDoctorsService,OptionalSettingService,FormTableService,
     FormFieldService,
-    FormFieldSelectionValueService,]
+    FormFieldSelectionValueService,
+    ProcessService]
 })
 export class OptionsModule { }

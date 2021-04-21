@@ -1,9 +1,11 @@
 import { WorkingService } from 'src/app/core/service/working.service';
 import { Working } from 'src/app/core/models/working.model';
 import { Component, Inject} from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DateAdapter } from '@angular/material/core';
+import { WorkingDto } from 'src/app/core/models/workingdto.model';
+import { SweetalertService } from 'src/app/core/service/sweetalert.service';
 
 @Component({
   selector: 'app-edit-dialog',
@@ -12,28 +14,21 @@ import { DateAdapter } from '@angular/material/core';
 })
 export class EditDialogComponent{
   action: string;
-  dialogTitle: string;
   workingForm: FormGroup;
   working: Working;
+  workingDto:WorkingDto;
   constructor(
     public dialogRef: MatDialogRef<EditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public workingService: WorkingService,
     private fb: FormBuilder,
-    private dateAdapter:DateAdapter<any>
+    private dateAdapter:DateAdapter<any>,
+    private sweetAlert:SweetalertService
   ) {
-    console.log(data);
     this.dateAdapter.setLocale('tr');
-      this.dialogTitle = "Hizmet Düzenle";
-      this.working=data.working;
-      console.log(JSON.stringify(this.working));
-
-    this.workingForm = this.createContactForm();
+      this.workingDto=data.workingDto;
+    this.getWorking();
   }
-  formControl = new FormControl("", [
-    Validators.required,
-    // Validators.email,
-  ]);
   createContactForm(): FormGroup {
     return this.fb.group({
       id: [this.working.id],
@@ -59,6 +54,12 @@ export class EditDialogComponent{
   submit() {
     // emppty stuff
   }
+  getWorking(){
+    this.workingService.getById(this.workingDto.workingNo).subscribe(data=>{
+      this.working=data;
+      this.workingForm = this.createContactForm();
+    })
+  }
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -71,10 +72,14 @@ export class EditDialogComponent{
       this.working.arrearsValue=this.working.price-oldPrice+oldArrears;
       if(this.working.id==0){
         this.workingService.add(this.working).subscribe(data=>{
+          this.dialogRef.close(1);
+          this.sweetAlert.success(data);
           }
           );
       }else{
         this.workingService.update(this.working).subscribe(data=>{
+          this.dialogRef.close(1);
+          this.sweetAlert.info(data);
           }
           );
       }

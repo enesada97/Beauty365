@@ -72,7 +72,7 @@ export class InstitueProcessSaveComponent implements OnInit {
       }
     });
   }
-  deleteItem(i: number, row) {
+  deleteItem(row) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: row,
     });

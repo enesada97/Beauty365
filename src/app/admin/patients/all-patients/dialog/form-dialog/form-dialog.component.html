@@ -24,7 +24,34 @@
       [formGroup]="patientForm"
       (ngSubmit)="submit()"
     >
-      <div class="row">
+    <div *ngIf="optionalSetting" class="row">
+      <div *ngIf="optionalSetting.isOpen;else noRequired" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>{{'IdentityNumber'|translate}}</mat-label>
+          <input
+            maxlength="11"
+            minlength="11"
+            matInput
+            formControlName="identityNumber"
+            required
+          />
+          <mat-icon matSuffix>person</mat-icon>
+          <mat-error
+            *ngIf="patientForm.get('identityNumber').hasError('required')"
+          >
+          {{'IdentityNumber'|translate}} {{'Required'|translate}}
+          </mat-error>
+          <mat-error
+            *ngIf="
+            patientForm.get('identityNumber').hasError('minlength')
+            "
+          >
+          {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentLength'|translate}}:
+            {{ patientForm.get("identityNumber").value.length }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <ng-template #noRequired>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>{{'IdentityNumber'|translate}}</mat-label>
@@ -33,46 +60,54 @@
               minlength="11"
               matInput
               formControlName="identityNumber"
-              required
             />
             <mat-icon matSuffix>person</mat-icon>
             <mat-error
-              *ngIf="patientForm.get('identityNumber').hasError('required')"
-            >
-            {{'IdentityNumber'|translate}} {{'Required'|translate}}
-            </mat-error>
-            <mat-error
-                      *ngIf="
-                        patientForm.get('identityNumber').hasError('minlength')
-                      "
-                    >
-                    {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentValue'|translate}}
-                      {{ patientForm.get("identityNumber").value.length }}
-                    </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>{{'PhoneNumber'|translate}}</mat-label>
-            <input
-              matInput
-              mask="(000) 000-0000"
-              [showMaskTyped]="true"
-              formControlName="phoneNumber"
-              required
-            />
-            <mat-icon matSuffix>phone</mat-icon>
-            <mat-error
               *ngIf="
-                patientForm.get('phoneNumber').hasError('required') &&
-                patientForm.get('phoneNumber').touched
+              patientForm.get('identityNumber').hasError('minlength')
               "
             >
-            {{'PhoneNumber'|translate}} {{'Required'|translate}}
+            {{'IfEnter'|translate}} {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentLength'|translate}}:
+              {{ patientForm.get("identityNumber").value.length }}
             </mat-error>
           </mat-form-field>
         </div>
+      </ng-template>
+      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>{{'PhoneNumber'|translate}}</mat-label>
+          <input
+            matInput
+            mask="(000) 000-0000"
+            [showMaskTyped]="true"
+            formControlName="phoneNumber"
+            required
+          />
+          <mat-icon matSuffix>phone</mat-icon>
+          <mat-error
+            *ngIf="
+            patientForm.get('phoneNumber').hasError('required') &&
+            patientForm.get('phoneNumber').touched
+            "
+          >
+          {{'PhoneNumber'|translate}} {{'Required'|translate}}
+          </mat-error>
+        </mat-form-field>
       </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <div class="m-b-20">
+          <mat-label class="mr-3">{{'IsForeign'|translate}}:</mat-label>
+          <mat-radio-group
+            formControlName="isForeign"
+          >
+            <mat-radio-button [value]="true">{{'Yes'|translate}}</mat-radio-button>
+            <mat-radio-button [value]="false">{{'No'|translate}}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">

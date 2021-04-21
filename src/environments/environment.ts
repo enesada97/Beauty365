@@ -5,8 +5,10 @@
 export const environment = {
   production: false,
   //  apiUrl: "https://klinik.hatemhastanesi.com.tr/api",
-  apiUrl: "https://localhost:44375/WebAPI/api",
-  baseUrl: 'http://localhost:44314/'
+  // apiUrl: "https://localhost:44375/WebAPI/api",
+  // baseUrl: 'http://localhost:44314/'
+  apiUrl: "https://localhost:44371/WebAPI/api",
+  baseUrl: 'http://localhost:44371/'
 };
 
 /*

@@ -190,8 +190,9 @@
                         mat-icon-button
                         color="accent"
                         class="btn-tbl-delete"
+                        *ngIf="checkClaim('DeleteProcessCommand')"
                         (click)="$event.stopPropagation()"
-                        (click)="deleteItem(i, row)"
+                        (click)="deleteItem(row)"
                       >
                         <mat-icon aria-label="Delete" class="col-white"
                           >delete</mat-icon

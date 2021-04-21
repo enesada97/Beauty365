@@ -261,34 +261,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div *ngIf="optionalSettingForIdentityRequired" class="row">
-        <div *ngIf="optionalSettingForIdentityRequired.isOpen;else noRequired" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>{{'IdentityNumber'|translate}}</mat-label>
-            <input
-              maxlength="11"
-              minlength="11"
-              matInput
-              formControlName="identityNumber"
-              required
-            />
-            <mat-icon matSuffix>person</mat-icon>
-            <mat-error
-              *ngIf="appointmentForm.get('identityNumber').hasError('required')"
-            >
-            {{'IdentityNumber'|translate}} {{'Required'|translate}}
-            </mat-error>
-            <mat-error
-              *ngIf="
-                appointmentForm.get('identityNumber').hasError('minlength')
-              "
-            >
-            {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentLength'|translate}}:
-              {{ appointmentForm.get("identityNumber").value.length }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <ng-template #noRequired>
+      <div class="row">
           <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
             <mat-form-field class="example-full-width" appearance="outline">
               <mat-label>{{'IdentityNumber'|translate}}</mat-label>
@@ -309,7 +282,6 @@
               </mat-error>
             </mat-form-field>
           </div>
-        </ng-template>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>{{'PhoneNumber'|translate}}</mat-label>

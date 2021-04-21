@@ -1,27 +1,27 @@
 <div class="container">
-    <h3 mat-dialog-title>Emin misiniz?</h3>
+    <h3 mat-dialog-title>{{'DeleteConfirm'|translate}}</h3>
     <div mat-dialog-content>
       <ul class="clearfix">
         <li>
-          <p><span class="font-weight-bold">İşlem Tarihi: </span>{{ data.row.workingDateTime | date: "short"}}</p>
+          <p><span class="font-weight-bold">{{'WorkingDateTime'|translate}}: </span>{{ data.row.workingDateTime | date: "short"}}</p>
         </li>
         <li>
-            <p><span class="font-weight-bold">İşlem Grubu: </span>{{ data.row.groupName }} {{ data.patientSurname }}</p>
+            <p><span class="font-weight-bold">{{'GroupName'|translate}}: </span>{{ data.row.groupName }}</p>
         </li>
         <li>
-          <p><span class="font-weight-bold">İşlem Adı: </span>{{ data.row.processName }}</p>
+          <p><span class="font-weight-bold">{{'ProcessName'|translate}}: </span>{{ data.row.processName }}</p>
         </li>
         <li>
-          <p><span class="font-weight-bold">Adet: </span>{{ data.row.quantity }}</p>
+          <p><span class="font-weight-bold">{{'Quantity'|translate}}: </span>{{ data.row.quantity }}</p>
         </li>
         <li>
-          <p><span class="font-weight-bold">Ücret: </span>{{ data.row.price}}</p>
+          <p><span class="font-weight-bold">{{'Price'|translate}}: </span>{{ data.row.price}}</p>
         </li>
         <li>
-          <p><span class="font-weight-bold">Ödenen: </span>{{ data.row.paidValue}}</p>
+          <p><span class="font-weight-bold">{{'Paid'|translate}}: </span>{{ data.row.paidValue}}</p>
         </li>
         <li>
-            <p><span class="font-weight-bold">Kalan: </span>{{ data.row.arrearsValue}}</p>
+            <p><span class="font-weight-bold">{{'Balance'|translate}}: </span>{{ data.row.arrearsValue}}</p>
           </li>
       </ul>
     </div>
@@ -32,8 +32,8 @@
         [mat-dialog-close]="1"
         (click)="confirmDelete()"
       >
-        Sil
+      {{'Delete'|translate}}
       </button>
-      <button mat-flat-button (click)="onNoClick()" tabindex="-1">İptal</button>
+      <button mat-flat-button (click)="onNoClick()" tabindex="-1">{{'Cancel'|translate}}</button>
     </div>
   </div>

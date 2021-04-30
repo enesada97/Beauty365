@@ -77,7 +77,7 @@ export class FormDialogComponent {
         this.patientService.add(this.patient).subscribe(data=>{
           // this.dialogRef.close(data);
           this.dialogRef.close(JSON.parse(data).data);
-          this.sweetAlert.success(data);
+          this.sweetAlert.success("Added");
           }
           );
       }else{

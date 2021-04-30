@@ -1,0 +1,116 @@
+<section *ngIf="invoiceDto" class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{'Invoice'|translate }}:#{{invoiceDto.invoiceId}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i>{{'HomePage' |translate}}</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/admin/working/working-processes/{{invoiceDto.protocolId}}" onClick="return false;">{{'Protocol' |translate}}:#{{invoiceDto.protocolId}}</a>
+            </li>
+            <li class="breadcrumb-item active">{{'Invoice' |translate}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="white-box" id="printer">
+                  <h3>
+                    <b>{{'Invoice' |translate}}</b>
+                    <span class="pull-right">#{{invoiceDto.paymentBillNo}}</span>
+                  </h3>
+                  <hr>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="pull-left">
+                        <address>
+                          <p class="font-bold">{{'BillFrom'|translate}}:</p>
+                          <p class="text-muted">
+                            Aditya University,
+                            <br> Opp. Town Hall,
+                            <br> Sardar Patel Road,
+                            <br> Ahmedabad - 380015
+                          </p>
+                        </address>
+                      </div>
+                      <div class="pull-right text-right">
+                        <address>
+                          <p class="addr-font-h3 font-bold">{{'BillTo'|translate}}:</p>
+                          <p class="font-bold addr-font-h4">{{invoiceDto.patientName}} {{invoiceDto.patientSurName}}</p>
+                          <p class="text-muted m-l-30">
+                            {{invoiceDto.country}},{{invoiceDto.region}}
+                            <br> {{invoiceDto.city}},
+                            <br> {{invoiceDto.address}}
+                            <br> {{invoiceDto.email}}
+                          </p>
+                          <p class="m-t-30">
+                            <b>{{'InvoiceDate'|translate}}: </b>
+                            <i class="fa fa-calendar"></i> {{invoiceDto.addedDate | date}}
+                          </p>
+                          <p>
+                            <b>{{'Status'|translate}}: </b>
+                            <span class="label label-success">{{'Success'|translate}}</span>
+                          </p>
+                        </address>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="table-responsive m-t-40">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th class="text-center">#</th>
+                              <th class="text-center">{{'ProcessName'|translate}}</th>
+                              <th class="text-center">{{'Quantity'|translate}}</th>
+                              <th class="text-center">{{'UnitCost'|translate}}</th>
+                              <th class="text-right">{{'TotalPrice'|translate}}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of invoiceDetailDtos">
+                              <td class="text-center">{{item.invoiceId}}</td>
+                              <td class="text-center">{{item.processName}}</td>
+                              <td class="text-center">{{item.quantity}}</td>
+                              <td class="text-center">{{item.price}}</td>
+                              <td class="text-right">{{item.totalPrice}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="pull-right m-t-30 text-right">
+                        <p>{{'DiscountValue'|translate}} : {{invoiceDto.discountValue|number:'1.0-2'}}{{'Currency'|translate}} </p>
+                        <p *ngIf="invoiceDto.taxValue">{{'Tax'|translate}} : {{invoiceDto.taxValue|number:'1.0-2'}}{{'Currency'|translate}} </p>
+                        <p *ngIf="!invoiceDto.taxValue">{{'Tax'|translate}} : 0{{'Currency'|translate}} </p>
+                        <hr>
+                        <h3>
+                          <b>{{'TotalAmount'|translate}} :</b> {{invoiceDto.totalPrice |number:'1.0-2'}}{{'Currency'|translate}}</h3>
+                      </div>
+                      <div class="clearfix"></div>
+                      <hr>
+                      <div class="text-right">
+                        <button (click)="print('printer')" mat-raised-button color="primary"><i class="fas fa-print mr-2"></i>{{'Print'|translate}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

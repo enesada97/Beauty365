@@ -5,14 +5,14 @@
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <ul class="breadcrumb breadcrumb-style ">
               <li class="breadcrumb-item">
-                <h4 class="page-title">Doktor Profili</h4>
+                <h4 class="page-title">{{'DoctorDetail'|translate}}</h4>
               </li>
               <li class="breadcrumb-item bcrumb-1">
                 <a routerLink="/admin/dashboard/main">
-                  <i class="fas fa-home"></i> Anasayfa</a>
+                  <i class="fas fa-home"></i> {{'Homepage'|translate}}</a>
               </li>
               <li class="breadcrumb-item bcrumb-2">
-                <a href="#" onClick="return false;">Doktorlar</a>
+                <a href="/admin/doctors/all-doctors" onClick="return false;">{{'Doctors'|translate}}</a>
               </li>
               <li class="breadcrumb-item active">{{ doctor.name| uppercase }} {{ doctor.surName| uppercase }}</li>
             </ul>
@@ -26,7 +26,7 @@
               <div class="contact-grid">
                 <div class="profile-header bg-green">
                   <div class="user-name">{{ doctor.name| uppercase }} {{ doctor.surName| uppercase }}</div>
-                  <div class="name-center">Klinikte Doktor</div>
+                  <div class="name-center">{{'Doctor'|translate}}</div>
                 </div>
                 <img class="user-img" src="assets/images/user/usrbig4.jpg" alt="">
                 <p>
@@ -39,17 +39,17 @@
                     <i class="material-icons">phone</i>{{doctor.phone}}</span>
                 </div>
                 <div class="profile-userbuttons">
-                  <button routerLink="edit-doctor/{{ doctor.id }}" mat-flat-button color="primary">Doktor Bilgilerini Düzenle</button>
+                  <button routerLink="edit-doctor/{{ doctor.id }}" mat-flat-button color="primary">{{'EditDoctorInformations'|translate}}</button>
                 </div>
               </div>
             </div>
           </div>
           <div class="card">
             <div class="header">
-              <h2>Doktor İletişim Bilgileri</h2>
+              <h2>{{'ContactInformations'|translate}}</h2>
             </div>
             <div class="tab-pane body active" id="about">
-              <small class="text-muted">Email Adres: </small>
+              <small class="text-muted">{{'Email'|translate}}: </small>
               <p>{{doctor.eMail}}</p>
               <hr>
             </div>
@@ -62,28 +62,28 @@
                 <div class="col-lg-12 col-md-12 col-sm-12">
                   <div class="card project_widget">
                     <div class="header">
-                      <h5>Doktor Hakkında</h5>
+                      <h5>{{'AboutDoctor'|translate}}</h5>
                     </div>
                     <div class="body">
                       <div class="row">
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Bölüm</strong>
+                          <strong>{{'Department'|translate}}</strong>
                           <br>
-                          
+
                           <p class="text-muted">{{department.departmentName}}</p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Ünvan</strong>
+                          <strong>{{'Speciality'|translate}}</strong>
                           <br>
                           <p class="text-muted">{{doctor.speciality}}</p>
                         </div>
                         <div class="col-md-3 col-6">
-                          <strong>T.C Kimlik</strong>
+                          <strong>{{'IdentityNumber'|translate}}</strong>
                           <br>
                           <p class="text-muted">{{doctor.identityNumber}}</p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>Lisans numarası</strong>
+                          <strong>{{'LicenceNumber'|translate}}</strong>
                           <br>
                           <p class="text-muted">{{doctor.licenceNumber}}</p>
                         </div>
@@ -100,4 +100,3 @@
       </div>
     </div>
   </section>
-  

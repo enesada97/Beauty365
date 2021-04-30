@@ -42,10 +42,13 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
 import { ProtocolService } from 'src/app/core/service/protocol.service';
+import { AddInvoicesDialogComponent } from './working-processes/dialog/add-invoices-dialog/add-invoices-dialog.component';
+import { InvoiceService } from 'src/app/core/service/invoice.service';
+import { InvoiceDetailService } from 'src/app/core/service/invoice-detail.service';
 
 
 @NgModule({
-  declarations: [WorkingProcessesComponent, DeleteComponent, EditDialogComponent, AddWorkingsDialogComponent, AddCollectionsDialogComponent,FilterPipe],
+  declarations: [WorkingProcessesComponent, DeleteComponent, EditDialogComponent, AddWorkingsDialogComponent, AddCollectionsDialogComponent,FilterPipe, AddInvoicesDialogComponent],
   imports: [
     CommonModule,
     WorkingRoutingModule,
@@ -86,6 +89,6 @@ import { ProtocolService } from 'src/app/core/service/protocol.service';
       }
   })
   ],
-  providers: [WorkingService,ProcessService,ProcessgroupService,CollectionService,ProtocolService],
+  providers: [WorkingService,ProcessService,ProcessgroupService,CollectionService,ProtocolService,InvoiceService,InvoiceDetailService],
 })
 export class WorkingModule { }

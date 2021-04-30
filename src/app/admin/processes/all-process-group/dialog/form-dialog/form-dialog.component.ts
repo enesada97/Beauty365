@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProcessGroup } from 'src/app/core/models/processgroup.model';
 import { ProcessgroupService } from 'src/app/core/service/processgroup.service';
+import { SweetalertService } from 'src/app/core/service/sweetalert.service';
 
 @Component({
   selector: 'app-form-dialog',
@@ -17,7 +18,8 @@ export class FormDialogComponent{
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public processGroupService: ProcessgroupService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private sweetAlert:SweetalertService
   ) {
     // Set the defaults
     this.action = data.action;
@@ -28,10 +30,6 @@ export class FormDialogComponent{
     }
     this.processGroupForm = this.createContactForm();
   }
-  formControl = new FormControl("", [
-    Validators.required,
-    // Validators.email,
-  ]);
   createContactForm(): FormGroup {
     return this.fb.group({
       id: [this.processGroup.id],
@@ -51,11 +49,13 @@ export class FormDialogComponent{
       if(this.processGroup.id==0){
         this.processGroupService.add(this.processGroup).subscribe(data=>{
           this.dialogRef.close(1);
+          this.sweetAlert.success(data);
           }
           );
       }else{
         this.processGroupService.update(this.processGroup).subscribe(data=>{
           this.dialogRef.close(1);
+          this.sweetAlert.info(data);
           }
           );
       }

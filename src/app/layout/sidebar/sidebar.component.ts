@@ -12,6 +12,8 @@ import {
 import { ROUTES } from './sidebar-items';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/core/service/system-service/auth.service';
+import { FirmService } from 'src/app/core/service/firm.service';
+import { Firm } from 'src/app/core/models/firm.model';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -32,13 +34,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
   headerHeight = 60;
   currentRoute: string;
   routerObj = null;
+  firm:Firm;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     public elementRef: ElementRef,
     private router: Router,
     public translateService:TranslateService,
-    private authService:AuthService
+    private authService:AuthService,
+    private firmService:FirmService
   ) {
     const body = this.elementRef.nativeElement.closest('body');
     this.routerObj = this.router.events.subscribe((event) => {
@@ -107,8 +111,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit() {
-      this.userFullName ="Sarah";
-      this.userImg =  "assets/images/user/admin.jpg";
+    this.getFirm();
 
       this.sidebarItems = ROUTES
 
@@ -117,6 +120,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.bodyTag = this.document.body;
     var lang=localStorage.getItem('lang') || 'tr-TR'
     this.translateService.use(lang);
+  }
+  getFirm(){
+    this.firmService.getFirm(1).subscribe(data=>{
+      if (data != null) {
+      this.firm=data.body;
+      this.userFullName=this.firm.name;
+      this.userImg="https://localhost:44371/WebAPI/Images/Logos/"+this.firm.logoUrl;
+      }else{
+        this.userImg="assets/images/user/admin.jpg";
+        this.userFullName="System Admin";
+      }
+    })
   }
   ngOnDestroy() {
     this.routerObj.unsubscribe();

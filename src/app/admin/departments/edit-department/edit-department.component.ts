@@ -32,9 +32,7 @@ export class EditDepartmentComponent{
   }
   public onSubmit(): void {
     if (this.departmentForm.valid) {
-      console.log(this.departmentForm.value);
       this.department = Object.assign({}, this.departmentForm.value);
-      console.log(this.department);
       // this.patient.userId=this.authService.getCurrentUserId();
       this.departmentService.update(this.department).subscribe(data=>{
         this.departmentService.isTblLoading=false;

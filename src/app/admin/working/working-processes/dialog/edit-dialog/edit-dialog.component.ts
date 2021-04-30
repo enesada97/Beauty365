@@ -43,7 +43,7 @@ export class EditDialogComponent{
       collectionId :[this.working.collectionId],
       receiptNo :[this.working.receiptNo],
       taxRatio :[this.working.taxRatio],
-      priceIncludeTax :[this.working.priceIncludeTax],
+      nonTaxablePrice :[this.working.nonTaxablePrice],
       user :[this.working.user],
       quantity :[this.working.quantity],
       saleValue :[this.working.saleValue],
@@ -64,7 +64,6 @@ export class EditDialogComponent{
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    console.log(this.working);
     if (this.workingForm.valid) {
       let oldPrice=this.working.price;
       let oldArrears=this.working.arrearsValue;

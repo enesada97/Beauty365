@@ -36,6 +36,7 @@ export class AddWorkingsDialogComponent implements OnInit {
     "groupName",
     "processName",
     "price",
+    "taxRatio",
     "isLab",
     "isRad",
     "actions",
@@ -44,6 +45,7 @@ export class AddWorkingsDialogComponent implements OnInit {
     "groupName",
     "processName",
     "price",
+    "taxRatio",
     "isLab",
     "isRad",
     "actions",
@@ -72,8 +74,6 @@ export class AddWorkingsDialogComponent implements OnInit {
   ) {
     this.processDtoForWorking = data.processDtoForWorking;
     this.protocolId = data.protocolId;
-    console.log(this.processDtoForWorking);
-    this.dialogTitle = "Yeni Hizmet Ekle";
     this.userName = this.authService.getUserName();
     this.getProtocol();
   }
@@ -88,10 +88,11 @@ export class AddWorkingsDialogComponent implements OnInit {
   ngOnInit(): void {
     this.processGroupService.getList().subscribe((data) => {
       this.categories = data;
-      console.log(data);
-      console.log(JSON.stringify(data));
     });
     this.getProcesses(this.selectedOption);
+  }
+  checkClaim(claim: string): boolean {
+    return this.authService.claimGuard(claim);
   }
   getProtocol() {
     this.protocolService.getById(this.protocolId).subscribe((data) => {
@@ -124,7 +125,6 @@ export class AddWorkingsDialogComponent implements OnInit {
   }
   addNewProcess(i, row) {
     this.id = row.processId;
-    console.log(row);
     this.processService.getById(this.id).subscribe((data) => {
       this.process = data;
       this.working = new Working({});
@@ -132,52 +132,57 @@ export class AddWorkingsDialogComponent implements OnInit {
       this.working.protocolId = this.protocolId;
       this.working.workingDateTime = new Date();
       this.working.quantity = 1;
-      this.working.price = row.price;
+      data.taxRatio>0?this.working.price=row.price+((row.price/100)*data.taxRatio):this.working.price=row.price;
+      this.working.taxRatio=data.taxRatio;
+      this.working.nonTaxablePrice=row.price;
       this.working.paidValue = 0;
-      this.working.arrearsValue = row.price;
+      this.working.arrearsValue = this.working.price;
       this.working.doctorId = this.protocol.doctorId;
-      this.working.user = this.userName;
-      if (this.working.doctorId && this.working.user) {
-        if (this.working.id == 0) {
+      // this.working.user = this.userName;
+      this.working.user = '';
           this.workingService.add(this.working).subscribe((data) => {
             this.processesForAdd.splice(i, 1);
             this.getProcessesAdd();
+            this.sweetAlert.success(data);
           });
-        } else {
-          this.workingService.update(this.working).subscribe((data) => {
-            this.processesForAdd.splice(i, 1);
-            this.getProcessesAdd();
-          });
-        }
-      }
     });
   }
   scroll(el: HTMLElement) {
-    el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    }, 500);
   }
   addSelectedRowProcesses() {
-    const alertCounter = this.dataSourceForProcess.data[
+    this.dataSourceForProcess.data.sort((a, b) => a.processId - b.processId);
+    console.log(this.dataSourceForProcess.data);
+    let alertCounter = this.dataSourceForProcess.data[
       this.dataSourceForProcess.data.length - 1
     ].processId;
     this.dataSourceForProcess.data.forEach((item) => {
       const index: number = item.processId;
+      this.processService.getById(index).subscribe((pr) => {
       this.working = new Working({});
-      this.working.user = this.userName;
+      // this.working.user = this.userName;
+      this.working.user = '';
       this.working.processId = item.processId;
       this.working.protocolId = this.protocolId;
       this.working.workingDateTime = new Date();
       this.working.quantity = 1;
-      this.working.price = item.price;
       this.working.paidValue = 0;
-      this.working.arrearsValue = item.price;
       this.working.doctorId = this.protocol.doctorId;
+      pr.taxRatio>0?this.working.price=item.price+((item.price/100)*pr.taxRatio):this.working.price=item.price;
+      this.working.taxRatio=pr.taxRatio;
+      this.working.nonTaxablePrice=item.price;
+      this.working.arrearsValue = this.working.price;
       this.workingService.add(this.working).subscribe((data) => {
         if (index == alertCounter) {
-          this.dialogRef.close(1);
-          this.sweetAlert.success(data);
+          alertCounter=null;
+          setTimeout(()=>this.dialogRef.close(1),500);
+          setTimeout(()=> this.sweetAlert.success(data),500);
         }
       });
-    });
+  });
+});
   }
   addNewProcesses(row) {
     this.processesForAdd.push(row);
@@ -196,7 +201,6 @@ export class AddWorkingsDialogComponent implements OnInit {
     const totalSelect = this.selection.selected.length;
     this.selection.selected.forEach((item) => {
       this.processesForAdd.push(item);
-      console.log(JSON.stringify(this.processesForAdd));
     });
     this.selection = new SelectionModel<ProcessDtoForWorking>(true, []);
     this.getProcessesAdd();
@@ -210,7 +214,6 @@ export class AddWorkingsDialogComponent implements OnInit {
   }
   onNgModelChange($event) {
     this.filterValue = "";
-    console.log($event);
     this.selectedOption = $event;
     this.refresh();
   }

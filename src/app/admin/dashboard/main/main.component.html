@@ -5,31 +5,31 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style ">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Kontrol Paneli</h4>
+              <h4 class="page-title">{{'Dashboard'|translate}}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i>Anasayfa</a>
+                <i class="fas fa-home"></i>{{'Homepage'|translate}}</a>
             </li>
-            <li class="breadcrumb-item active">Kontrol Paneli</li>
+            <li class="breadcrumb-item active">{{'Dashboard'|translate}}</li>
           </ul>
         </div>
       </div>
     </div>
     <!-- Widgets -->
-    <div class="row">
+    <div *ngIf="dailyReportDto" class="row">
       <div class="col-lg-3 col-md-3 col-sm-12">
         <div class="card card-statistic-2">
           <div class="clearfix">
             <div class="card-icon shadow-primary bg-purple">
-              <i class="material-icons align-middle">face</i>
+              <i class="material-icons align-middle">assignment_ind</i>
             </div>
             <div class="float-right m-4">
               <div>
-                <h5 class="pull-right">Randevular</h5>
+                <h5 class="pull-right">{{'DailyAppointments'|translate}}</h5>
               </div>
               <div class="m-r-10 m-l-10">
-                <h3 class="font-weight-bold pull-right mb-0"> 650</h3>
+                <h3 class="font-weight-bold pull-right mb-0"> {{dailyReportDto.totalAppointmentOfDaily}}</h3>
               </div>
             </div>
           </div>
@@ -44,14 +44,14 @@
         <div class="card card-statistic-2">
           <div class="clearfix">
             <div class="card-icon shadow-primary bg-orange">
-              <i class="material-icons align-middle">content_cut</i>
+              <i class="material-icons align-middle">assignment_turned_in</i>
             </div>
             <div class="float-right m-4">
               <div>
-                <h5 class="pull-right">Operations</h5>
+                <h5 class="pull-right">{{'DailyConfirmedAppointments'|translate}}</h5>
               </div>
               <div class="m-r-10 m-l-10">
-                <h3 class="font-weight-bold pull-right mb-0"> 54</h3>
+                <h3 class="font-weight-bold pull-right mb-0"> {{dailyReportDto.totalAppointmentOfDailyCome}}</h3>
               </div>
             </div>
           </div>
@@ -66,14 +66,14 @@
         <div class="card card-statistic-2">
           <div class="clearfix">
             <div class="card-icon shadow-primary bg-green">
-              <i class="material-icons align-middle">person_add</i>
+              <i class="material-icons align-middle">content_cut</i>
             </div>
             <div class="float-right m-4">
               <div>
-                <h5 class="pull-right">New Patients</h5>
+                <h5 class="pull-right">{{'DailyProcesses'|translate}}</h5>
               </div>
               <div class="m-r-10 m-l-10">
-                <h3 class="font-weight-bold pull-right mb-0"> 129</h3>
+                <h3 class="font-weight-bold pull-right mb-0"> {{dailyReportDto.totalProcessOfDaily}}</h3>
               </div>
             </div>
           </div>
@@ -92,10 +92,10 @@
             </div>
             <div class="float-right m-4">
               <div>
-                <h5 class="pull-right">Hospital Earning</h5>
+                <h5 class="pull-right">{{'DailyEarnings'|translate}}</h5>
               </div>
               <div class="m-r-10 m-l-10">
-                <h3 class="font-weight-bold pull-right mb-0"> $20,125</h3>
+                <h3 class="font-weight-bold pull-right mb-0"> {{'Currency'|translate}}{{dailyReportDto.totalCollectionOfDaily}}</h3>
               </div>
             </div>
           </div>
@@ -109,543 +109,277 @@
 
     </div>
     <!-- #END# Widgets -->
-    <div class="row">
-      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-        <div class="card">
-          <div class="header">
-            <h2>
-              Hospital Survay</h2>
-            <button mat-button [matMenuTriggerFor]="menu" class="header-dropdown">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item>Action</button>
-              <button mat-menu-item>Another action</button>
-              <button mat-menu-item>Something else here</button>
-            </mat-menu>
-          </div>
-          <div class="body">
-            <apx-chart [series]="areaChartOptions.series" [chart]="areaChartOptions.chart"
-              [xaxis]="areaChartOptions.xaxis" [yaxis]="areaChartOptions.yaxis" [colors]="areaChartOptions.colors"
-              [stroke]="areaChartOptions.stroke" [legend]="areaChartOptions.legend" [tooltip]="areaChartOptions.tooltip"
-              [dataLabels]="areaChartOptions.dataLabels"></apx-chart>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-        <div class="card">
-          <div class="header">
-            <h2>Common Diseases Report</h2>
-            <button mat-button [matMenuTriggerFor]="menu" class="header-dropdown">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item>Action</button>
-              <button mat-menu-item>Another action</button>
-              <button mat-menu-item>Something else here</button>
-            </mat-menu>
-          </div>
-          <div class="body">
-            <apx-chart [series]="barChartOptions.series" [chart]="barChartOptions.chart"
-              [dataLabels]="barChartOptions.dataLabels" [plotOptions]="barChartOptions.plotOptions"
-              [responsive]="barChartOptions.responsive" [xaxis]="barChartOptions.xaxis"
-              [tooltip]="barChartOptions.tooltip" [legend]="barChartOptions.legend" [fill]="barChartOptions.fill">
-            </apx-chart>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="row clearfix">
-      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
-          <div class="header">
-            <h2>
-              Booked Appointment</h2>
-            <button mat-button [matMenuTriggerFor]="menu" class="header-dropdown">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item>Action</button>
-              <button mat-menu-item>Another action</button>
-              <button mat-menu-item>Something else here</button>
-            </mat-menu>
-          </div>
-          <div class="tableBody">
-            <div class="table-responsive">
-              <table class="table table-hover ">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Patient Name</th>
-                    <th>Assigned Doctor</th>
-                    <th>Date</th>
-                    <th>Diseases</th>
-                    <th>Actions </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user1.jpg" alt="">
-                    </td>
-                    <td>John Doe</td>
-                    <td><a href="mailto:test@gmail.com"> Dr.Jacob Ryan </a></td>
-                    <td>12/05/2016 </td>
-                    <td>
-                      <div class="badge col-red">Fever</div>
-                    </td>
-                    <td>
-                      <button mat-icon-button>
-                        <mat-icon>edit</mat-icon>
+          <div class="body">
+            <div class="table-responsive" *ngIf="dataSource">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-6">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>{{ "AppointmentList" | translate }}</strong>
+                        </h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"
+                          ><i class="material-icons search-icon"
+                            >search</i
+                          ></label
+                        >
+                        <input
+                          placeholder="{{ 'Filter' | translate }}"
+                          type="text"
+                          (keyup)="applyFilter($event.target.value)"
+                          class="browser-default search-field"
+                          aria-label="Search box"
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-6">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="refresh()"
+                          >
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table
+                #table
+                [dataSource]="dataSource"
+                matSort
+                class="mat-cell"
+              >
+                <!-- ID Column -->
+                <ng-container matColumnDef="appointmentNo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                    "Id" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{
+                    row.appointmentNo
+                  }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="patientName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                    "PatientName" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{ row.patientName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="patientSurname">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                    "PatientSurname" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{ row.patientSurname }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="departmentName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                    "DepartmentName" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{ row.departmentName }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="doctorName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                    "DoctorName" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{ row.doctorName }}</mat-cell
+                  >
+                </ng-container>
+
+                <ng-container matColumnDef="doctorSurname">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                    "DoctorSurName" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{ row.doctorSurname }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="time">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                    "Time" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{ row.time }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="typeName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                    "TypeName" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{ row.typeName }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="phoneNumber">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                    "PhoneNumber" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{ row.phoneNumber }}</mat-cell
+                  >
+                </ng-container>
+                <ng-container matColumnDef="patientHasArrive">
+                  <mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    [ngClass]="'tbl-col-width-per-8'"
+                    >{{ "Status" | translate }}
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let row"
+                    [ngClass]="'tbl-col-width-per-8'"
+                  >
+                    <ng-container
+                      *ngIf="row.patientHasArrive == true; else elseTemplate"
+                    >
+                      <button
+                        [disabled]="true"
+                        mat-icon-button
+                        color="accent"
+                        class="btn-tbl-check"
+                      >
+                        <mat-icon aria-label="Ok" class="col-white"
+                          >check</mat-icon
+                        >
                       </button>
-                      <button mat-icon-button>
-                        <mat-icon>delete</mat-icon>
+                    </ng-container>
+                    <ng-template #elseTemplate
+                      ><button
+                        [disabled]="true"
+                        mat-icon-button
+                        color="accent"
+                        class="btn-tbl-close"
+                      >
+                        <mat-icon aria-label="Ok" class="col-white"
+                          >close</mat-icon
+                        >
+                      </button></ng-template
+                    >
+                  </mat-cell>
+                </ng-container>
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0"
+                    >{{'Actions'|translate}}</mat-header-cell
+                  >
+                  <mat-cell *matCellDef="let row; let i = index" class="pr-0">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item
+                      *ngIf="checkClaim('GetPatientDataQuery')"
+                      routerLink="/admin/patients/all-patients/patient-detail/{{row.patientDataId}}"
+                      >
+                        <mat-icon>description</mat-icon>
+                        <span>{{'PatientDetail'|translate}}</span>
                       </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user2.jpg" alt="">
-                    </td>
-                    <td>Sarah Smith</td>
-                    <td><a href="mailto:test@gmail.com"> Dr.Rajesh </a></td>
-                    <td>12/05/2016 </td>
-                    <td>
-                      <div class="badge col-green">Cholera</div>
-                    </td>
-                    <td>
-                      <button mat-icon-button>
-                        <mat-icon>edit</mat-icon>
+                      <button mat-menu-item
+                      routerLink="/admin/working/working-processes/{{row.protocolNo}}"
+                      *ngIf="checkClaim('GetProtocolQuery')&&row.protocolNo">
+                        <mat-icon>exit_to_app</mat-icon>
+                        <span>{{'ProtocolDetail'|translate}}</span>
                       </button>
-                      <button mat-icon-button>
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user3.jpg" alt="">
-                    </td>
-                    <td>Airi Satou</td>
-                    <td><a href="mailto:test@gmail.com"> Dr.Jay Soni </a></td>
-                    <td>12/05/2016 </td>
-                    <td>
-                      <div class="badge col-purple">Jaundice</div>
-                    </td>
-                    <td>
-                      <button mat-icon-button>
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button>
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user4.jpg" alt="">
-                    </td>
-                    <td>Angelica Ramos</td>
-                    <td><a href="mailto:test@gmail.com"> Dr.John Deo </a></td>
-                    <td>12/05/2016 </td>
-                    <td>
-                      <div class="badge col-brown">Typhod</div>
-                    </td>
-                    <td>
-                      <button mat-icon-button>
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button>
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user5.jpg" alt="">
-                    </td>
-                    <td>Ashton Cox</td>
-                    <td><a href="mailto:test@gmail.com"> Dr.Megha Trivedi </a></td>
-                    <td>12/05/2016 </td>
-                    <td>
-                      <div class="badge col-orange">Maleria</div>
-                    </td>
-                    <td>
-                      <button mat-icon-button>
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button>
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user8.jpg" alt="">
-                    </td>
-                    <td>Cara Stevens</td>
-                    <td><a href="mailto:test@gmail.com"> Dr.Sarah Smith </a></td>
-                    <td>12/05/2016 </td>
-                    <td>
-                      <div class="badge col-cyan">Infection</div>
-                    </td>
-                    <td>
-                      <button mat-icon-button>
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button>
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-        <div class="card">
-          <div class="header">
-            <h2>
-              Doctors List</h2>
-            <button mat-button [matMenuTriggerFor]="menu" class="header-dropdown">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item>Action</button>
-              <button mat-menu-item>Another action</button>
-              <button mat-menu-item>Something else here</button>
-            </mat-menu>
-          </div>
-          <div class="tableBody">
-            <div class="table-responsive">
-              <table class="table table-hover ">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Doctor Name</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user5.jpg" alt="">
-                    </td>
-                    <td>
-                      <div class="media-title"><a href="mailto:test@gmail.com"> Dr.Jay Soni
-                        </a></div>
-                      <div class="text-job font-11">(MBBS,MD)</div>
-                    </td>
-                    <td>
-                      <div class="badge col-green">Available</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user6.jpg" alt="">
-                    </td>
-                    <td>
-                      <div class="media-title"><a href="mailto:test@gmail.com"> Dr.Sarah Smith
-                        </a></div>
-                      <div class="text-job font-11">(BDS,MDS)</div>
-                    </td>
-                    <td>
-                      <div class="badge col-red">Absend</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user3.jpg" alt="">
-                    </td>
-                    <td>
-                      <div class="media-title"><a href="mailto:test@gmail.com">Dr.Megha Trivedi
-                        </a></div>
-                      <div class="text-job font-11">(BHMS)</div>
-                    </td>
-                    <td>
-                      <div class="badge col-green">Available</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user2.jpg" alt="">
-                    </td>
-                    <td>
-                      <div class="media-title"><a href="mailto:test@gmail.com"> Dr.John Deo
-                        </a></div>
-                      <div class="text-job font-11">(MBBS,MS)</div>
-                    </td>
-                    <td>
-                      <div class="badge col-green">Available</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user1.jpg" alt="">
-                    </td>
-                    <td>
-                      <div class="media-title"><a href="mailto:test@gmail.com"> Dr.Jacob Ryan
-                        </a></div>
-                      <div class="text-job font-11">(MBBS,MD)</div>
-                    </td>
-                    <td>
-                      <div class="badge col-red">Absend</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user8.jpg" alt="">
-                    </td>
-                    <td>
-                      <div class="media-title"><a href="mailto:test@gmail.com"> Dr.Jay Soni
-                        </a></div>
-                      <div class="text-job font-11">(MBBS)</div>
-                    </td>
-                    <td>
-                      <div class="badge col-green">Available</div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    </mat-menu>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                  matRipple
+                >
+                </mat-row>
+              </mat-table>
+              <!-- Loading spinner -->
+              <div
+                *ngIf="dashboardService.isTblLoading"
+                class="tbl-spinner"
+              >
+                <mat-progress-spinner
+                  color="primary"
+                  [diameter]="40"
+                  mode="indeterminate"
+                >
+                </mat-progress-spinner>
+              </div>
+              <div
+                *ngIf="!dashboardService.isTblLoading"
+                class="no-results"
+                [style.display]="
+                  dataSource.data.length == 0 ? '' : 'none'
+                "
+              >
+              <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
+              </div>
+              <mat-paginator
+                #paginator
+                [pageIndex]="0"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+              >
+              </mat-paginator>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="row clearfix">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="card">
-          <div class="header">
-            <h2>
-              Operations</h2>
-            <button mat-button [matMenuTriggerFor]="menu" class="header-dropdown">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item>Action</button>
-              <button mat-menu-item>Another action</button>
-              <button mat-menu-item>Something else here</button>
-            </mat-menu>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="box-part text-center">
+          <i style="background-color: #fff;" class="fab fa-twitter fa-3x col-blue"></i>
+          <div class="title p-t-15">
+            <h3>Twitter</h3>
           </div>
-          <div class="tableBody">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Parient Name</th>
-                    <th>Doctors Team</th>
-                    <th>Date Of Operation</th>
-                    <th>Report</th>
-                    <th>Diseases</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user8.jpg" alt="">
-                    </td>
-                    <td>John Deo</td>
-                    <td class="text-truncate">
-                      <ul class="list-unstyled order-list">
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user1.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user2.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user3.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><span class="badge">+4</span>
-                        </li>
-                      </ul>
-                    </td>
-                    <td>12-08-2019</td>
-                    <td>
-                      <i class="far fa-file-pdf tbl-pdf"></i>
-                    </td>
-                    <td>Cancer</td>
-                    <td>
-                      <button mat-icon-button class="btn-tbl-edit">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button class="btn-tbl-delete">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user5.jpg" alt="">
-                    </td>
-                    <td>Jens Brincker</td>
-                    <td class="text-truncate">
-                      <ul class="list-unstyled order-list">
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user7.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user2.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><span class="badge">+3</span>
-                        </li>
-                      </ul>
-                    </td>
-                    <td>14-08-2019</td>
-                    <td>
-                      <i class="far fa-file-pdf tbl-pdf"></i>
-                    </td>
-                    <td>Fracture</td>
-                    <td>
-                      <button mat-icon-button class="btn-tbl-edit">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button class="btn-tbl-delete">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user3.jpg" alt="">
-                    </td>
-                    <td>Mark Hay</td>
-                    <td class="text-truncate">
-                      <ul class="list-unstyled order-list">
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user2.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user1.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user8.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><span class="badge">+2</span>
-                        </li>
-                      </ul>
-                    </td>
-                    <td>18-08-2019</td>
-                    <td>
-                      <i class="far fa-file-pdf tbl-pdf"></i>
-                    </td>
-                    <td>Cataract surgery</td>
-                    <td>
-                      <button mat-icon-button class="btn-tbl-edit">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button class="btn-tbl-delete">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user6.jpg" alt="">
-                    </td>
-                    <td>Mark Hay</td>
-                    <td class="text-truncate">
-                      <ul class="list-unstyled order-list">
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user5.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user3.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user9.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><span class="badge">+4</span>
-                        </li>
-                      </ul>
-                    </td>
-                    <td>20-08-2019</td>
-                    <td>
-                      <i class="far fa-file-pdf tbl-pdf"></i>
-                    </td>
-                    <td>Cholecystectomy</td>
-                    <td>
-                      <button mat-icon-button class="btn-tbl-edit">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button class="btn-tbl-delete">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user1.jpg" alt="">
-                    </td>
-                    <td>Mark Hay</td>
-                    <td class="text-truncate">
-                      <ul class="list-unstyled order-list">
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user2.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user4.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><span class="badge">+3</span>
-                        </li>
-                      </ul>
-                    </td>
-                    <td>22-08-2019</td>
-                    <td>
-                      <i class="far fa-file-pdf tbl-pdf"></i>
-                    </td>
-                    <td>Hysterectomy</td>
-                    <td>
-                      <button mat-icon-button class="btn-tbl-edit">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button class="btn-tbl-delete">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user2.jpg" alt="">
-                    </td>
-                    <td>Mark Hay</td>
-                    <td class="text-truncate">
-                      <ul class="list-unstyled order-list">
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user6.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user9.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><img class="rounded-circle" src="assets/images/user/user4.jpg"
-                            alt="user">
-                        </li>
-                        <li class="avatar avatar-sm"><span class="badge">+2</span>
-                        </li>
-                      </ul>
-                    </td>
-                    <td>28-08-2019</td>
-                    <td>
-                      <i class="far fa-file-pdf tbl-pdf"></i>
-                    </td>
-                    <td>back pain surgery</td>
-                    <td>
-                      <button mat-icon-button class="btn-tbl-edit">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button class="btn-tbl-delete">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="text p-b-10">
+            <span>Lorem ipsum dolor sit amet, id quo eruditi
+              eloquentiam. Assum decore te sed. Elitr scripta ocurreret qui
+              ad.</span>
           </div>
+          <a href="#">Learn More</a>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="box-part text-center">
+          <i style="background-color: #fff;" class="fab fa-instagram fa-3x col-red"></i>
+          <div class="title p-t-15">
+            <h3>Instagram</h3>
+          </div>
+          <div class="text p-b-10">
+            <span>Lorem ipsum dolor sit amet, id quo eruditi
+              eloquentiam. Assum decore te sed. Elitr scripta ocurreret qui
+              ad.</span>
+          </div>
+          <a href="#">Learn More</a>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="box-part text-center">
+          <i style="background-color: #fff;" class="fab fa-facebook-f fa-3x col-blue"></i>
+          <div class="title p-t-15">
+            <h3>Facebook</h3>
+          </div>
+          <div class="text p-b-10">
+            <span>Lorem ipsum dolor sit amet, id quo eruditi
+              eloquentiam. Assum decore te sed. Elitr scripta ocurreret qui
+              ad.</span>
+          </div>
+          <a href="#">Learn More</a>
         </div>
       </div>
     </div>

@@ -5,15 +5,19 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style">
             <li class="breadcrumb-item">
-              <h4 class="page-title">{{ patient.name | uppercase }} {{ patient.surName | uppercase }}</h4>
+              <h4 class="page-title">
+                {{ patient.name | uppercase }} {{ patient.surName | uppercase }}
+              </h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
-                <i class="fas fa-home"></i> {{'Homepage'|translate}}</a
+                <i class="fas fa-home"></i> {{ "Homepage" | translate }}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
-              <a routerLink="/admin/patients/all-patients">{{'Patients'|translate}}</a>
+              <a routerLink="/admin/patients/all-patients">{{
+                "Patients" | translate
+              }}</a>
             </li>
             <li class="breadcrumb-item active">
               {{ patient.name | uppercase }} {{ patient.surName | uppercase }}
@@ -26,18 +30,24 @@
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
           <div class="header" style="padding-bottom: 0px; padding-top: 0px">
-            <h2>{{'MedicalAlerts'|translate}}</h2>
+            <h2>{{ "MedicalAlerts" | translate }}</h2>
           </div>
           <div class="body" style="padding-bottom: 0px; width: 100%">
-            <div *ngIf="checkClaim('GetMedicalAlertsQuery')" class="row clearfix">
-              <div *ngIf="checkClaim('CreateMedicalAlertCommand')" class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+            <div
+              *ngIf="checkClaim('GetMedicalAlertsQuery')"
+              class="row clearfix"
+            >
+              <div
+                *ngIf="checkClaim('CreateMedicalAlertCommand')"
+                class="col-xs-6 col-sm-6 col-md-4 col-lg-3"
+              >
                 <button
                   style="width: 100%"
                   (click)="addNote()"
                   mat-flat-button
                   color="primary"
                 >
-                {{'AddMedicalAlert'|translate}} <mat-icon>edit</mat-icon>
+                  {{ "AddMedicalAlert" | translate }} <mat-icon>edit</mat-icon>
                 </button>
               </div>
               <div
@@ -49,6 +59,7 @@
                   (click)="editNote(medicalAlert)"
                   mat-flat-button
                   color="warn"
+                  matTooltip="{{medicalAlert.note}}"  matTooltipClass="tooltip-orange"
                 >
                   {{ medicalAlert.note.slice(0, 20) }}...<mat-icon
                     >remove_red_eye</mat-icon
@@ -81,7 +92,7 @@
                     <mat-icon matListAvatar>person</mat-icon>
                     <div style="display: flex; flex-direction: column">
                       <div>
-                        <h6 matLine>{{'Informations'|translate}}</h6>
+                        <h6 matLine>{{ "Informations" | translate }}</h6>
                       </div>
                     </div>
                   </div>
@@ -90,7 +101,11 @@
               </mat-list-option>
               <!-- Burada menü claims sorgularını yap -->
               <div *ngFor="let item of menuItems">
-                <mat-list-option *ngIf="checkClaim(item.claim)" [value]="item.id" [disableRipple]="true">
+                <mat-list-option
+                  *ngIf="checkClaim(item.claim)"
+                  [value]="item.id"
+                  [disableRipple]="true"
+                >
                   <div
                     style="
                       display: flex;
@@ -165,7 +180,7 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">history</mat-icon>
-                  {{'ContactInformations'|translate}}
+                  {{ "ContactInformations" | translate }}
                 </ng-template>
                 <br />
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -174,26 +189,40 @@
                       <div class="tab-pane body active" id="about">
                         <div class="row">
                           <div class="col-6">
-                            <small class="text-muted">{{'PhoneNumber'|translate}}: </small>
+                            <small class="text-muted"
+                              >{{ "PhoneNumber" | translate }}:
+                            </small>
                             <p>{{ patient.phoneNumber }}</p>
                             <hr />
-                            <small class="text-muted">{{'City'|translate}}: </small>
+                            <small class="text-muted"
+                              >{{ "City" | translate }}:
+                            </small>
                             <p>{{ patient.city }}</p>
                             <hr />
-                            <small class="text-muted">{{'Address'|translate}}: </small>
+                            <small class="text-muted"
+                              >{{ "Address" | translate }}:
+                            </small>
                             <p>{{ patient.address }}</p>
                             <hr />
-                            <small class="text-muted">{{'Email'|translate}}: </small>
+                            <small class="text-muted"
+                              >{{ "Email" | translate }}:
+                            </small>
                             <p>{{ patient.eMail }}</p>
                           </div>
                           <div class="col-6">
-                            <small class="text-muted">{{'Country'|translate}}: </small>
+                            <small class="text-muted"
+                              >{{ "Country" | translate }}:
+                            </small>
                             <p>{{ patient.country }}</p>
                             <hr />
-                            <small class="text-muted">{{'Region'|translate}}: </small>
+                            <small class="text-muted"
+                              >{{ "Region" | translate }}:
+                            </small>
                             <p>{{ patient.region }}</p>
                             <hr />
-                            <small class="text-muted">{{'Nationality'|translate}}: </small>
+                            <small class="text-muted"
+                              >{{ "Nationality" | translate }}:
+                            </small>
                             <p>{{ patient.nationality }}</p>
                           </div>
                         </div>
@@ -205,14 +234,14 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">description</mat-icon>
-                  {{'AboutPatient'|translate}}
+                  {{ "AboutPatient" | translate }}
                 </ng-template>
                 <div class="col-lg-12 col-md-12 col-sm-12">
                   <div class="project_widget">
                     <div class="body">
                       <div class="row">
                         <div class="col-md-3 col-6 b-r">
-                          <strong>{{'BirthDate'|translate}}</strong>
+                          <strong>{{ "BirthDate" | translate }}</strong>
                           <br />
 
                           <p class="text-muted">
@@ -220,7 +249,7 @@
                           </p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>{{'Gender'|translate}}</strong>
+                          <strong>{{ "Gender" | translate }}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -229,21 +258,21 @@
                             "
                             class="text-muted"
                           >
-                          {{'Male'|translate}}
+                            {{ "Male" | translate }}
                           </p>
                           <ng-template #elseTemplateGender>
-                            <p class="text-muted">{{'Female'|translate}}</p>
+                            <p class="text-muted">{{ "Female" | translate }}</p>
                           </ng-template>
                         </div>
                         <div class="col-md-3 col-6">
-                          <strong>{{'IdentityNumber'|translate}}</strong>
+                          <strong>{{ "IdentityNumber" | translate }}</strong>
                           <br />
                           <p class="text-muted">
                             {{ patient.identityNumber }}
                           </p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>{{'BloodGroup'|translate}}</strong>
+                          <strong>{{ "BloodGroup" | translate }}</strong>
                           <br />
                           <p class="text-muted">{{ patient.bloodGroup }}</p>
                         </div>
@@ -251,23 +280,23 @@
                       <hr />
                       <div class="row">
                         <div class="col-md-3 col-6 b-r">
-                          <strong>{{'MotherName'|translate}}</strong>
+                          <strong>{{ "MotherName" | translate }}</strong>
                           <br />
                           <p class="text-muted">{{ patient.motherName }}</p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>{{'FatherName'|translate}}</strong>
+                          <strong>{{ "FatherName" | translate }}</strong>
                           <br />
                           <p class="text-muted">{{ patient.fatherName }}</p>
                         </div>
 
                         <div class="col-md-3 col-6 b-r">
-                          <strong>{{'Job'|translate}}</strong>
+                          <strong>{{ "Job" | translate }}</strong>
                           <br />
                           <p class="text-muted">{{ patient.job }}</p>
                         </div>
                         <div class="col-md-3 col-6 b-r">
-                          <strong>{{'MaritalStatus'|translate}}</strong>
+                          <strong>{{ "MaritalStatus" | translate }}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -276,17 +305,17 @@
                             "
                             class="text-muted"
                           >
-                          {{'Married'|translate}}
+                            {{ "Married" | translate }}
                           </p>
                           <ng-template #elseTemplateMarital>
-                            <p class="text-muted">{{'Single'|translate}}</p>
+                            <p class="text-muted">{{ "Single" | translate }}</p>
                           </ng-template>
                         </div>
                       </div>
                       <hr />
                       <div class="row text-center">
                         <div class="col-md-6 col-12 b-r">
-                          <strong>{{'GdprConfirm'|translate}}</strong>
+                          <strong>{{ "GdprConfirm" | translate }}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -295,14 +324,14 @@
                             "
                             class="text-muted"
                           >
-                          {{'Yes'|translate}}
+                            {{ "Yes" | translate }}
                           </p>
                           <ng-template #elseTemplateGdpr>
-                            <p class="text-muted">{{'No'|translate}}</p>
+                            <p class="text-muted">{{ "No" | translate }}</p>
                           </ng-template>
                         </div>
                         <div class="col-md-6 col-12 b-r">
-                          <strong>{{'SmsConfirm'|translate}}</strong>
+                          <strong>{{ "SmsConfirm" | translate }}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -311,10 +340,10 @@
                             "
                             class="text-muted"
                           >
-                          {{'Yes'|translate}}
+                            {{ "Yes" | translate }}
                           </p>
                           <ng-template #elseTemplateSms>
-                            <p class="text-muted">{{'No'|translate}}</p>
+                            <p class="text-muted">{{ "No" | translate }}</p>
                           </ng-template>
                         </div>
                       </div>
@@ -326,13 +355,13 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">edit</mat-icon>
-                  {{'NotesAndAddictions'|translate}}
+                  {{ "NotesAndAddictions" | translate }}
                 </ng-template>
                 <br />
                 <div class="col-lg-12 col-md-12 col-sm-12">
                   <div class="card project_widget">
                     <div class="header">
-                      <h5>{{'NotesAndAddictions'|translate}}</h5>
+                      <h5>{{ "NotesAndAddictions" | translate }}</h5>
                     </div>
                     <div class="body">
                       <p *ngIf="patient.note; else noNote">
@@ -340,16 +369,16 @@
                       </p>
                       <ng-template #noNote
                         ><div class="alert alert-danger">
-                          {{'PatientDontHaveNote'|translate}}
-                          <a (click)="addNotePatient()" style="color: blue"
-                            >{{'ClickForAdd'|translate}}</a
-                          >
+                          {{ "PatientDontHaveNote" | translate }}
+                          <a (click)="addNotePatient()" style="color: blue">{{
+                            "ClickForAdd" | translate
+                          }}</a>
                         </div></ng-template
                       >
                       <hr />
                       <div class="row text-center">
                         <div class="col-md-4 col-8 b-r">
-                          <strong>{{'UsingSmoke'|translate}}</strong>
+                          <strong>{{ "UsingSmoke" | translate }}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -358,14 +387,14 @@
                             "
                             class="text-muted"
                           >
-                          {{'Yes'|translate}}
+                            {{ "Yes" | translate }}
                           </p>
                           <ng-template #elseTemplateSmoke>
-                            <p class="text-muted">{{'No'|translate}}</p>
+                            <p class="text-muted">{{ "No" | translate }}</p>
                           </ng-template>
                         </div>
                         <div class="col-md-4 col-8 b-r">
-                          <strong>{{'UsingAlcohol'|translate}}</strong>
+                          <strong>{{ "UsingAlcohol" | translate }}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -374,14 +403,14 @@
                             "
                             class="text-muted"
                           >
-                          {{'Yes'|translate}}
+                            {{ "Yes" | translate }}
                           </p>
                           <ng-template #elseTemplateAlcohol>
-                            <p class="text-muted">{{'No'|translate}}</p>
+                            <p class="text-muted">{{ "No" | translate }}</p>
                           </ng-template>
                         </div>
                         <div class="col-md-4 col-8 b-r">
-                          <strong>{{'IsTrobule'|translate}}</strong>
+                          <strong>{{ "IsTrobule" | translate }}</strong>
                           <br />
                           <p
                             *ngIf="
@@ -390,10 +419,10 @@
                             "
                             class="text-muted"
                           >
-                          {{'Yes'|translate}}
+                            {{ "Yes" | translate }}
                           </p>
                           <ng-template #elseTemplateSmoke>
-                            <p class="text-muted">{{'No'|translate}}</p>
+                            <p class="text-muted">{{ "No" | translate }}</p>
                           </ng-template>
                         </div>
                       </div>
@@ -406,13 +435,13 @@
                   <mat-icon class="example-tab-icon mr-2"
                     >find_in_page</mat-icon
                   >
-                  {{'GeneralReport'|translate}}
+                  {{ "GeneralReport" | translate }}
                 </ng-template>
                 <br />
                 <div class="col-lg-12 col-md-12 col-sm-12">
                   <div class="card project_widget">
                     <div class="header">
-                      <h5>{{'GeneralReport'|translate}}</h5>
+                      <h5>{{ "GeneralReport" | translate }}</h5>
                     </div>
                     <div class="body">
                       <ul class="list-unstyled">
@@ -593,7 +622,10 @@
           <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card project_widget">
               <div class="body">
-                <ul class="left-timeline" *ngIf="protocols&&protocols.length>0;else noProtocols">
+                <ul
+                  class="left-timeline"
+                  *ngIf="protocols && protocols.length > 0; else noProtocols"
+                >
                   <li *ngFor="let protocol of protocols">
                     <div *ngIf="!protocol.isOpen; else openProtocol">
                       <time class="left-time" datetime="2017-11-04T18:30"
@@ -631,7 +663,9 @@
                               protocol.protocolNo
                             }}"
                             onClick="return false;"
-                            >{{'ProtocolNo'|translate}}: #{{ protocol.protocolNo }}</a
+                            >{{ "ProtocolNo" | translate }}: #{{
+                              protocol.protocolNo
+                            }}</a
                           >
                         </span>
                         <div class="row clearfix">
@@ -644,7 +678,7 @@
                                       style="justify-content: center"
                                     >
                                       <p class="font-bold col-orange">
-                                        {{'PatientNotes'|translate}}
+                                        {{ "PatientNotes" | translate }}
                                       </p>
                                     </mat-panel-title>
                                   </mat-expansion-panel-header>
@@ -667,9 +701,9 @@
                                             class="example-full-width"
                                             appearance="fill"
                                           >
-                                            <mat-label
-                                              >{{'ChooseNoteType'|translate}}</mat-label
-                                            >
+                                            <mat-label>{{
+                                              "ChooseNoteType" | translate
+                                            }}</mat-label>
                                             <mat-select
                                               (selectionChange)="
                                                 onOptionsSelectedNote(
@@ -680,9 +714,9 @@
                                               #selectForNotes
                                               [(value)]="selectedNoteType"
                                             >
-                                              <mat-option value="Muayene"
-                                                >{{'Medical'|translate}}</mat-option
-                                              >
+                                              <mat-option value="Muayene">{{
+                                                "Medical" | translate
+                                              }}</mat-option>
                                               <mat-option value="Test"
                                                 >Test</mat-option
                                               >
@@ -753,7 +787,8 @@
                                                       >
                                                         <mat-card>
                                                           <mat-card-content
-                                                            [attr.id]="'Dynamic'+
+                                                            [attr.id]="
+                                                              'Dynamic' +
                                                               form.id
                                                             "
                                                           >
@@ -811,10 +846,10 @@
                                                               </button>
                                                               <button
                                                                 (click)="
-                                                                deleteNoteForDynamicData(
-                                                                  dynamicTableDatas,
-                                                                  form.id
-                                                                )
+                                                                  deleteNoteForDynamicData(
+                                                                    dynamicTableDatas,
+                                                                    form.id
+                                                                  )
                                                                 "
                                                                 mat-icon-button
                                                               >
@@ -835,21 +870,28 @@
                                                 </div>
                                                 <ng-template #noDynamicData>
                                                   <div
-                                                class="alert alert-warning w-100"
-                                              >
-                                              {{'PatientDontHaveCurrentNote'|translate}}
-                                                <strong
+                                                    class="alert alert-warning w-100"
+                                                  >
+                                                    {{
+                                                      "PatientDontHaveCurrentNote"
+                                                        | translate
+                                                    }}
+                                                    <strong
                                                       ><a
                                                         (click)="
                                                           addNoteForMedical(
-                                                            selectForNotes.value,protocol.protocolNo
+                                                            selectForNotes.value,
+                                                            protocol.protocolNo
                                                           )
                                                         "
                                                         class="alert-link"
-                                                        >{{'ClickForAdd'|translate}}</a
+                                                        >{{
+                                                          "ClickForAdd"
+                                                            | translate
+                                                        }}</a
                                                       ></strong
                                                     >
-                                              </div>
+                                                  </div>
                                                 </ng-template>
                                               </ng-container>
                                             </div>
@@ -886,9 +928,10 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong
-                                                            >{{'Sikayet'|translate}}</strong
-                                                          >
+                                                          <strong>{{
+                                                            "Sikayet"
+                                                              | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{
@@ -899,9 +942,9 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong
-                                                            >{{'Hikaye'|translate}}</strong
-                                                          >
+                                                          <strong>{{
+                                                            "Hikaye" | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{ medical.hikaye }}
@@ -910,7 +953,9 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong>{{'Icd'|translate}}</strong>
+                                                          <strong>{{
+                                                            "Icd" | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{ medical.icd }}
@@ -919,9 +964,10 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong
-                                                            >{{'SoyGecmis'|translate}}</strong
-                                                          >
+                                                          <strong>{{
+                                                            "SoyGecmis"
+                                                              | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{
@@ -932,14 +978,216 @@
                                                         <div
                                                           class="col-md-12 col-12"
                                                         >
-                                                          <strong
-                                                            >{{'BasBoyunTiroid'|translate}}</strong
-                                                          >
+                                                          <strong>{{
+                                                            "BasBoyunTiroid"
+                                                              | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{
                                                               medical.basBoyunTiroid
                                                             }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Notes" | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{ medical.notlar }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "SolunumSistemi"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.solunumSistemi
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Kardiyo"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.kardiyo
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Extremiteler"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.extremiteler
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "KarinMuayene"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.karinMuayene
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "AnalGenital"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.analGenital
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Cilt" | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{ medical.cilt }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "NorolojikMuayene"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.norolojikMuayene
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "GecirilenOperasnyonlar"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.gecirilenOperasnyonlar
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Alerjiler"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.alerjiler
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "KullanilanIlaclar"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.kullanilanIlaclar
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Bagimlilik"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.bagimlilik
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Uygulamalar"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.uygulamalar
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Oneriler"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.oneriler
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Tedavi" | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{ medical.tedavi }}
                                                           </p>
                                                         </div>
                                                       </mat-card-content>
@@ -987,7 +1235,10 @@
                                                           </button>
                                                           <span fxFlex></span>
                                                           <strong
-                                                            >{{'AddedDate'|translate}}:
+                                                            >{{
+                                                              "AddedDate"
+                                                                | translate
+                                                            }}:
                                                             {{
                                                               medical.addedDate
                                                                 | date
@@ -1004,18 +1255,24 @@
                                               <div
                                                 class="alert alert-warning w-100"
                                               >
-                                              {{'PatientDontHaveCurrentNote'|translate}}
+                                                {{
+                                                  "PatientDontHaveCurrentNote"
+                                                    | translate
+                                                }}
                                                 <strong
-                                                      ><a
-                                                        (click)="
-                                                          addNoteForMedical(
-                                                            selectForNotes.value,protocol.protocolNo
-                                                          )
-                                                        "
-                                                        class="alert-link"
-                                                        >{{'ClickForAdd'|translate}}</a
-                                                      ></strong
-                                                    >
+                                                  ><a
+                                                    (click)="
+                                                      addNoteForMedical(
+                                                        selectForNotes.value,
+                                                        protocol.protocolNo
+                                                      )
+                                                    "
+                                                    class="alert-link"
+                                                    >{{
+                                                      "ClickForAdd" | translate
+                                                    }}</a
+                                                  ></strong
+                                                >
                                               </div>
                                             </ng-template>
                                           </ng-template>
@@ -1071,7 +1328,9 @@
                               protocol.protocolNo
                             }}"
                             onClick="return false;"
-                            >{{'ProtocolNo'|translate}}: #{{ protocol.protocolNo }}</a
+                            >{{ "ProtocolNo" | translate }}: #{{
+                              protocol.protocolNo
+                            }}</a
                           >
                         </span>
                         <div class="row clearfix">
@@ -1084,7 +1343,7 @@
                                       style="justify-content: center"
                                     >
                                       <p class="font-bold col-teal">
-                                        {{'PatientNotes'|translate}}
+                                        {{ "PatientNotes" | translate }}
                                       </p>
                                     </mat-panel-title>
                                   </mat-expansion-panel-header>
@@ -1098,9 +1357,9 @@
                                             class="example-full-width"
                                             appearance="fill"
                                           >
-                                            <mat-label
-                                              >{{'ChooseNoteType'|translate}}</mat-label
-                                            >
+                                            <mat-label>{{
+                                              "ChooseNoteType" | translate
+                                            }}</mat-label>
                                             <mat-select
                                               (selectionChange)="
                                                 onOptionsSelectedNote(
@@ -1111,9 +1370,9 @@
                                               #selectForNotes
                                               [(value)]="selectedNoteType"
                                             >
-                                              <mat-option value="Muayene"
-                                                >{{'Medical'|translate}}</mat-option
-                                              >
+                                              <mat-option value="Muayene">{{
+                                                "Medical" | translate
+                                              }}</mat-option>
                                               <mat-option value="Test"
                                                 >Test</mat-option
                                               >
@@ -1184,7 +1443,8 @@
                                                       >
                                                         <mat-card>
                                                           <mat-card-content
-                                                            [attr.id]="'Dynamic'+
+                                                            [attr.id]="
+                                                              'Dynamic' +
                                                               form.id
                                                             "
                                                           >
@@ -1242,10 +1502,10 @@
                                                               </button>
                                                               <button
                                                                 (click)="
-                                                                deleteNoteForDynamicData(
-                                                                  dynamicTableDatas,
-                                                                  form.id
-                                                                )
+                                                                  deleteNoteForDynamicData(
+                                                                    dynamicTableDatas,
+                                                                    form.id
+                                                                  )
                                                                 "
                                                                 mat-icon-button
                                                               >
@@ -1268,16 +1528,23 @@
                                                   <div
                                                     class="alert alert-warning w-100"
                                                   >
-                                                  {{'PatientDontHaveCurrentNote'|translate}}
+                                                    {{
+                                                      "PatientDontHaveCurrentNote"
+                                                        | translate
+                                                    }}
                                                     <strong
                                                       ><a
                                                         (click)="
                                                           addNoteForMedical(
-                                                            selectForNotes.value,protocol.protocolNo
+                                                            selectForNotes.value,
+                                                            protocol.protocolNo
                                                           )
                                                         "
                                                         class="alert-link"
-                                                        >{{'ClickForAdd'|translate}}</a
+                                                        >{{
+                                                          "ClickForAdd"
+                                                            | translate
+                                                        }}</a
                                                       ></strong
                                                     >
                                                   </div>
@@ -1317,9 +1584,10 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong
-                                                            >{{'Sikayet'|translate}}</strong
-                                                          >
+                                                          <strong>{{
+                                                            "Sikayet"
+                                                              | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{
@@ -1330,9 +1598,9 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong
-                                                            >{{'Hikaye'|translate}}</strong
-                                                          >
+                                                          <strong>{{
+                                                            "Hikaye" | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{ medical.hikaye }}
@@ -1341,7 +1609,9 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong>{{'Icd'|translate}}</strong>
+                                                          <strong>{{
+                                                            "Icd" | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{ medical.icd }}
@@ -1350,9 +1620,10 @@
                                                         <div
                                                           class="col-md-12 col-12 b-r"
                                                         >
-                                                          <strong
-                                                            >{{'SoyGecmis'|translate}}</strong
-                                                          >
+                                                          <strong>{{
+                                                            "SoyGecmis"
+                                                              | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{
@@ -1363,14 +1634,216 @@
                                                         <div
                                                           class="col-md-12 col-12"
                                                         >
-                                                          <strong
-                                                            >{{'BasBoyunTiroid'|translate}}</strong
-                                                          >
+                                                          <strong>{{
+                                                            "BasBoyunTiroid"
+                                                              | translate
+                                                          }}</strong>
                                                           <br />
                                                           <p class="text-muted">
                                                             {{
                                                               medical.basBoyunTiroid
                                                             }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Notes" | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{ medical.notlar }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "SolunumSistemi"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.solunumSistemi
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Kardiyo"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.kardiyo
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Extremiteler"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.extremiteler
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "KarinMuayene"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.karinMuayene
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "AnalGenital"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.analGenital
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Cilt" | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{ medical.cilt }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "NorolojikMuayene"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.norolojikMuayene
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "GecirilenOperasnyonlar"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.gecirilenOperasnyonlar
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Alerjiler"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.alerjiler
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "KullanilanIlaclar"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.kullanilanIlaclar
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Bagimlilik"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.bagimlilik
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Uygulamalar"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.uygulamalar
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Oneriler"
+                                                              | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{
+                                                              medical.oneriler
+                                                            }}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          class="col-md-12 col-12"
+                                                        >
+                                                          <strong>{{
+                                                            "Tedavi" | translate
+                                                          }}</strong>
+                                                          <br />
+                                                          <p class="text-muted">
+                                                            {{ medical.tedavi }}
                                                           </p>
                                                         </div>
                                                       </mat-card-content>
@@ -1418,7 +1891,10 @@
                                                           </button>
                                                           <span fxFlex></span>
                                                           <strong
-                                                            >{{'AddedDate'|translate}}:
+                                                            >{{
+                                                              "AddedDate"
+                                                                | translate
+                                                            }}:
                                                             {{
                                                               medical.addedDate
                                                                 | date
@@ -1435,18 +1911,24 @@
                                               <div
                                                 class="alert alert-warning w-100"
                                               >
-                                              {{'PatientDontHaveCurrentNote'|translate}}
+                                                {{
+                                                  "PatientDontHaveCurrentNote"
+                                                    | translate
+                                                }}
                                                 <strong
-                                                      ><a
-                                                        (click)="
-                                                          addNoteForMedical(
-                                                            selectForNotes.value,protocol.protocolNo
-                                                          )
-                                                        "
-                                                        class="alert-link"
-                                                        >{{'ClickForAdd'|translate}}</a
-                                                      ></strong
-                                                    >
+                                                  ><a
+                                                    (click)="
+                                                      addNoteForMedical(
+                                                        selectForNotes.value,
+                                                        protocol.protocolNo
+                                                      )
+                                                    "
+                                                    class="alert-link"
+                                                    >{{
+                                                      "ClickForAdd" | translate
+                                                    }}</a
+                                                  ></strong
+                                                >
                                               </div>
                                             </ng-template>
                                           </ng-template>
@@ -1469,7 +1951,9 @@
                   </li>
                 </ul>
                 <ng-template #noProtocols>
-                  <p class="alert alert-warning">{{'NoRecordsFound'|translate}}</p>
+                  <p class="alert alert-warning">
+                    {{ "NoRecordsFound" | translate }}
+                  </p>
                 </ng-template>
               </div>
             </div>
@@ -1481,7 +1965,7 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">history</mat-icon>
-                  {{'TimeLineOfAppointments'|translate}}
+                  {{ "TimeLineOfAppointments" | translate }}
                 </ng-template>
                 <br />
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -1528,7 +2012,7 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon mr-2">description</mat-icon>
-                  {{'AppointmentList'|translate}}
+                  {{ "AppointmentList" | translate }}
                 </ng-template>
                 <div class="row" style="margin-left: 0; margin-right: 0">
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -1547,7 +2031,9 @@
                                 <ul class="header-buttons-left ml-0">
                                   <li class="dropdown">
                                     <h2>
-                                      <strong>{{'Appointments'|translate}}</strong>
+                                      <strong>{{
+                                        "Appointments" | translate
+                                      }}</strong>
                                     </h2>
                                   </li>
                                   <li class="dropdown m-l-20">
@@ -1557,7 +2043,7 @@
                                       ></label
                                     >
                                     <input
-                                      placeholder="{{'Filter'|translate}}"
+                                      placeholder="{{ 'Filter' | translate }}"
                                       type="text"
                                       [(ngModel)]="filterValue"
                                       (keyup)="applyFilter($event.target.value)"
@@ -1594,40 +2080,56 @@
                           >
                             <!-- ID Column -->
                             <ng-container matColumnDef="appointmentNo">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >{{'ID'|translate}}</mat-header-cell
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                >{{ "ID" | translate }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">{{
                                 row.appointmentNo
                               }}</mat-cell>
                             </ng-container>
                             <ng-container matColumnDef="patientName">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >{{'PatientName'|translate}}</mat-header-cell
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                >{{
+                                  "PatientName" | translate
+                                }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.patientName }}</mat-cell
                               >
                             </ng-container>
                             <ng-container matColumnDef="patientSurname">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >{{'PatientSurName'|translate}}</mat-header-cell
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                >{{
+                                  "PatientSurName" | translate
+                                }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.patientSurname }}</mat-cell
                               >
                             </ng-container>
                             <ng-container matColumnDef="departmentName">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >{{'DepartmentName'|translate}}</mat-header-cell
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                >{{
+                                  "DepartmentName" | translate
+                                }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.departmentName }}</mat-cell
                               >
                             </ng-container>
                             <ng-container matColumnDef="doctorName">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >{{'DoctorName'|translate}}</mat-header-cell
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                >{{ "DoctorName" | translate }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.doctorName }}</mat-cell
@@ -1635,32 +2137,44 @@
                             </ng-container>
 
                             <ng-container matColumnDef="doctorSurname">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >{{'DoctorSurName'|translate}}</mat-header-cell
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                >{{
+                                  "DoctorSurName" | translate
+                                }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.doctorSurname }}</mat-cell
                               >
                             </ng-container>
                             <ng-container matColumnDef="time">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >{{'Time'|translate}}</mat-header-cell
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                >{{ "Time" | translate }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.time }}</mat-cell
                               >
                             </ng-container>
                             <ng-container matColumnDef="typeName">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >{{'TypeName'|translate}}</mat-header-cell
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                >{{ "TypeName" | translate }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.typeName }}</mat-cell
                               >
                             </ng-container>
                             <ng-container matColumnDef="phoneNumber">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header
-                                >{{'PhoneNumber'|translate}}</mat-header-cell
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                                >{{
+                                  "PhoneNumber" | translate
+                                }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
                                 {{ row.phoneNumber }}</mat-cell
@@ -1671,7 +2185,7 @@
                                 *matHeaderCellDef
                                 mat-sort-header
                                 [ngClass]="'tbl-col-width-per-8'"
-                                >{{'Status'|translate}}
+                                >{{ "Status" | translate }}
                               </mat-header-cell>
                               <mat-cell
                                 *matCellDef="let row"
@@ -1710,9 +2224,9 @@
                             </ng-container>
                             <!-- actions -->
                             <ng-container matColumnDef="actions">
-                              <mat-header-cell *matHeaderCellDef class="pr-0"
-                                >{{'Actions'|translate}}</mat-header-cell
-                              >
+                              <mat-header-cell *matHeaderCellDef class="pr-0">{{
+                                "Actions" | translate
+                              }}</mat-header-cell>
                               <mat-cell
                                 *matCellDef="let row; let i = index"
                                 class="pr-0"
@@ -1787,7 +2301,9 @@
                               dataSource.data.length == 0 ? '' : 'none'
                             "
                           >
-                          <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
+                            <p class="alert alert-danger">
+                              {{ "NoRecordsFound" | translate }}
+                            </p>
                           </div>
                           <mat-paginator
                             #paginator
@@ -1804,9 +2320,145 @@
             </mat-tab-group>
           </div>
         </ng-template>
-        <ng-template #fourthContent
-          ><p>The fourthContent option content</p></ng-template
-        >
+        <ng-template #fourthContent>
+          <div class="row" style="margin-left: 0; margin-right: 0">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                <div class="body">
+                  <div class="table-responsive" *ngIf="dataSourceForInvoices">
+                    <div class="materialTableHeader" style="min-width: 565px">
+                      <div class="row" style="margin-left: 0; margin-right: 0">
+                        <div class="col-12">
+                          <ul class="header-buttons-left ml-0">
+                            <li class="dropdown">
+                              <h2>
+                                <strong>{{ "Invoices" | translate }}</strong>
+                              </h2>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <mat-table
+                      #table
+                      [dataSource]="dataSourceForInvoices"
+                      matSort
+                      class="mat-cell"
+                    >
+                      <!-- ID Column -->
+                      <ng-container matColumnDef="collectorId">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "ID" | translate
+                        }}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{
+                          row.collectorId
+                        }}</mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="protocolId">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "ProtocolNo" | translate
+                        }}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          {{ row.protocolId }}</mat-cell
+                        >
+                      </ng-container>
+                      <ng-container matColumnDef="totalPrice">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "TotalPrice" | translate
+                        }}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          {{ row.totalPrice }}</mat-cell
+                        >
+                      </ng-container>
+                      <ng-container matColumnDef="paymentBillNo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "PaymentBillNo" | translate
+                        }}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          {{ row.paymentBillNo }}</mat-cell
+                        >
+                      </ng-container>
+
+                      <ng-container matColumnDef="discountValue">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "DiscountValue" | translate
+                        }}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          {{ row.discountValue }}</mat-cell
+                        >
+                      </ng-container>
+                      <ng-container matColumnDef="addedDate">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "AddedDate" | translate
+                        }}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          {{ row.addedDate | date: "MM/dd/yyyy" }}</mat-cell
+                        >
+                      </ng-container>
+                      <ng-container matColumnDef="addedBy">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "AddedBy" | translate
+                        }}</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          {{ row.addedBy }}</mat-cell
+                        >
+                      </ng-container>
+                      <!-- actions -->
+                      <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef class="pr-0">{{
+                          "Actions" | translate
+                        }}</mat-header-cell>
+                        <mat-cell
+                          *matCellDef="let row; let i = index"
+                          class="pr-0"
+                        >
+                          <button
+                            mat-icon-button
+                            color="accent"
+                            class="btn-tbl-description"
+                            routerLink="/admin/invoices/all-invoices/detail-invoice/{{
+                              row.invoiceId
+                            }}"
+                          >
+                            <mat-icon aria-label="Detail" class="col-white"
+                              >description</mat-icon
+                            >
+                          </button>
+                        </mat-cell>
+                      </ng-container>
+                      <mat-header-row
+                        *matHeaderRowDef="displayedColumnsForInvoices"
+                      ></mat-header-row>
+                      <mat-row
+                        *matRowDef="
+                          let row;
+                          columns: displayedColumnsForInvoices
+                        "
+                      >
+                      </mat-row>
+                    </mat-table>
+                    <div
+                      class="no-results"
+                      [style.display]="
+                        dataSourceForInvoices.data.length == 0 ? '' : 'none'
+                      "
+                    >
+                      <p class="alert alert-danger">
+                        {{ "NoRecordsFound" | translate }}
+                      </p>
+                    </div>
+                    <mat-paginator
+                      #paginatorForInvoices
+                      [pageIndex]="0"
+                      [pageSize]="4"
+                    >
+                    </mat-paginator>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
         <ng-template #fifthContent>
           <div class="row" style="margin-left: 0; margin-right: 0">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -1822,7 +2474,7 @@
                           <ul class="header-buttons-left ml-0">
                             <li class="dropdown">
                               <h2>
-                                <strong>{{'Payments'|translate}}</strong>
+                                <strong>{{ "Payments" | translate }}</strong>
                               </h2>
                             </li>
                           </ul>
@@ -1837,83 +2489,89 @@
                     >
                       <!-- ID Column -->
                       <ng-container matColumnDef="collectorId">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >{{'ID'|translate}}</mat-header-cell
-                        >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "ID" | translate
+                        }}</mat-header-cell>
                         <mat-cell *matCellDef="let row">{{
                           row.collectorId
                         }}</mat-cell>
                       </ng-container>
                       <ng-container matColumnDef="protocolId">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >{{'ProtocolNo'|translate}}</mat-header-cell
-                        >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "ProtocolNo" | translate
+                        }}</mat-header-cell>
                         <mat-cell *matCellDef="let row">
                           {{ row.protocolId }}</mat-cell
                         >
                       </ng-container>
                       <ng-container matColumnDef="paymentType">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >{{'PaymentType'|translate}}</mat-header-cell
-                        >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "PaymentType" | translate
+                        }}</mat-header-cell>
                         <mat-cell
                           [ngSwitch]="row.paymentType"
                           *matCellDef="let row"
                         >
-                          <div *ngSwitchCase="1">{{'Cash'|translate}}</div>
-                          <div *ngSwitchCase="2">{{'CreditCard'|translate}}</div>
+                          <div *ngSwitchCase="1">{{ "Cash" | translate }}</div>
+                          <div *ngSwitchCase="2">
+                            {{ "CreditCard" | translate }}
+                          </div>
                         </mat-cell>
                       </ng-container>
                       <ng-container matColumnDef="price">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >{{'Price'|translate}}</mat-header-cell
-                        >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "Price" | translate
+                        }}</mat-header-cell>
                         <mat-cell *matCellDef="let row">
                           {{ row.price }}</mat-cell
                         >
                       </ng-container>
                       <ng-container matColumnDef="discount">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >{{'Discount'|translate}}</mat-header-cell
-                        >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "Discount" | translate
+                        }}</mat-header-cell>
                         <mat-cell
                           [ngSwitch]="row.discount"
                           *matCellDef="let row"
                         >
-                          <div *ngSwitchCase="true">{{'Yes'|translate}}</div>
-                          <div *ngSwitchCase="false">{{'No'|translate}}</div>
+                          <div *ngSwitchCase="true">
+                            {{ "Yes" | translate }}
+                          </div>
+                          <div *ngSwitchCase="false">
+                            {{ "No" | translate }}
+                          </div>
                         </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="paymentValue">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >{{'PaymentValue'|translate}}</mat-header-cell
-                        >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "PaymentValue" | translate
+                        }}</mat-header-cell>
                         <mat-cell *matCellDef="let row">
                           {{ row.paymentValue }}</mat-cell
                         >
                       </ng-container>
                       <ng-container matColumnDef="discountValue">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >{{'DiscountValue'|translate}}</mat-header-cell
-                        >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "DiscountValue" | translate
+                        }}</mat-header-cell>
                         <mat-cell *matCellDef="let row">
                           {{ row.discountValue }}</mat-cell
                         >
                       </ng-container>
                       <ng-container matColumnDef="addedDate">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header
-                          >{{'AddedDate'|translate}}</mat-header-cell
-                        >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{
+                          "AddedDate" | translate
+                        }}</mat-header-cell>
                         <mat-cell *matCellDef="let row">
                           {{ row.addedDate | date: "MM/dd/yyyy" }}</mat-cell
                         >
                       </ng-container>
                       <!-- actions -->
                       <ng-container matColumnDef="actions">
-                        <mat-header-cell *matHeaderCellDef class="pr-0"
-                          >{{'Actions'|translate}}</mat-header-cell
-                        >
+                        <mat-header-cell *matHeaderCellDef class="pr-0">{{
+                          "Actions" | translate
+                        }}</mat-header-cell>
                         <mat-cell
                           *matCellDef="let row; let i = index"
                           class="pr-0"
@@ -1941,14 +2599,16 @@
                       >
                       </mat-row>
                     </mat-table>
-              <div
-                class="no-results"
-                [style.display]="
-                dataSourceForCollections.data.length == 0 ? '' : 'none'
-                "
-              >
-              <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
-              </div>
+                    <div
+                      class="no-results"
+                      [style.display]="
+                        dataSourceForCollections.data.length == 0 ? '' : 'none'
+                      "
+                    >
+                      <p class="alert alert-danger">
+                        {{ "NoRecordsFound" | translate }}
+                      </p>
+                    </div>
                     <mat-paginator
                       #paginatorForCollections
                       [pageIndex]="0"
@@ -1970,9 +2630,12 @@
             </ng-container>
           </ng-container>
           <ng-template #secondSubContent>
-            <div *ngIf="dynamicTableDataFormControl(); else noNotes" class="row">
+            <div
+              *ngIf="dynamicTableDataFormControl(); else noNotes"
+              class="row"
+            >
               <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
-                  {{action}}
+                {{ action }}
                 <div class="card">
                   <div class="body">
                     <div class="row">
@@ -1981,7 +2644,9 @@
                           class="example-full-width"
                           appearance="outline"
                         >
-                          <mat-label>{{'ChooseNoteType'|translate}}</mat-label>
+                          <mat-label>{{
+                            "ChooseNoteType" | translate
+                          }}</mat-label>
                           <mat-select
                             #selectForNoteAdd
                             [(ngModel)]="selectedNoteTypeForAdd"
@@ -1989,7 +2654,9 @@
                               onOptionsSelectedForm(selectForNoteAdd.value)
                             "
                           >
-                            <mat-option value="Muayene">{{'Medical'|translate}}</mat-option>
+                            <mat-option value="Muayene">{{
+                              "Medical" | translate
+                            }}</mat-option>
                             <mat-option value="Test">Test</mat-option>
                             <mat-option value="Test2" disabled
                               >Test2</mat-option
@@ -2007,7 +2674,9 @@
                           class="example-full-width"
                           appearance="outline"
                         >
-                          <mat-label>{{'ChoosePatientArrival'|translate}}</mat-label>
+                          <mat-label>{{
+                            "ChoosePatientArrival" | translate
+                          }}</mat-label>
                           <mat-select
                             #selectAppointmentForNoteAdd
                             [(ngModel)]="selectionForAppointment"
@@ -2026,7 +2695,7 @@
                               {{ appointment.date | date }} tarihli,{{
                                 appointment.typeName
                               }}
-                              tipli, {{appointment.departmentName}} departmanı
+                              tipli, {{ appointment.departmentName }} departmanı
                             </mat-option>
                           </mat-select>
                         </mat-form-field>
@@ -2105,19 +2774,28 @@
                                       </div>
                                     </ng-container>
                                     <ng-container *ngSwitchCase="'radio'">
-                                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                      <div
+                                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                                      >
                                         <div class="m-b-20">
-                                          <mat-label class="mr-3">{{control.label}}</mat-label>
+                                          <mat-label class="mr-3">{{
+                                            control.label
+                                          }}</mat-label>
                                           <mat-radio-group
                                             aria-label="Select gender"
                                             [formControlName]="
                                               control.formControlName
                                             "
                                           >
-                                            <mat-radio-button *ngFor="
-                                            let option of control.values
-                                          "
-                                          [value]="option.value">{{ option.value }}</mat-radio-button>
+                                            <mat-radio-button
+                                              *ngFor="
+                                                let option of control.values
+                                              "
+                                              [value]="option.value"
+                                              >{{
+                                                option.value
+                                              }}</mat-radio-button
+                                            >
                                           </mat-radio-group>
                                         </div>
                                       </div>
@@ -2172,58 +2850,62 @@
                                     </ng-container>
                                   </ng-container>
                                 </ng-container>
-                                  <div *ngIf="protocolHaveOneNote()||action=='edit';else protocolHaveNote"
-                                    class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3"
+                                <div
+                                  *ngIf="
+                                    protocolHaveOneNote() || action == 'edit';
+                                    else protocolHaveNote
+                                  "
+                                  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3"
+                                >
+                                  <button
+                                    class="mr-3"
+                                    [disabled]="
+                                      !(
+                                        selectionForAppointment &&
+                                        selectedNoteTypeForAdd
+                                      )
+                                    "
+                                    mat-raised-button
+                                    color="primary"
                                   >
-                                    <button
-                                      class="mr-3"
-                                      [disabled]="
-                                        !(
-                                          selectionForAppointment &&
-                                          selectedNoteTypeForAdd
-                                        )
-                                      "
-                                      mat-raised-button
-                                      color="primary"
+                                    {{ "Save" | translate }}
+                                  </button>
+                                  <button
+                                    class="mr-3"
+                                    type="reset"
+                                    [disabled]="
+                                      !(
+                                        selectionForAppointment &&
+                                        selectedNoteTypeForAdd
+                                      )
+                                    "
+                                    mat-raised-button
+                                    color="accent"
+                                  >
+                                    {{ "Clear" | translate }}
+                                  </button>
+                                  <button
+                                    (click)="backToNote()"
+                                    type="button"
+                                    mat-button
+                                  >
+                                    {{ "Cancel" | translate }}
+                                  </button>
+                                </div>
+                                <ng-template #protocolHaveNote>
+                                  <div class="alert alert-danger w-100">
+                                    {{ "MustOneNote" | translate }}!
+                                    <strong
+                                      ><a
+                                        (click)="backToNote()"
+                                        class="alert-link"
+                                        >{{
+                                          "ClickForBackToNotes" | translate
+                                        }}</a
+                                      ></strong
                                     >
-                                    {{'Save'|translate}}
-                                    </button>
-                                    <button
-                                      class="mr-3"
-                                      type="reset"
-                                      [disabled]="
-                                        !(
-                                          selectionForAppointment &&
-                                          selectedNoteTypeForAdd
-                                        )
-                                      "
-                                      mat-raised-button
-                                      color="accent"
-                                    >
-                                    {{'Clear'|translate}}
-                                    </button>
-                                    <button
-                                      (click)="backToNote()"
-                                      type="button"
-                                      mat-button
-                                    >
-                                    {{'Cancel'|translate}}
-                                    </button>
                                   </div>
-                                  <ng-template #protocolHaveNote>
-                                    <div
-                                                class="alert alert-danger w-100"
-                                              >
-                                              {{'MustOneNote'|translate}}!
-                                                <strong
-                                                      ><a
-                                                        (click)="backToNote()"
-                                                        class="alert-link"
-                                                        >{{'ClickForBackToNotes'|translate}}</a
-                                                      ></strong
-                                                    >
-                                              </div>
-                                  </ng-template>
+                                </ng-template>
                               </form>
                             </ng-container>
                           </div>
@@ -2243,7 +2925,9 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>{{'Sikayet'|translate}}</mat-label>
+                                      <mat-label>{{
+                                        "Sikayet" | translate
+                                      }}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="sikayet"
@@ -2256,7 +2940,9 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>{{'Hikaye'|translate}}</mat-label>
+                                      <mat-label>{{
+                                        "Hikaye" | translate
+                                      }}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="hikaye"
@@ -2271,7 +2957,9 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>{{'Soygecmis'|translate}}</mat-label>
+                                      <mat-label>{{
+                                        "Soygecmis" | translate
+                                      }}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="soygecmis"
@@ -2284,7 +2972,9 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>{{'Icd'|translate}}</mat-label>
+                                      <mat-label>{{
+                                        "Icd" | translate
+                                      }}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="icd"
@@ -2299,7 +2989,9 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>{{'BasBoyunTiroid'|translate}}</mat-label>
+                                      <mat-label>{{
+                                        "BasBoyunTiroid" | translate
+                                      }}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="basBoyunTiroid"
@@ -2312,7 +3004,9 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>{{'Notes'|translate}}</mat-label>
+                                      <mat-label>{{
+                                        "Notes" | translate
+                                      }}</mat-label>
                                       <textarea
                                         matInput
                                         formControlName="notlar"
@@ -2327,10 +3021,12 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>{{'Status'|translate}}</mat-label>
+                                      <mat-label>{{
+                                        "SolunumSistemi" | translate
+                                      }}</mat-label>
                                       <textarea
                                         matInput
-                                        formControlName="durum"
+                                        formControlName="solunumSistemi"
                                       ></textarea>
                                     </mat-form-field>
                                   </div>
@@ -2340,16 +3036,214 @@
                                     <mat-form-field
                                       class="example-full-width mb-3"
                                     >
-                                      <mat-label>{{'Notes'|translate}}</mat-label>
+                                      <mat-label>{{
+                                        "Kardiyo" | translate
+                                      }}</mat-label>
                                       <textarea
                                         matInput
-                                        formControlName="notlar"
+                                        formControlName="kardiyo"
                                       ></textarea>
                                     </mat-form-field>
                                   </div>
                                 </div>
                                 <div class="row">
-                                  <div *ngIf="protocolHaveOneMedicalNote();else protocolHaveMedicalNote"
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "Extremiteler" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="extremiteler"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "KarinMuayene" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="karinMuayene"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "AnalGenital" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="analGenital"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "Cilt" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="cilt"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "NorolojikMuayene" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="norolojikMuayene"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "GecirilenOperasnyonlar" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="gecirilenOperasnyonlar"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "Alerjiler" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="alerjiler"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "KullanilanIlaclar" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="kullanilanIlaclar"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "Bagimlilik" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="bagimlilik"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "Uygulamalar" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="uygulamalar"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "Oneriler" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="oneriler"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                  <div
+                                    class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                  >
+                                    <mat-form-field
+                                      class="example-full-width mb-3"
+                                    >
+                                      <mat-label>{{
+                                        "Tedavi" | translate
+                                      }}</mat-label>
+                                      <textarea
+                                        matInput
+                                        formControlName="tedavi"
+                                      ></textarea>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div
+                                    *ngIf="
+                                      protocolHaveOneMedicalNote();
+                                      else protocolHaveMedicalNote
+                                    "
                                     class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3"
                                   >
                                     <button
@@ -2363,7 +3257,7 @@
                                       mat-raised-button
                                       color="primary"
                                     >
-                                    {{'Save'|translate}}
+                                      {{ "Save" | translate }}
                                     </button>
                                     <button
                                       class="mr-3"
@@ -2377,29 +3271,29 @@
                                       mat-raised-button
                                       color="accent"
                                     >
-                                    {{'Clear'|translate}}
+                                      {{ "Clear" | translate }}
                                     </button>
                                     <button
                                       (click)="backToNote()"
                                       type="button"
                                       mat-button
                                     >
-                                    {{'Cancel'|translate}}
+                                      {{ "Cancel" | translate }}
                                     </button>
                                   </div>
                                   <ng-template #protocolHaveMedicalNote>
-                                    <div
-                                                class="alert alert-danger w-100"
-                                              >
-                                              {{'MustOneNote'|translate}}!
-                                                <strong
-                                                      ><a
-                                                        (click)="backToNote()"
-                                                        class="alert-link"
-                                                        >{{'ClickForBackToNotes'|translate}}</a
-                                                      ></strong
-                                                    >
-                                              </div>
+                                    <div class="alert alert-danger w-100">
+                                      {{ "MustOneNote" | translate }}!
+                                      <strong
+                                        ><a
+                                          (click)="backToNote()"
+                                          class="alert-link"
+                                          >{{
+                                            "ClickForBackToNotes" | translate
+                                          }}</a
+                                        ></strong
+                                      >
+                                    </div>
                                   </ng-template>
                                 </div>
                               </form>
@@ -2504,7 +3398,7 @@
                                                     <div fxLayout="row">
                                                       <button
                                                         (click)="
-                                                        getNoteForDynamicData(
+                                                          getNoteForDynamicData(
                                                             dynamicTableDatas
                                                           )
                                                         "
@@ -2514,7 +3408,9 @@
                                                         <mat-icon
                                                           >arrow_back</mat-icon
                                                         >
-                                                        {{'Export'|translate}}
+                                                        {{
+                                                          "Export" | translate
+                                                        }}
                                                       </button>
                                                       <button
                                                         (click)="
@@ -2608,7 +3504,9 @@
                                                 <div
                                                   class="col-md-12 col-12 b-r"
                                                 >
-                                                  <strong>{{'Sikayet'|translate}}</strong>
+                                                  <strong>{{
+                                                    "Sikayet" | translate
+                                                  }}</strong>
                                                   <br />
                                                   <p class="text-muted">
                                                     {{ medical.sikayet }}
@@ -2617,7 +3515,9 @@
                                                 <div
                                                   class="col-md-12 col-12 b-r"
                                                 >
-                                                  <strong>{{'Hikaye'|translate}}</strong>
+                                                  <strong>{{
+                                                    "Hikaye" | translate
+                                                  }}</strong>
                                                   <br />
                                                   <p class="text-muted">
                                                     {{ medical.hikaye }}
@@ -2626,7 +3526,9 @@
                                                 <div
                                                   class="col-md-12 col-12 b-r"
                                                 >
-                                                  <strong>{{'Icd'|translate}}</strong>
+                                                  <strong>{{
+                                                    "Icd" | translate
+                                                  }}</strong>
                                                   <br />
                                                   <p class="text-muted">
                                                     {{ medical.icd }}
@@ -2635,19 +3537,165 @@
                                                 <div
                                                   class="col-md-12 col-12 b-r"
                                                 >
-                                                  <strong>{{'Soygecmis'|translate}}</strong>
+                                                  <strong>{{
+                                                    "Soygecmis" | translate
+                                                  }}</strong>
                                                   <br />
                                                   <p class="text-muted">
                                                     {{ medical.soygecmis }}
                                                   </p>
                                                 </div>
                                                 <div class="col-md-12 col-12">
-                                                  <strong
-                                                    >{{'BasBoyunTiroid'|translate}}</strong
-                                                  >
+                                                  <strong>{{
+                                                    "BasBoyunTiroid" | translate
+                                                  }}</strong>
                                                   <br />
                                                   <p class="text-muted">
                                                     {{ medical.basBoyunTiroid }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "Notes" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.notlar }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "SolunumSistemi" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.solunumSistemi }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "Kardiyo" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.kardiyo }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "Extremiteler" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.extremiteler }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "KarinMuayene" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.karinMuayene }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "AnalGenital" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.analGenital }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "Cilt" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.cilt }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "NorolojikMuayene"
+                                                      | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{
+                                                      medical.norolojikMuayene
+                                                    }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "GecirilenOperasnyonlar"
+                                                      | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{
+                                                      medical.gecirilenOperasnyonlar
+                                                    }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "Alerjiler" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.alerjiler }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "KullanilanIlaclar"
+                                                      | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{
+                                                      medical.kullanilanIlaclar
+                                                    }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "Bagimlilik" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.bagimlilik }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "Uygulamalar" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.uygulamalar }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "Oneriler" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.oneriler }}
+                                                  </p>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                  <strong>{{
+                                                    "Tedavi" | translate
+                                                  }}</strong>
+                                                  <br />
+                                                  <p class="text-muted">
+                                                    {{ medical.tedavi }}
                                                   </p>
                                                 </div>
                                               </mat-card-content>
@@ -2656,9 +3704,7 @@
                                                 <div fxLayout="row">
                                                   <button
                                                     (click)="
-                                                    getNoteForMedical(
-                                                        medical
-                                                      )
+                                                      getNoteForMedical(medical)
                                                     "
                                                     mat-raised-button
                                                     color="accent"
@@ -2666,7 +3712,7 @@
                                                     <mat-icon
                                                       >arrow_back</mat-icon
                                                     >
-                                                    {{'Export'|translate}}
+                                                    {{ "Export" | translate }}
                                                   </button>
                                                   <button
                                                     (click)="
@@ -2722,7 +3768,9 @@
                             class="example-full-width"
                             appearance="outline"
                           >
-                            <mat-label>{{'ChooseNoteType'|translate}}</mat-label>
+                            <mat-label>{{
+                              "ChooseNoteType" | translate
+                            }}</mat-label>
                             <mat-select
                               #selectForNoteAdd
                               [(ngModel)]="selectedNoteTypeForAdd"
@@ -2730,7 +3778,9 @@
                                 onOptionsSelectedForm(selectForNoteAdd.value)
                               "
                             >
-                              <mat-option value="Muayene">{{'Medical'|translate}}</mat-option>
+                              <mat-option value="Muayene">{{
+                                "Medical" | translate
+                              }}</mat-option>
                               <mat-option value="Test">Test</mat-option>
                               <mat-option value="Test2" disabled
                                 >Test2</mat-option
@@ -2748,9 +3798,11 @@
                             class="example-full-width"
                             appearance="outline"
                           >
-                            <mat-label>{{'ChoosePatientArrival'|translate}}</mat-label>
+                            <mat-label>{{
+                              "ChoosePatientArrival" | translate
+                            }}</mat-label>
                             <mat-select
-                            disabled
+                              disabled
                               #selectAppointmentForNoteAdd
                               [(ngModel)]="selectionForAppointment"
                               disabled
@@ -2768,14 +3820,17 @@
                                 {{ appointment.date | date }} tarihli,{{
                                   appointment.typeName
                                 }}
-                                tipli, {{appointment.departmentName}} departmanı
+                                tipli,
+                                {{ appointment.departmentName }} departmanı
                               </mat-option>
                             </mat-select>
                           </mat-form-field>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                        <div
+                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3"
+                        >
                           <ng-container [ngSwitch]="selectForNoteAdd.value">
                             <ng-container *ngSwitchCase="'Muayene'">
                               <ng-container
@@ -2847,19 +3902,28 @@
                                         </div>
                                       </ng-container>
                                       <ng-container *ngSwitchCase="'radio'">
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                        <div
+                                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                                        >
                                           <div class="m-b-20">
-                                            <mat-label class="mr-3">{{control.label}}</mat-label>
+                                            <mat-label class="mr-3">{{
+                                              control.label
+                                            }}</mat-label>
                                             <mat-radio-group
                                               aria-label="Select gender"
                                               [formControlName]="
                                                 control.formControlName
                                               "
                                             >
-                                              <mat-radio-button *ngFor="
-                                              let option of control.values
-                                            "
-                                            [value]="option.value">{{ option.value }}</mat-radio-button>
+                                              <mat-radio-button
+                                                *ngFor="
+                                                  let option of control.values
+                                                "
+                                                [value]="option.value"
+                                                >{{
+                                                  option.value
+                                                }}</mat-radio-button
+                                              >
                                             </mat-radio-group>
                                           </div>
                                         </div>
@@ -2929,7 +3993,7 @@
                                         mat-raised-button
                                         color="primary"
                                       >
-                                      {{'Save'|translate}}
+                                        {{ "Save" | translate }}
                                       </button>
                                       <button
                                         class="mr-3"
@@ -2943,14 +4007,14 @@
                                         mat-raised-button
                                         color="accent"
                                       >
-                                      {{'Clear'|translate}}
+                                        {{ "Clear" | translate }}
                                       </button>
                                       <button
                                         (click)="backToNote()"
                                         type="button"
                                         mat-button
                                       >
-                                      {{'Cancel'|translate}}
+                                        {{ "Cancel" | translate }}
                                       </button>
                                     </div>
                                   </div>
@@ -2973,7 +4037,9 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>{{'Sikayet'|translate}}</mat-label>
+                                        <mat-label>{{
+                                          "Sikayet" | translate
+                                        }}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="sikayet"
@@ -2986,7 +4052,9 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>{{'Hikaye'|translate}}</mat-label>
+                                        <mat-label>{{
+                                          "Hikaye" | translate
+                                        }}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="hikaye"
@@ -3001,7 +4069,9 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>{{'Soygecmis'|translate}}</mat-label>
+                                        <mat-label>{{
+                                          "Soygecmis" | translate
+                                        }}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="soygecmis"
@@ -3014,7 +4084,9 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>{{'Icd'|translate}}</mat-label>
+                                        <mat-label>{{
+                                          "Icd" | translate
+                                        }}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="icd"
@@ -3029,7 +4101,9 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>{{'BasBoyunTiroid'|translate}}</mat-label>
+                                        <mat-label>{{
+                                          "BasBoyunTiroid" | translate
+                                        }}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="basBoyunTiroid"
@@ -3042,7 +4116,9 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>{{'Notes'|translate}}</mat-label>
+                                        <mat-label>{{
+                                          "Notes" | translate
+                                        }}</mat-label>
                                         <textarea
                                           matInput
                                           formControlName="notlar"
@@ -3057,10 +4133,12 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>{{'Status'|translate}}</mat-label>
+                                        <mat-label>{{
+                                          "SolunumSistemi" | translate
+                                        }}</mat-label>
                                         <textarea
                                           matInput
-                                          formControlName="durum"
+                                          formControlName="solunumSistemi"
                                         ></textarea>
                                       </mat-form-field>
                                     </div>
@@ -3070,10 +4148,204 @@
                                       <mat-form-field
                                         class="example-full-width mb-3"
                                       >
-                                        <mat-label>{{'Notes'|translate}}</mat-label>
+                                        <mat-label>{{
+                                          "Kardiyo" | translate
+                                        }}</mat-label>
                                         <textarea
                                           matInput
-                                          formControlName="notlar"
+                                          formControlName="kardiyo"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "Extremiteler" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="extremiteler"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "KarinMuayene" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="karinMuayene"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "AnalGenital" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="analGenital"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "Cilt" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="cilt"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "NorolojikMuayene" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="norolojikMuayene"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "GecirilenOperasnyonlar" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="gecirilenOperasnyonlar"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "Alerjiler" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="alerjiler"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "KullanilanIlaclar" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="kullanilanIlaclar"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "Bagimlilik" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="bagimlilik"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "Uygulamalar" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="uygulamalar"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "Oneriler" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="oneriler"
+                                        ></textarea>
+                                      </mat-form-field>
+                                    </div>
+                                    <div
+                                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3"
+                                    >
+                                      <mat-form-field
+                                        class="example-full-width mb-3"
+                                      >
+                                        <mat-label>{{
+                                          "Tedavi" | translate
+                                        }}</mat-label>
+                                        <textarea
+                                          matInput
+                                          formControlName="tedavi"
                                         ></textarea>
                                       </mat-form-field>
                                     </div>
@@ -3094,7 +4366,7 @@
                                         mat-raised-button
                                         color="primary"
                                       >
-                                      {{'Save'|translate}}
+                                        {{ "Save" | translate }}
                                       </button>
                                       <button
                                         class="mr-3"
@@ -3109,14 +4381,14 @@
                                         mat-raised-button
                                         color="accent"
                                       >
-                                      {{'Clear'|translate}}
+                                        {{ "Clear" | translate }}
                                       </button>
                                       <button
                                         (click)="backToNote()"
                                         type="button"
                                         mat-button
                                       >
-                                      {{'Cancel'|translate}}
+                                        {{ "Cancel" | translate }}
                                       </button>
                                     </div>
                                   </div>
@@ -3142,14 +4414,20 @@
       </div>
 
       <ul class="fab-options">
-        <li *ngIf="checkClaim('UpdatePatientDataCommand')" routerLink="edit-patient/{{ patient.id }}">
-          <span class="fab-label">{{'Edit'|translate}}</span>
+        <li
+          *ngIf="checkClaim('UpdatePatientDataCommand')"
+          routerLink="edit-patient/{{ patient.id }}"
+        >
+          <span class="fab-label">{{ "Edit" | translate }}</span>
           <div class="fab-icon-holder">
             <i class="fas fa-user-edit"></i>
           </div>
         </li>
-        <li *ngIf="checkClaim('CreateProtocolCommand')" (click)="addProtocolForPatient()">
-          <span class="fab-label">{{'NewProtocol'|translate}}</span>
+        <li
+          *ngIf="checkClaim('CreateProtocolCommand')"
+          (click)="protocolControl(patient)"
+        >
+          <span class="fab-label">{{ "NewProtocol" | translate }}</span>
           <div class="fab-icon-holder">
             <i class="fas fa-file-medical"></i>
           </div>

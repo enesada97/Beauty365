@@ -23,6 +23,7 @@ import { AuthService } from "src/app/core/service/system-service/auth.service";
 import Swal from "sweetalert2";
 import { FormDialogComponent } from "../../patients/all-patients/dialog/form-dialog/form-dialog.component";
 import { Router } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-all-appointments",
@@ -61,7 +62,9 @@ export class AllAppointmentsComponent implements OnInit {
     private optionalSettingService: OptionalSettingService,
     private patientService :PatientService,
     private authService:AuthService,
-    private router:Router
+    private router:Router,
+    private protocolService:ProtocolService,
+    private translate:TranslateService,
   ) {}
   dataSource: MatTableDataSource<AppointmentDto>;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -70,7 +73,6 @@ export class AllAppointmentsComponent implements OnInit {
   optionalSettings: OptionalSetting[];
   ngOnInit() {
     this.userName=this.authService.getUserName();
-    console.log(this.userName);
     this.date = new Date();
     this.getAppointments();
     this.getOptionalSettings();
@@ -133,7 +135,6 @@ export class AllAppointmentsComponent implements OnInit {
     this.appointmentService.getById(row.appointmentNo).subscribe((data) => {
       this.appointment = data;
       if (this.appointment) {
-        console.log(this.appointment);
         const dialogRef = this.dialog.open(AddAppointmentDialogComponent, {
           data: {
             appointment: this.appointment,
@@ -183,12 +184,30 @@ export class AllAppointmentsComponent implements OnInit {
     });
   }
   protocolController(row:AppointmentDto){
-    this.addForProtocolAppointment=new Appointment({});
-    this.appointmentService.getById(row.appointmentNo).subscribe(data=>{
-      this.addForProtocolAppointment=data;
-      console.log(this.addForProtocolAppointment.patientDataId);
-        this.addForProtocolAppointment.patientDataId!=0?this.addProtocolForAppointment(this.addForProtocolAppointment):this.passParameter(this.addForProtocolAppointment);
-    })
+    (row.protocolNo);
+    if (row.protocolNo==0) {
+      this.addForProtocolAppointment=new Appointment({});
+      this.appointmentService.getById(row.appointmentNo).subscribe(data=>{
+        this.addForProtocolAppointment=data;
+          this.addForProtocolAppointment.patientDataId!=0?this.addProtocolForAppointment(this.addForProtocolAppointment):this.passParameter(this.addForProtocolAppointment);
+      });
+    } else {
+      Swal.fire({
+        title: this.translate.instant('ViewTheProtocol'),
+        text: this.translate.instant('AlreadyProtocolForAppointment'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: this.translate.instant('No'),
+        confirmButtonText: this.translate.instant('Yes'),
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigateByUrl("/admin/working/working-processes/"+row.protocolNo);
+        }
+      })
+    }
   }
   addProtocolForAppointment(appointment:Appointment,patient?:Patient) {
     if(patient){
@@ -202,7 +221,6 @@ export class AllAppointmentsComponent implements OnInit {
           },
         });
         dialogRef.afterClosed().subscribe((result:number) => {
-          console.log("result:" +result);
           if(result){
             this.router.navigateByUrl("admin/working/working-processes/"+result);
             }
@@ -225,7 +243,6 @@ export class AllAppointmentsComponent implements OnInit {
                 },
               });
               dialogRef.afterClosed().subscribe((result:number) => {
-                console.log("result:" +result);
                 if(result){
                   this.router.navigateByUrl("admin/working/working-processes/"+result);
                   }
@@ -236,7 +253,6 @@ export class AllAppointmentsComponent implements OnInit {
         }else{
           this.patientService.getById(appointment.patientDataId).subscribe(p=>{
             this.patient=p;
-            console.log(this.patient);
               const dialogRef = this.dialog.open(AddProtocolDialogComponent, {
                 data: {
                   patient: this.patient,
@@ -246,7 +262,6 @@ export class AllAppointmentsComponent implements OnInit {
                 },
               });
               dialogRef.afterClosed().subscribe((result:number) => {
-                console.log("result:" +result);
                 if(result){
                   this.router.navigateByUrl("admin/working/working-processes/"+result);
                   }
@@ -258,14 +273,14 @@ export class AllAppointmentsComponent implements OnInit {
   }
   passParameter(appointment:Appointment) {
     Swal.fire({
-      title: 'Randevudaki ilgili hastanın,hasta kayıdını oluşturmak ister misiniz ?',
-      text: appointment.name+" "+appointment.surName+" hasta kayıdı bulunamadı!",
+      title: this.translate.instant('CreatePatientAtTheAppointment'),
+      text: appointment.name+" "+appointment.surName+" "+this.translate.instant('PatientRecordNotFound'),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      cancelButtonText: 'Hayır',
-      confirmButtonText: 'Evet',
+      cancelButtonText: this.translate.instant('No'),
+      confirmButtonText: this.translate.instant('Yes'),
       showLoaderOnConfirm: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -280,14 +295,14 @@ export class AllAppointmentsComponent implements OnInit {
   }
   passParameterForIdentity(patient:Patient,appointment) {
     Swal.fire({
-      title: 'Randevudaki ilgili hastanın kimlik numarasını eklemek ister misiniz ?',
-      text: patient.name+" "+patient.surName+" kimlik numarası bulunamadı!",
+      title: this.translate.instant('AddIdentityNumberForPatientAtTheAppointment'),
+      text: patient.name+" "+patient.surName+" "+this.translate.instant('IdentityNumberNotFound'),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      cancelButtonText: 'Hayır',
-      confirmButtonText: 'Evet',
+      cancelButtonText: this.translate.instant('No'),
+      confirmButtonText: this.translate.instant('Yes'),
       showLoaderOnConfirm: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -304,8 +319,6 @@ export class AllAppointmentsComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((result:Patient) => {
-      console.log("result:");
-      console.log(result);
       if(result){
         this.patientService.getById(row.id).subscribe(p=>{
           row=p;
@@ -324,11 +337,8 @@ export class AllAppointmentsComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((result:Patient) => {
-      console.log("result:");
-      console.log(result);
       if(result){
         appointment.patientDataId=result.id;
-        console.log(appointment.patientDataId);
         this.appointmentService.update(appointment).subscribe(data=>{
           this.refresh();
           this.addProtocolForAppointment(JSON.parse(data).data,result);
@@ -345,7 +355,6 @@ export class AllAppointmentsComponent implements OnInit {
     this.events.push(`${type}: ${event.value}`);
     const newValue = event.value;
     this.date = moment(newValue).toDate();
-    console.log(this.date);
     this.getAppointments();
   }
   afterDay() {
@@ -356,7 +365,6 @@ export class AllAppointmentsComponent implements OnInit {
     day == 0 ? this.date.setMonth(month + 1) : this.date.setMonth(month);
     this.date.setDate(day + 1);
     this.date.setFullYear(year);
-    console.log(this.date);
     this.getAppointments();
   }
   beforeDay() {
@@ -367,7 +375,6 @@ export class AllAppointmentsComponent implements OnInit {
     day == 0 ? this.date.setMonth(month - 1) : this.date.setMonth(month);
     this.date.setDate(day - 1);
     this.date.setFullYear(year);
-    console.log(this.date);
     this.getAppointments();
   }
 }

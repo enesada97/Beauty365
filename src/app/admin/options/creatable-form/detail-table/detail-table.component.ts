@@ -71,7 +71,6 @@ export class DetailTableComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((result: FormField) => {
-      console.log("result:" + result);
       if (result && result != undefined) {
         if (result.type != "input") {
           this.refresh();

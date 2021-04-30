@@ -1,0 +1,65 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <div class="font-weight-bold p-t-5 p-l-10 font-17">
+            {{ "InvoiceForm" | translate }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>{{ "PaymentBillNo" | translate }}</mat-label>
+          <input matInput [(ngModel)]="paymentBillNo" type="number" required />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>{{'Workings'|translate}}</mat-label>
+          <mat-select [(ngModel)]="selectedWorkings" multiple>
+            <mat-option *ngFor="let item of workingDtos" [value]="item"
+              >{{'ProcessName'|translate}}:{{ item.processName }}- {{'Quantity'|translate}}:{{ item.quantity }}- {{'Price'|translate}}:{{ item.price}}{{'Currency'|translate}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <div class="example-button-row">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="submit()"
+            [disabled]="!paymentBillNo&&selectedWorkings&&selectedWorkings.length"
+          >
+            {{ "Save" | translate }}
+          </button>
+          <button
+            type="button"
+            mat-raised-button
+            color="warn"
+            (click)="onNoClick()"
+            tabindex="-1"
+          >
+            {{ "Cancel" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

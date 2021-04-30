@@ -75,6 +75,7 @@ export class AddProtocolDialogComponent implements OnInit {
     // Set the defaults
     this.dateAdapter.setLocale("tr");
     this.action = data.action;
+    this.userName=data.userName;
     if (this.action === "add") {
       this.data.patient.gender == true
       this.protocol = new Protocol({});
@@ -93,16 +94,13 @@ export class AddProtocolDialogComponent implements OnInit {
       this.protocolService
         .getById(this.protocolDto.protocolNo)
         .subscribe((data) => (this.protocol = data));
-      console.log(this.protocol);
       this.patientService
         .getById(this.protocol.patientDataId)
         .subscribe((data) => (this.patient = data));
-      console.log(this.patient);
     }
     this.protocolForm = this.createContactForm();
   }
   onOptionsSelected(value: any) {
-    console.log("the selected value is " + value);
     this.depForDoctorsService.getDoctorListByDepId(value).subscribe((data) => {
       this.doctors = data;
       if (this.action == "add" && this.doctors[0].id) {
@@ -116,7 +114,6 @@ export class AddProtocolDialogComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    console.log(this.userName);
     this.protocolTypeService.getList().subscribe((data) => {
       this.protocolTypes = data;
       if (this.action == "add" && this.protocolTypes[0].id) {
@@ -162,14 +159,14 @@ export class AddProtocolDialogComponent implements OnInit {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    if (this.protocolForm.valid&&this.userName) {
+    console.log(this.userName)
+    if (this.protocolForm.valid) {
       this.protocol.patientDataId = this.patient.id;
       this.protocol = Object.assign({}, this.protocolForm.value);
       this.protocolService.add(this.protocol).subscribe((m) => {
         if (m) {
           this.protocol=new Protocol({});
           this.protocol=JSON.parse(m).data;
-          console.log(JSON.stringify(m));
           //working kısmı
           this.protocolTypeProcessService
             .GetListForDefaultProcesses(
@@ -190,14 +187,14 @@ export class AddProtocolDialogComponent implements OnInit {
                 this.working.paidValue = 0;
                 this.working.arrearsValue = item.price;
                 this.working.doctorRatio=item.doctorRatio;
-                this.working.user=this.userName;
+                // this.working.user=this.userName;
+                this.working.user='';
                   this.workingService.add(this.working).subscribe((data) => {});
               });
             });
           this.appointmentService
             .getByIdentity(this.patient.phoneNumber, this.protocol.doctorId)
             .subscribe((data) => {
-              console.log(JSON.stringify(data));
               this.appointment = new Appointment({});
               if (data) {
                 this.appointment = data;
@@ -211,8 +208,6 @@ export class AddProtocolDialogComponent implements OnInit {
                     this.dialogRef.close(this.protocol.id);
                   });
               } else {
-                let test = new Date();
-                console.log("test" + test);
                 this.appointment.time =
                   this.appointment.date.getHours().toString() + ":00";
                 this.appointment.identityNumber = this.patient.identityNumber;

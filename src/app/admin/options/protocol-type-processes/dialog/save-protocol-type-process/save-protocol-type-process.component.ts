@@ -78,10 +78,6 @@ export class SaveProtocolTypeProcessComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   onNgModelChange($event) {
-    console.log($event);
-    console.log("kurum"+this.selectedInstitutionId.toString());
-    console.log("protokol"+this.selectedProtocolTypeId);
-    console.log("doktor"+this.selectedDoctorId);
     this.refresh();
   }
   isAllSelected() {
@@ -124,6 +120,7 @@ export class SaveProtocolTypeProcessComponent implements OnInit {
         this.processService.getById(pi.processId).subscribe(pr=>{
           this.protocolTypeProcess.doctorRatio=pr.doctorRatio;
           this.protocolTypeProcess.taxRatio=pr.taxRatio;
+          this.protocolTypeProcess.processId=pr.id;
           this.protocolTypeProcessService.add(this.protocolTypeProcess).subscribe(
             (data) => {
               if (index==alertCounter) {

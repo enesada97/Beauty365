@@ -38,7 +38,6 @@ export class AddDoctorComponent implements OnInit {
   }
   public onSubmit(): void {
     if (this.doctorForm.valid) {
-      console.log(this.doctorForm.value);
       this.doctor = Object.assign({}, this.doctorForm.value);
       this.depForDoctorsService.add(this.doctor).subscribe(data=>{
         this.router.navigateByUrl('/admin/doctors/all-doctors');

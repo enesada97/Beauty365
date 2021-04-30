@@ -92,9 +92,9 @@ export class ProtocolTypeProcessesComponent implements OnInit {
   }
   addNew() {
     const dialogRef = this.dialog.open(SaveProtocolTypeProcessComponent, {
-      height: "90%",
+      height: "70%",
       width: "90%",
-      minHeight: "60%",
+      minHeight: "40%",
       minWidth: "60%",
       data: {
         action: "add",

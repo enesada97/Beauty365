@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -13,6 +16,10 @@ import {
   ApexFill,
   ApexResponsive,
 } from 'ng-apexcharts';
+import { AppointmentDto } from 'src/app/core/models/appointmentdto.model';
+import { DailyReportDto } from 'src/app/core/models/daily-report-dto.model';
+import { DashboardService } from 'src/app/core/service/dashboard.service';
+import { AuthService } from 'src/app/core/service/system-service/auth.service';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -51,16 +58,58 @@ export class MainComponent implements OnInit {
 
   public areaChartOptions: Partial<ChartOptions>;
   public barChartOptions: Partial<ChartOptions>;
-  constructor() {}
+  dailyReportDto:DailyReportDto;
+  filledAppointmentDtos:AppointmentDto[];
+  displayedColumns = [
+    "patientName",
+    "patientSurname",
+    "departmentName",
+    "doctorName",
+    "doctorSurname",
+    "typeName",
+    "time",
+    "phoneNumber",
+    "patientHasArrive",
+    "actions",
+  ];
+  dataSource: MatTableDataSource<AppointmentDto>;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild("filter", { static: true }) filter: ElementRef;
+  constructor(public dashboardService:DashboardService,private authService:AuthService) {}
   ngOnInit() {
+    this.getDailyReport();
+    this.getFilledAppointmentsDto();
     this.smallChart1();
     this.smallChart2();
     this.smallChart3();
     this.smallChart4();
-    this.chart1();
-    this.chart2();
   }
-
+  getDailyReport(){
+    this.dashboardService.getDailyReport().subscribe(data=>{
+      this.dailyReportDto=data;
+    })
+  }
+  getFilledAppointmentsDto(){
+    this.dashboardService.getFilledAppointmentsDto().subscribe(data=>{
+      this.filledAppointmentDtos=data;
+      setTimeout(() => (this.dashboardService.isTblLoading = false), 1000);
+      this.dataSource = new MatTableDataSource<AppointmentDto>(
+        this.filledAppointmentDtos
+      );
+      setTimeout(() => (this.dataSource.sort = this.sort));
+      setTimeout(() => (this.dataSource.paginator = this.paginator));
+    })
+  }
+  refresh(){
+    this.getFilledAppointmentsDto();
+  }
+  checkClaim(claim:string):boolean{
+		return this.authService.claimGuard(claim)
+	}
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
   private smallChart1() {
     this.cardChart1 = {
       responsive: true,
@@ -340,135 +389,5 @@ export class MainComponent implements OnInit {
       '30-07-2018',
       '31-07-2018',
     ];
-  }
-  private chart1() {
-    this.areaChartOptions = {
-      series: [
-        {
-          name: 'New Patients',
-          data: [31, 40, 28, 51, 42, 85, 77],
-        },
-        {
-          name: 'Old Patients',
-          data: [11, 32, 45, 32, 34, 52, 41],
-        },
-      ],
-      chart: {
-        height: 350,
-        type: 'area',
-        toolbar: {
-          show: false,
-        },
-        foreColor: '#9aa0ac',
-      },
-      colors: ['#407fe4', '#908e8e'],
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: 'smooth',
-      },
-      xaxis: {
-        type: 'datetime',
-        categories: [
-          '2018-09-19',
-          '2018-09-20',
-          '2018-09-21',
-          '2018-09-22',
-          '2018-09-23',
-          '2018-09-24',
-          '2018-09-25',
-        ],
-      },
-      legend: {
-        show: true,
-        position: 'top',
-        horizontalAlign: 'center',
-        offsetX: 0,
-        offsetY: 0,
-      },
-
-      tooltip: {
-        theme: 'dark',
-        marker: {
-          show: true,
-        },
-        x: {
-          show: true,
-        },
-      },
-    };
-  }
-  private chart2() {
-    this.barChartOptions = {
-      series: [
-        {
-          name: 'Colds and Flu',
-          data: [44, 55, 41, 67, 22, 43],
-        },
-        {
-          name: 'Headaches',
-          data: [13, 23, 20, 8, 13, 27],
-        },
-        {
-          name: 'Malaria',
-          data: [11, 17, 15, 15, 21, 14],
-        },
-        {
-          name: 'Typhoid',
-          data: [21, 7, 25, 13, 22, 8],
-        },
-      ],
-      chart: {
-        type: 'bar',
-        height: 350,
-        foreColor: '#9aa0ac',
-        stacked: true,
-        toolbar: {
-          show: false,
-        },
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: 'bottom',
-              offsetX: -10,
-              offsetY: 0,
-            },
-          },
-        },
-      ],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '30%',
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      xaxis: {
-        type: 'category',
-        categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      },
-      legend: {
-        show: false,
-      },
-      fill: {
-        opacity: 0.8,
-        colors: ['#01B8AA', '#374649', '#FD625E', '#F2C80F'],
-      },
-      tooltip: {
-        theme: 'dark',
-        marker: {
-          show: true,
-        },
-        x: {
-          show: true,
-        },
-      },
-    };
   }
 }

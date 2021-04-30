@@ -41,8 +41,6 @@ export class AuthService {
         this.claims=data.data.claims;
         localStorage.setItem("claim",data.data.claims.toString());
         this.name=data.data.claims;
-        console.log(this.name);
-        console.log(this.claims);
 
 
          var decode = this.jwtHelper.decodeToken(this.storageService.getToken());
@@ -84,7 +82,7 @@ export class AuthService {
   }
 
   logOut() {
-    console.log("Çıkış Yapıldı");
+    ("Çıkış Yapıldı");
     this.storageService.removeToken();
     this.storageService.removeItem("lang");
     this.storageService.removeItem("claim");
@@ -104,7 +102,7 @@ export class AuthService {
   claimGuard(claim: string): boolean {
     if(this.claims.length==0){
       this.claims=localStorage.getItem("claim").split(',');
-      console.log("a");
+      ("a");
     }
     var check = this.claims.some(function (item) {
       return item == claim;

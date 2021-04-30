@@ -1,0 +1,216 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ "FirmSettingsForm" | translate }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i>{{ "Homepage" | translate }}</a
+              >
+            </li>
+            <li class="breadcrumb-item active">
+              {{ "FirmSettings" | translate }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header d-flex justify-content-center pt-4">
+            <img width="15%" *ngIf="firm&&firm.logoUrl && firm.logoUrl.length;else noLogo" [src]="fullPath" alt="logo" />
+            <ng-template #noLogo>
+              <h2><strong>{{'FirmSettingsForm'|translate}}</strong></h2>
+            </ng-template>
+          </div>
+          <div class="body">
+            <form class="m-4" *ngIf="firmForm" [formGroup]="firmForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'LogoUrl' | translate }}</mat-label>
+                    <ngx-mat-file-input formControlName="logoUrl">
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>add_a_photo</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'Name' | translate }}</mat-label>
+                    <input matInput formControlName="name" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'Email' | translate }}</mat-label>
+                    <input matInput formControlName="email" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'EmailHost' | translate }}</mat-label>
+                    <input matInput formControlName="emailHost" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'EmailPort' | translate }}</mat-label>
+                    <input matInput formControlName="emailPort" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'EmailPassword' | translate }}</mat-label>
+                    <input matInput formControlName="emailPassword" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'Fax' | translate }}</mat-label>
+                    <input matInput formControlName="fax" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'City' | translate }}</mat-label>
+                    <input matInput formControlName="city" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'District' | translate }}</mat-label>
+                    <input matInput formControlName="district" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'SmsHeader' | translate }}</mat-label>
+                    <input matInput formControlName="smsHeader" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'SmsUserName' | translate }}</mat-label>
+                    <input matInput formControlName="smsUserName" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'SmsPassword' | translate }}</mat-label>
+                    <input matInput formControlName="smsPassword" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'SmsTur' | translate }}</mat-label>
+                    <input matInput formControlName="smsTur" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'PhoneNumber' | translate }}</mat-label>
+                    <input matInput formControlName="phoneNumber" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'TradeNo' | translate }}</mat-label>
+                    <input matInput formControlName="tradeNo" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'TradeTitle'| translate }}</mat-label>
+                    <input matInput formControlName="tradeTitle" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'TaxOffice' | translate }}</mat-label>
+                    <input matInput formControlName="taxOffice" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'TaxNo' | translate }}</mat-label>
+                    <input matInput formControlName="taxNo" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'WebSiteUrl' | translate }}</mat-label>
+                    <input matInput formControlName="webSiteUrl" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{
+                      'DateOfLicenceFinish' | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="picker"
+                      placeholder="{{ 'Select' | translate }}"
+                      formControlName="dateOfLicenceFinish"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3">
+                    <mat-label>{{ 'Address' | translate }}</mat-label>
+                    <textarea matInput formControlName="address"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div *ngIf="checkClaim('UpdateFirmCommand')" class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button
+                    class="mr-3"
+                    [disabled]="!firmForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                  <button type="button" mat-button>
+                    {{ "Cancel" | translate }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

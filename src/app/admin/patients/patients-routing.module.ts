@@ -5,7 +5,6 @@ import { AddPatientComponent } from './add-patient/add-patient.component';
 import { AllPatientsComponent } from './all-patients/all-patients.component';
 import { DetailPatientComponent } from './detail-patient/detail-patient/detail-patient.component';
 import { EditPatientComponent } from './edit-patient/edit-patient.component';
-import { PatientDetailComponent } from './patient-detail/patient-detail.component';
 import { SearchPatientComponent } from './search-patient/search-patient.component';
 
 const routes: Routes = [
@@ -24,10 +23,6 @@ const routes: Routes = [
   {
     path:"all-patients/patient-detail/:id",
     component:DetailPatientComponent
-  },
-  {
-    path:"search-patient/patient-detail/:id",
-    component:PatientDetailComponent
   },
   {
     path:"search-patient/edit-patient/:id",

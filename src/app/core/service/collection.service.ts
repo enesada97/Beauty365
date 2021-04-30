@@ -17,7 +17,7 @@ export class CollectionService extends CrudService<Collection, null, number> {
   }
   getListByProtocolId(id): Observable<Collection[]> {
     return this.httpClient.get<Collection[]>(
-      environment.apiUrl + "/collections/getlistbyprotocolid?=" + id
+      environment.apiUrl + "/collections/getlistbyprotocolid?id=" + id
     );
   }
 }

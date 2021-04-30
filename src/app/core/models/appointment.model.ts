@@ -29,12 +29,12 @@ export class Appointment {
         this.surName = appointment.surName || '';
         this.phoneNumber = appointment.phoneNumber || null;
         this.patientDataId = appointment.patientDataId || '';
-        this.protocolId = appointment.protocolId || '';
+        this.protocolId = appointment.protocolId || 0;
         this.doctorId = appointment.doctorId || '';
         this.departmentId = appointment.departmentId || '';
         this.protocolTypeId = appointment.protocolTypeId || '';
         this.description = appointment.description || '';
-        this.createdAppointmentDateTime = appointment.createdAppointmentDateTime || '';
+        this.createdAppointmentDateTime = appointment.createdAppointmentDateTime || new Date();
         this.arriveDateTime = appointment.arriveDateTime || '';
         this.inspectionStartDateTime = appointment.inspectionStartDateTime || '';
         this.inspectionEndDateTime = appointment.inspectionEndDateTime || '';

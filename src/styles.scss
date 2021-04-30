@@ -2,6 +2,12 @@
 .tooltip-red {
   background: #b71c1c;
 }
+.tooltip-orange {
+  background: #ffb04a;
+  font-size: 15px;
+ white-space: pre-wrap;
+ max-width: unset !important;
+}
 .fab-container {
 	position: fixed;
 	bottom: 30px;
@@ -178,5 +184,16 @@ mat-list-option span {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.mat-dialog-container .custom-dialog-container{
+  overflow: visible !important;
+  height: 45vh;
+  min-width: 50vh;
+}
+@media only all and (max-device-width: 1024px) {
+  .mat-dialog-container .custom-dialog-container{
+    overflow: visible !important;
+    height: 40vh;
+  }
 }
 

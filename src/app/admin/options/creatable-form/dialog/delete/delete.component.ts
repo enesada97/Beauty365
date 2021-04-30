@@ -41,7 +41,6 @@ export class DeleteComponent{
     }
   }
   onNoClick(): void {
-    console.log(this.data);
     this.dialogRef.close();
   }
   confirmDelete(): void {

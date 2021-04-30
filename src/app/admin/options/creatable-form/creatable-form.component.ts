@@ -72,7 +72,6 @@ export class CreatableFormComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((result:FormTable) => {
-      console.log("result:" +result);
       if(result){
           this.refresh();
           this.router.navigateByUrl("admin/options/detail-table/"+result.id);

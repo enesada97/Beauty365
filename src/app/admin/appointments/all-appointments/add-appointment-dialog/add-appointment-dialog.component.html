@@ -111,13 +111,11 @@
               </ng-container>
               <ng-container matColumnDef="identityNumber">
                 <mat-header-cell
-                  [ngClass]="'tbl-col-width-per-11'"
                   *matHeaderCellDef
                   mat-sort-header
                   >{{'IdentityNumber'|translate}}</mat-header-cell
                 >
                 <mat-cell
-                  [ngClass]="'tbl-col-width-per-11'"
                   *matCellDef="let row"
                 >
                   {{ row.identityNumber }}</mat-cell
@@ -125,13 +123,11 @@
               </ng-container>
               <ng-container matColumnDef="phoneNumber">
                 <mat-header-cell
-                  [ngClass]="'tbl-col-width-per-11'"
                   *matHeaderCellDef
                   mat-sort-header
                   >{{'PhoneNumber'|translate}}</mat-header-cell
                 >
                 <mat-cell
-                  [ngClass]="'tbl-col-width-per-11'"
                   *matCellDef="let row"
                 >
                   {{ row.phoneNumber }}</mat-cell
@@ -162,6 +158,13 @@
               <mat-row *matRowDef="let row; columns: displayedColumns">
               </mat-row>
             </mat-table>
+            <mat-paginator
+                #paginator
+                [pageIndex]="0"
+                [pageSize]="5"
+                [pageSizeOptions]="[5, 10, 25]"
+              >
+              </mat-paginator>
           </div>
         </mat-expansion-panel>
       </mat-accordion>

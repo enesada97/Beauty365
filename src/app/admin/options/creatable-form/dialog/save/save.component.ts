@@ -44,7 +44,8 @@ export class SaveComponent{
   submit() {
     if (this.tableForm.valid&&this.userName) {
       this.formTable = Object.assign({}, this.tableForm.value);
-      this.formTable.addedBy=this.userName;
+      // this.formTable.addedBy=this.userName;
+      this.formTable.addedBy='';
       if(this.formTable.id==0){
         this.formTableService.add(this.formTable).subscribe(data=>{
           this.dialogRef.close(JSON.parse(data).data);

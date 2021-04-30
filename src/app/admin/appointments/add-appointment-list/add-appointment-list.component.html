@@ -36,6 +36,7 @@
               [formGroup]="createAppointmentsForm"
               (ngSubmit)="onSubmit()"
             >
+            {{createAppointmentsForm.value|json}}
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">

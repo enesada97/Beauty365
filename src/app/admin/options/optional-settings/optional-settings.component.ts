@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { OptionalSetting } from 'src/app/core/models/optional-setting.model';
 import { OptionalSettingService } from 'src/app/core/service/optional-setting.service';
 import { AuthService } from 'src/app/core/service/system-service/auth.service';
@@ -14,7 +15,7 @@ export class OptionalSettingsComponent implements OnInit {
   optionalSettings:OptionalSetting[]=[];
   optionalSetting:OptionalSetting;
   optionalSettingsForm: FormGroup;
-  constructor(private optionalSettingService:OptionalSettingService,private fb: FormBuilder,private authService:AuthService) {
+  constructor(private optionalSettingService:OptionalSettingService,private fb: FormBuilder,private authService:AuthService,private translate:TranslateService) {
       this.optionalSettingsForm = this.fb.group({
         id: this.fb.array([
         ]),
@@ -61,13 +62,11 @@ export class OptionalSettingsComponent implements OnInit {
 public onFormSubmit(): void {
     if (this.optionalSettingsForm.valid) {
       let optionalSettings:OptionalSetting[] = Object.assign([], this.optionalSettingsForm.value);
-      console.log(this.optionalSettings);
     }
   }
   passParameter() {
     if (this.optionalSettingsForm.valid) {
       let optionalSettings= Object.assign([], this.optionalSettingsForm.value);
-      console.log(optionalSettings);
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn btn-success",
@@ -77,7 +76,7 @@ public onFormSubmit(): void {
     });
     swalWithBootstrapButtons
       .fire({
-        title: "Varsayılan ayarlarınızı güncellemek istediğinize emin misiniz?",
+        title: this.translate.instant('UpdateOptionalSettingsConfirm'),
         showClass: {
           popup: "animate__animated animate__fadeInDown",
         },
@@ -88,8 +87,8 @@ public onFormSubmit(): void {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Evet ",
-        cancelButtonText: " Hayır",
+        confirmButtonText: this.translate.instant('Yes'),
+        cancelButtonText: this.translate.instant('No'),
         reverseButtons: true,
       })
       .then((result) => {
@@ -110,7 +109,11 @@ public onFormSubmit(): void {
                 );
             }
           }
-          swalWithBootstrapButtons.fire("Değişiklikler Kaydedildi", "", "success");
+          swalWithBootstrapButtons.fire({
+            title: this.translate.instant('SavedChanges'),
+            icon:"success",
+            confirmButtonText: this.translate.instant('OK')
+          });
         }
       });
   }

@@ -25,7 +25,7 @@ export class TranslateComponent implements OnInit {
     public translateService: TranslateService,
     private authService: AuthService,
     public dialog: MatDialog,
-    private sweetAlert:SweetalertService
+    private sweetAlert:SweetalertService,
   ) {}
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 	@ViewChild(MatSort) sort: MatSort;
@@ -37,6 +37,7 @@ export class TranslateComponent implements OnInit {
   refresh() {
     this.getTranslateList();
   }
+
   getTranslateList() {
     this.translateService.getList().subscribe((data) => {
       setTimeout(() => (this.translateService.isTblLoading = false), 1000);

@@ -27,6 +27,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslationService } from './core/service/system-service/Translation.service';
 import { JwtModule } from "@auth0/angular-jwt";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { CookieService } from "ngx-cookie-service";
+import { FirmService } from "./core/service/firm.service";
 
 // i18 kullanıclak ise aşağıdaki metod aktif edilecek
 
@@ -99,7 +101,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       multi: true,
     },
     // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
+    CookieService,
+    FirmService
   ],
   entryComponents: [],
   bootstrap: [AppComponent],

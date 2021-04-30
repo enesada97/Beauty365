@@ -42,7 +42,7 @@ export class TranslateSaveComponent{
   createContactForm(): FormGroup {
     return this.fb.group({
       id: [this.translate.id],
-      langid: [this.translate.langid, [Validators.required]],
+      langId: [this.translate.langId, [Validators.required]],
       code: [this.translate.code, [Validators.required]],
       value: [this.translate.value, [Validators.required]]
     });

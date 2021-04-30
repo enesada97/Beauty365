@@ -5,8 +5,8 @@
   <div class="demo-skin"
     [ngStyle]="{'position' : 'relative', 'max-height' : maxHeight+'px', 'max-width' : maxWidth+'px'}"
     [perfectScrollbar]>
-    <div class="rightSetting">
-      <p>GENERAL SETTINGS</p>
+    <!-- <div class="rightSetting">
+      <p>{{'GENERALSETTİNGS'|translate}}</p>
       <ul class="setting-list list-unstyled m-t-20">
         <li>
           <div class="form-check">
@@ -61,23 +61,23 @@
           </div>
         </li>
       </ul>
-    </div>
-    <div class="rightSetting">
-      <p>SIDEBAR MENU COLORS</p>
+    </div> -->
+    <div class="rightSetting mt-4">
+      <p>{{'SIDEBARMENUCOLORS'|translate}}</p>
       <mat-button-toggle-group class="mt-2" [value]="isDarkSidebar ? 'dark' : 'light'">
         <mat-button-toggle (click)="lightSidebarBtnClick()" value="light">Light</mat-button-toggle>
         <mat-button-toggle (click)="darkSidebarBtnClick()" value="dark">Dark</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
     <div class="rightSetting">
-      <p>THEME COLORS</p>
+      <p>{{'THEMECOLORS'|translate}}</p>
       <mat-button-toggle-group class="mt-2" [value]="isDarTheme ? 'dark' : 'light'">
         <mat-button-toggle (click)="lightThemeBtnClick()" value="light">Light</mat-button-toggle>
         <mat-button-toggle (click)="darkThemeBtnClick()" value="dark">Dark</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
     <div class="rightSetting">
-      <p>SKINS</p>
+      <p>{{'SKINS'|translate}}</p>
       <ul class="demo-choose-skin choose-theme list-unstyled">
         <li data-theme="white" [ngClass]="{'actived': selectedBgColor === 'white'}" (click)="selectTheme('white')">
           <div class="white-theme white-theme-border"></div>
@@ -102,7 +102,7 @@
         </li>
       </ul>
     </div>
-    <div class="rightSetting">
+    <!-- <div class="rightSetting">
       <p>Disk Space</p>
       <div class="sidebar-progress">
         <div class="progress m-t-20">
@@ -125,7 +125,7 @@
           <small>Highly Loaded</small>
         </span>
       </div>
-    </div>
+    </div> -->
   </div>
 </aside>
 <!-- #END# Right Sidebar -->

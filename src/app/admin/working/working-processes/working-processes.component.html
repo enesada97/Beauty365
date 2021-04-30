@@ -24,7 +24,7 @@
       <div class="col-lg-3 col-sm-6">
         <div class="info-box6 primary">
           <i class="fas fa-money-bill-wave"></i>
-          <span class="count-numbers">{{ totalPrice }}₺</span>
+          <span class="count-numbers">{{ totalPrice |number:'1.0-2'}}{{'Currency'|translate}}</span>
           <span class="count-name">{{'Total'|translate}}</span>
           <input hidden name="totalPrice" [(ngModel)]="totalPrice" />
         </div>
@@ -32,7 +32,7 @@
       <div class="col-lg-3 col-sm-6">
         <div class="info-box6 danger">
           <i class="fas fa-percent"></i>
-          <span class="count-numbers" *ngIf="(discount);else noDiscount">{{ discount }}₺</span>
+          <span class="count-numbers" *ngIf="(discount);else noDiscount">{{ discount |number:'1.0-2'}}{{'Currency'|translate}}</span>
             <ng-template #noDiscount><span class="count-numbers">%0</span></ng-template>
           <span class="count-name">{{'Discount'|translate}}</span>
           <input hidden name="discount" [(ngModel)]="discount" />
@@ -41,7 +41,7 @@
       <div class="col-lg-3 col-sm-6">
         <div class="info-box6 success">
           <i class="fas fa-check-circle"></i>
-          <span class="count-numbers">{{ paidValue }}₺</span>
+          <span class="count-numbers">{{ paidValue |number:'1.0-2'}}{{'Currency'|translate}}</span>
           <span class="count-name">{{'Paid'|translate}}</span>
           <input hidden name="paidValue" [(ngModel)]="paidValue" />
         </div>
@@ -49,7 +49,7 @@
       <div class="col-lg-3 col-sm-6">
         <div class="info-box6 info">
           <i class="fas fa-minus-circle"></i>
-          <span class="count-numbers">{{ arrearsValue }}₺</span>
+          <span class="count-numbers">{{ arrearsValue |number:'1.0-2'}}{{'Currency'|translate}}</span>
           <span class="count-name">{{'Arrears'|translate}}</span>
           <input
                       hidden
@@ -128,6 +128,20 @@
                                 (click)="exportTable()"
                               >
                                 <mat-icon class="col-white">print</mat-icon>
+                              </button>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="icon-button-demo">
+                              <button
+                                mat-mini-fab
+                                color="primary"
+                                (click)="openInvoiceToNewTab()
+                                "
+                              >
+                                <mat-icon
+                                  class="col-white fas fa-file-invoice"
+                                ></mat-icon>
                               </button>
                             </div>
                           </li>
@@ -264,7 +278,21 @@
                         [ngClass]="'tbl-col-width-per-11'"
                         *matCellDef="let row"
                       >
-                        {{ row.price }}</mat-cell
+                        {{ row.price|number:'1.0-2' }}</mat-cell
+                      >
+                    </ng-container>
+                    <ng-container matColumnDef="nonTaxablePrice">
+                      <mat-header-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matHeaderCellDef
+                        mat-sort-header
+                        >{{'NonTaxablePrice'|translate}}</mat-header-cell
+                      >
+                      <mat-cell
+                        [ngClass]="'tbl-col-width-per-11'"
+                        *matCellDef="let row"
+                      >
+                        {{ row.nonTaxablePrice|number:'1.0-2' }}</mat-cell
                       >
                     </ng-container>
                     <ng-container matColumnDef="saleValue">
@@ -278,7 +306,7 @@
                         [ngClass]="'tbl-col-width-per-11'"
                         *matCellDef="let row"
                       >
-                        {{ row.saleValue }}</mat-cell
+                        {{ row.saleValue |number:'1.0-2'}}</mat-cell
                       >
                     </ng-container>
                     <ng-container matColumnDef="paidValue">
@@ -292,7 +320,7 @@
                         [ngClass]="'tbl-col-width-per-11'"
                         *matCellDef="let row"
                       >
-                        {{ row.paidValue }}</mat-cell
+                        {{ row.paidValue|number:'1.0-2' }}</mat-cell
                       >
                     </ng-container>
                     <ng-container matColumnDef="arrearsValue">
@@ -306,7 +334,7 @@
                         [ngClass]="'tbl-col-width-per-11'"
                         *matCellDef="let row"
                       >
-                        {{ row.arrearsValue }}</mat-cell
+                        {{ row.arrearsValue|number:'1.0-2' }}</mat-cell
                       >
                     </ng-container>
                     <!-- actions -->
@@ -328,16 +356,27 @@
                           </button>
                         </mat-menu>
                         <mat-menu #protocolProcesses="matMenu">
-                          <button mat-menu-item
-                          *ngIf="checkClaim('UpdateWorkingCommand')"
-                          (click)="$event.stopPropagation()"
-                          (click)="editCall(row)">
-                            <mat-icon>edit</mat-icon>
+                          <button *ngIf="row.saleValue!>0;else noDiscount" mat-menu-item matTooltip="{{'CantDeleteAppliedDiscountWorking'|translate}}"  matTooltipClass="tooltip-red"
+                          disabled
+
+                          >
+                          <mat-icon>edit</mat-icon
+                          >
                             <span>{{'Edit'|translate}}</span>
                           </button>
+                          <ng-template #noDiscount>
+                            <button mat-menu-item
+                            *ngIf="checkClaim('UpdateWorkingCommand')"
+
+                          (click)="editCall(row)">
+                          <mat-icon>edit</mat-icon
+                        >
+                        {{'Edit'|translate}}
+                          </button>
+                          </ng-template>
                           <button *ngIf="row.arrearsValue===0;else notZero" mat-menu-item matTooltip="{{'CantDeletePaidWorking'|translate}}"  matTooltipClass="tooltip-red"
                           disabled
-                          (click)="$event.stopPropagation()"
+
                           >
                           <mat-icon>delete</mat-icon
                           >
@@ -346,7 +385,7 @@
                           <ng-template #notZero>
                             <button mat-menu-item
                             *ngIf="checkClaim('DeleteWorkingCommand')"
-                          (click)="$event.stopPropagation()"
+
                           (click)="deleteItem(row)">
                           <mat-icon>delete</mat-icon
                         >
@@ -407,6 +446,20 @@
             <i (click)="getProcessesDialog()" class="fas fa-plus-circle"></i>
           </div>
         </li>
+        <li *ngIf="dataSource&&dataSource.data.length>=1&&checkClaim('CreateCollectionCommand');else noInvoices">
+          <span class="fab-label">{{'AddInvoice' |translate}}</span>
+          <div class="fab-icon-holder">
+            <i (click)="addInvoices()" class="fas fa-file-invoice"></i>
+          </div>
+        </li>
+        <ng-template #noInvoices>
+          <li>
+            <span class="fab-label">{{'AddInvoice' |translate}}</span>
+          <div class="fab-icon-holder disabled">
+            <i matTooltip="{{'CurrentWorkingNotFound' |translate}}"  matTooltipClass="tooltip-red" class="fas fa-file-invoice"></i>
+          </div>
+          </li>
+        </ng-template>
         <li *ngIf="dataSource&&dataSource.data.length>=1&&checkClaim('CreateCollectionCommand');else noCollections">
           <span class="fab-label">{{'AddCollection' |translate}}</span>
           <div class="fab-icon-holder">

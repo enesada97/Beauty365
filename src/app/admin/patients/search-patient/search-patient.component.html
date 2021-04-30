@@ -159,17 +159,17 @@
                           <span>{{'ProtocolProcesses'|translate}}</span>
                         </button>
                         <button mat-menu-item [matMenuTriggerFor]="patientProcesses">
-                          <mat-icon>user</mat-icon>
+                          <mat-icon>face</mat-icon>
                           <span>{{'PatientProcesses'|translate}}</span>
                         </button>
                       </mat-menu>
                       <mat-menu #protocolProcesses="matMenu">
                         <button mat-menu-item
-                        *ngIf="checkClaim('CreateProtocolCommand')"
-                        (click)="addProtocolForPatient(row)">
-                          <mat-icon>add</mat-icon>
-                          <span>{{'Add'|translate}}</span>
-                        </button>
+                      *ngIf="checkClaim('CreateProtocolCommand')"
+                      (click)="protocolControl(row)">
+                        <mat-icon>add</mat-icon>
+                        <span>{{'Add'|translate}}</span>
+                      </button>
                         <!-- <button mat-menu-item>
                           <mat-icon>remove_red_eye</mat-icon>
                           <span>Görüntüle</span>
@@ -184,7 +184,7 @@
                         </button>
                         <button mat-menu-item
                         *ngIf="checkClaim('GetPatientDataQuery')"
-                        routerLink="patient-detail/{{ row.id }}">
+                        routerLink="/admin/patients/all-patients/patient-detail/{{row.id}}">
                           <mat-icon>description</mat-icon>
                           <span>{{'Detail'|translate}}</span>
                         </button>
@@ -221,6 +221,14 @@
                 >
                 </mat-row>
                 </mat-table>
+                <div
+                class="no-results"
+                [style.display]="
+                  dataSource.data.length == 0 ? '' : 'none'
+                "
+              >
+              <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
+              </div>
                 <mat-paginator
                 #paginator
                 [pageIndex]="0"

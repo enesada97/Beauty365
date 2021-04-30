@@ -1,6 +1,7 @@
 export class Working {
   id?: number;
   protocolId?: number;
+  invoiceDetailId?:number;
   workingDateTime?: Date | any;
   processId?: number;
   metarialId?: number;
@@ -14,7 +15,7 @@ export class Working {
   receiptNo?: string;
   billNo?: string;
   taxRatio?: number;
-  priceIncludeTax?: number;
+  nonTaxablePrice?: number;
   user?: string;
   quantity?: number;
   saleValue?: number;
@@ -22,6 +23,7 @@ export class Working {
     {
       this.id = working.id || 0;
       this.protocolId = working.protocolId || "";
+      this.invoiceDetailId= working.invoiceDetailId||null;
       this.processId = working.processId || "";
       this.metarialId = working.metarialId || 0;
       this.doctorId = working.doctorId || 0;
@@ -34,7 +36,7 @@ export class Working {
       this.billNo = working.biilNo || "";
       this.price = working.price || 0;
       this.taxRatio = working.taxRatio || 0;
-      this.priceIncludeTax = working.priceIncludeTax || 0;
+      this.nonTaxablePrice = working.nonTaxablePrice || 0;
       this.user = working.user || "";
       this.quantity = working.quantity || 0;
       this.saleValue = working.saleValue || 0;

@@ -4,6 +4,7 @@ export class AppointmentDto {
     institutionName:string;
     patientName:string;
     patientSurname:string;
+    patientDataId:string;
     departmentName:string;
     doctorName:string;
     doctorSurname:string;

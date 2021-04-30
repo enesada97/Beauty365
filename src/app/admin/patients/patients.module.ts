@@ -28,7 +28,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { DeleteComponent } from "./all-patients/dialog/delete/delete.component";
 import { FormDialogComponent } from "./all-patients/dialog/form-dialog/form-dialog.component";
 import { AddPatientComponent } from "./add-patient/add-patient.component";
-import { PatientDetailComponent } from './patient-detail/patient-detail.component';
 import { EditPatientComponent } from './edit-patient/edit-patient.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { SearchPatientComponent } from './search-patient/search-patient.component';
@@ -51,6 +50,9 @@ import { WorkingService } from 'src/app/core/service/working.service';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
+import { InvoiceService } from 'src/app/core/service/invoice.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { OptionalSettingService } from 'src/app/core/service/optional-setting.service';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,6 @@ import { TranslationService } from 'src/app/core/service/system-service/Translat
     AddPatientComponent,
     DeleteComponent,
     FormDialogComponent,
-    PatientDetailComponent,
     EditPatientComponent,
     SearchPatientComponent,
     AddProtocolDialogComponent,
@@ -97,6 +98,7 @@ import { TranslationService } from 'src/app/core/service/system-service/Translat
     MatExpansionModule,
     MatListModule,
     MatCardModule,
+    MatTooltipModule,
     TranslateModule.forChild({
       loader: {
           provide: TranslateLoader,
@@ -106,6 +108,6 @@ import { TranslationService } from 'src/app/core/service/system-service/Translat
       }
   })
   ],
-  providers: [PatientService,MedicalAlertService,AppointmentService,ProtocolService,MedicalService,CollectionService,WorkingService,ProtocolTypeProcessService],
+  providers: [PatientService,InvoiceService,MedicalAlertService,AppointmentService,ProtocolService,MedicalService,CollectionService,WorkingService,ProtocolTypeProcessService,OptionalSettingService],
 })
 export class PatientsModule {}

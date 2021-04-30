@@ -216,7 +216,7 @@
                       <button mat-menu-item
                       *ngIf="checkClaim('GetPatientDataQuery')"
                       routerLink="patient-detail/{{ row.id }}"
-                      (click)="$event.stopPropagation()">
+                      >
                         <mat-icon>description</mat-icon>
                         <span>{{'Detail'|translate}}</span>
                       </button>

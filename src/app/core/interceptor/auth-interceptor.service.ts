@@ -5,12 +5,14 @@ import { catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { AuthService } from '../service/system-service/auth.service';
 import { Router } from '@angular/router';
+import { SweetalertService } from '../service/sweetalert.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthInterceptorService implements HttpInterceptor {
-  constructor(private _router:Router) {
+  constructor(private _router:Router,private sweetAlert:SweetalertService,private translate:TranslateService) {
 
   }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -34,8 +36,8 @@ export class AuthInterceptorService implements HttpInterceptor {
         if(error.status===401){
           let timerInterval
           Swal.fire({
-            title: 'Güvenli oturum süresi doldu',
-            html: 'Giriş sayfasına yönlendiriliyor <b></b>.',
+            title: this.translate.instant('SecureSessionExpired'),
+            html: this.translate.instant('RedirectsToLoginPage')+' <b></b>.',
             timer: 1000,
             timerProgressBar: true,
             didOpen: () => {
@@ -63,12 +65,12 @@ export class AuthInterceptorService implements HttpInterceptor {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
           // client-side error
-          errorMessage = `Error: ${error.error.message}`;
+          errorMessage = this.translate.instant('Error')+":"+`${error.error.message}`;
         } else {
           // server-side error
           errorMessage = error.error;
         }
-        alert(errorMessage);
+        this.sweetAlert.error(errorMessage);
         return throwError(errorMessage);
       })
     )

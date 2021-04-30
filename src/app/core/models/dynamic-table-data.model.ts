@@ -22,7 +22,7 @@ export class DynamicTableData {
       this.addedBy = dynamicTableData.addedBy || '';
       this.updatedBy = dynamicTableData.updatedBy || '';
       this.addedDate = dynamicTableData.addedDate || new Date();
-      this.updatedDate = dynamicTableData.updatedDate || '';
+      this.updatedDate = dynamicTableData.updatedDate || null;
     }
   }
 }

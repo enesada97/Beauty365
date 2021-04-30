@@ -157,6 +157,19 @@ export const ROUTES: RouteInfo[] = [
     badgeClass: "",
     submenu: [],
   },
+  {
+    path: "/authentication/signin",
+    title: "Logout",
+    moduleName: "logout",
+    iconType: "material-icons-two-tone",
+    icon: "power_settings_new",
+    class: "",
+    groupTitle: false,
+    badge: "",
+    badgeClass: "",
+    claim:"",
+    submenu: [],
+  },
 
   // Admin Modules
   {
@@ -414,6 +427,33 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: "",
+    title: "Invoices",
+    moduleName: "invoices",
+    iconType: "material-icons-two-tone",
+    icon: "receipt",
+    class: "menu-toggle",
+    claim:'',
+    groupTitle: false,
+    badge: "",
+    badgeClass: "",
+    submenu: [
+      {
+        path: "/admin/invoices/all-invoices",
+        title: "Invoices Processes",
+        moduleName: "invoices",
+        iconType: "",
+        icon: "",
+        class: "ml-menu",
+        claim:'GetInvoiceDtosQuery',
+        groupTitle: false,
+        badge: "",
+        badgeClass: "",
+        submenu: [],
+      }
+    ]
+  },
+  {
+    path: "",
     title: "Processes",
     moduleName: "processes",
     iconType: "material-icons-two-tone",
@@ -484,6 +524,19 @@ export const ROUTES: RouteInfo[] = [
         iconType: "",
         icon: "",
         claim: "GetProtocolTypeProcessesQuery",
+        class: "ml-menu",
+        groupTitle: false,
+        badge: "",
+        badgeClass: "",
+        submenu: [],
+      },
+      {
+        path: "/admin/options/firm-settings",
+        title: "FirmSettings",
+        moduleName: "options",
+        iconType: "",
+        icon: "",
+        claim: "GetFirmQuery",
         class: "ml-menu",
         groupTitle: false,
         badge: "",

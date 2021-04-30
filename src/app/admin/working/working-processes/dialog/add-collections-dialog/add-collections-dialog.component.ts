@@ -20,6 +20,7 @@ import Swal from "sweetalert2";
 import { FormControl, Validators } from "@angular/forms";
 import { MatExpansionPanel } from "@angular/material/expansion";
 import { AuthService } from "src/app/core/service/system-service/auth.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-add-collections-dialog",
@@ -76,6 +77,7 @@ export class AddCollectionsDialogComponent implements OnInit {
     public workingService: WorkingService,
     public collectionService: CollectionService,
     private authService:AuthService,
+    private translate:TranslateService
   ) {
     this.workingForCollectionDtos = data.workingForCollectionDtos;
     this.protocolId = data.protocolId;
@@ -108,12 +110,10 @@ export class AddCollectionsDialogComponent implements OnInit {
       if (this.selection.selected[i].arrearsValue != 0) {
         this.selectedId[i] = this.selection.selected[i].workingNo;
         this.selectedPays[i] = this.selection.selected[i].arrearsValue;
+        this.selectedPays[i]=Math.round(this.selectedPays[i]*100)/100;
         this.selectedPay = this.selectedPay + this.selectedPays[i];
         this.addPay = this.selectedPay;
         this.arrears = this.selectedPay;
-        console.log(this.selectedId);
-        console.log(this.selectedPays);
-        console.log(this.selectedPay);
       }
     }
     this.formControl = new FormControl("", [Validators.max(this.arrears),Validators.min(1)]);
@@ -151,11 +151,9 @@ export class AddCollectionsDialogComponent implements OnInit {
           this.selection.select(row);
         }
       });
-      console.log(this.selection.selected);
       this.selection.selected.sort(function (a, b) {
         return a.workingNo - b.workingNo;
       });
-      console.log(this.selection.selected);
       for (let i = 0; i < this.selection.selected.length; i++) {
         if (
           this.selection.selected[i].arrearsValue != 0 &&
@@ -172,20 +170,14 @@ export class AddCollectionsDialogComponent implements OnInit {
     this.formControl = new FormControl("", [Validators.max(this.arrears),Validators.min(1)]);
   }
   singleSelectRow(event, row) {
-    console.log(event);
     this.id = row.id; //5,2
     let arrearsValue = row.arrearsValue;
     let firstDataId = this.dataSource.data[0].workingNo;
     let findIndex = this.selectedId.findIndex((m) => m == this.id);
     if (!event.checked) {
-      console.log(row);
       this.selectedPays[findIndex] = 0;
-      console.log(this.selectedId);
-      console.log(this.selectedPays);
     } else {
       this.selectedPays[findIndex] = arrearsValue;
-      console.log(this.selectedId);
-      console.log(this.selectedPays);
     }
     this.deleteAllPayments();
     this.onChange();
@@ -198,14 +190,19 @@ export class AddCollectionsDialogComponent implements OnInit {
     this.onChange();
   }
   onChange() {
-    console.log("Hello OnChange");
-    console.log("Tutarlar:" + this.selectedPays);
+    for (let i = 0; i < this.selectedPays.length; i++) {
+     this.selectedPays[i]=Math.round(this.selectedPays[i]*100)/100;
+    }
     this.selectedPay = this.selectedPays.reduce((a, b) => a + b, 0);
+    if (Number.isNaN(this.selectedPay)) {
+      this.selectedPay=0;
+      this.selectedPays.forEach(m=>{
+        m>0?this.selectedPay=this.selectedPay+m:null
+      })
+    }
     this.addPay = this.selectedPay;
     this.arrears = undefined;
     this.arrears = this.selectedPay;
-    console.log("Toplam:" + this.selectedPay);
-    console.log("İdler:" + this.selectedId);
   }
   addDiscount() {
     this.deleteAllPayments();
@@ -228,7 +225,6 @@ export class AddCollectionsDialogComponent implements OnInit {
       }
     } else if (this.latestPrice != undefined && this.latestPrice > 0) {
       this.discountFinder = this.selectedPay - this.latestPrice;
-      console.log(count);
       this.discountValue = this.discountFinder / count;
       for (let i = 0; i < totalLength; i++) {
         if (this.selectedPays[i] != undefined && this.selectedPays[i] != 0) {
@@ -246,6 +242,11 @@ export class AddCollectionsDialogComponent implements OnInit {
         for (let i = 0; i < totalLength; i++) {
           if (this.selectedPays[i] != undefined && this.selectedPays[i] != 0) {
             this.selectedPays[i] = this.selectedPays[i] - this.discountValue;
+            if (this.selectedPays[i] < 0) {
+              this.selectedPays[i + 1] =
+                this.selectedPays[i + 1] + this.selectedPays[i];
+              this.selectedPays[i] = 0;
+            }
           }
         }
       }
@@ -286,7 +287,8 @@ export class AddCollectionsDialogComponent implements OnInit {
   }
   addPayment() {
     this.collection = new Collection({});
-    this.collection.addedBy = this.userName;
+    // this.collection.addedBy = this.userName;
+    this.collection.addedBy = '';
     this.collection.addedDate = new Date();
     this.collection.discount = this.clickDiscount;
     if (this.collection.discount == true) {
@@ -308,8 +310,8 @@ export class AddCollectionsDialogComponent implements OnInit {
     this.collection.updatedDate = new Date();
     this.arrears = this.arrears - this.addPay;
     this.collections.push(this.collection);
-    console.log(this.collections);
     this.formControl = new FormControl("", [Validators.max(this.arrears),Validators.min(1)]);
+    this.addPay=this.arrears;
     this.getCollectionsAdd();
   }
   addCollections() {
@@ -320,7 +322,6 @@ export class AddCollectionsDialogComponent implements OnInit {
       //0-100tl
       if (this.selectedPays[i] > 0) {
         this.workingService.getById(this.selectedId[i]).subscribe((working) => {
-          console.log("gelen veri" + JSON.stringify(working));
           if(this.clickDiscount){
             if(this.discount>0){
               this.workingForCollection.saleValue=this.discountValueArray[i];
@@ -337,28 +338,26 @@ export class AddCollectionsDialogComponent implements OnInit {
             }
           }else{
           this.workingForCollection.arrearsValue =
-          working.price - this.selectedPays[i];
+          working.price - (working.paidValue+this.selectedPays[i]);
           }
           this.workingForCollection.price = working.price;
           this.workingForCollection.billNo = working.billNo;
           this.workingForCollection.doctorId = working.doctorId;
           this.workingForCollection.doctorRatio = working.doctorRatio;
           this.workingForCollection.metarialId = working.metarialId;
-          this.workingForCollection.priceIncludeTax = working.priceIncludeTax;
+          this.workingForCollection.nonTaxablePrice = working.nonTaxablePrice;
           this.workingForCollection.processId = working.processId;
           this.workingForCollection.quantity = working.quantity;
           this.workingForCollection.receiptNo = working.receiptNo;
           this.workingForCollection.taxRatio = working.taxRatio;
-          this.workingForCollection.user = this.userName;
+          // this.workingForCollection.user = this.userName;
+          this.workingForCollection.user = 'System Admin';
           this.workingForCollection.protocolId = working.protocolId;
           this.workingForCollection.workingDateTime = new Date(
             working.workingDateTime
           );
           this.workingForCollection.id = this.selectedId[i];
-          this.workingForCollection.paidValue = this.selectedPays[i];
-          console.log(
-            "kaydedilecek :" + JSON.stringify(this.workingForCollection)
-          );
+          this.workingForCollection.paidValue = working.paidValue+this.selectedPays[i];
           if(this.workingForCollection.id==0){
             this.workingService.add(this.workingForCollection).subscribe(data=>{
               this.dialogRef.close(1);
@@ -418,7 +417,7 @@ export class AddCollectionsDialogComponent implements OnInit {
     });
     swalWithBootstrapButtons
       .fire({
-        title: "İndirim Uygulamak İstediğinize Emin misiniz?",
+        title: this.translate.instant('ApplyDiscount'),
         showClass: {
           popup: "animate__animated animate__fadeInDown",
         },
@@ -429,21 +428,32 @@ export class AddCollectionsDialogComponent implements OnInit {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Evet ",
-        cancelButtonText: " Hayır",
+        confirmButtonText: this.translate.instant('Yes'),
+        cancelButtonText: this.translate.instant('No'),
         reverseButtons: true,
       })
       .then((result) => {
         if (result.value) {
           this.toggleFirstPanel();
           this.addDiscount();
-          swalWithBootstrapButtons.fire("İndirim Uygulandı", "", "success");
+          swalWithBootstrapButtons.fire({
+            title: this.translate.instant('DiscountApplied'),
+            icon:"success",
+            confirmButtonText: this.translate.instant('OK')
+          });
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
-          swalWithBootstrapButtons.fire("İndirim İptal Edildi", "", "error");
+          swalWithBootstrapButtons.fire({
+            title: this.translate.instant('DiscountCancelled'),
+            icon:"warning",
+            confirmButtonText: this.translate.instant('OK')
+          });
         }
       });
   }
+  checkClaim(claim:string):boolean{
+		return this.authService.claimGuard(claim)
+	}
 }

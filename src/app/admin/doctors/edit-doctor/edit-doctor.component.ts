@@ -16,6 +16,7 @@ export class EditDoctorComponent implements OnInit {
   doctorForm: FormGroup;
   doctor: Doctor;
   departments:Department[];
+  id:number;
   constructor(
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
@@ -28,6 +29,7 @@ export class EditDoctorComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
       this.getDoctorById(params["id"]);
+      this.id=params["id"];
     });
     this.departmentService.getList().subscribe((data) => (this.departments = data));
   }
@@ -41,7 +43,7 @@ export class EditDoctorComponent implements OnInit {
     if (this.doctorForm.valid) {
       this.doctor = Object.assign({}, this.doctorForm.value);
       this.depForDoctorsService.update(this.doctor).subscribe(data=>{
-        this.router.navigateByUrl('/admin/doctors/doctor-detail/'+data.doctor.id);
+        this.router.navigateByUrl('/admin/doctors/all-doctors/doctor-detail/'+this.id);
         this.sweetAlert.info(data.toString());
       })
     }

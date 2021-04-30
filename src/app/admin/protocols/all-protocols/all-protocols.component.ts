@@ -71,7 +71,6 @@ export class AllProtocolsComponent implements OnInit {
       .getById(row.protocolNo)
       .subscribe((data) => {this.protocol = data
       if(this.protocol){
-        console.log(this.protocol);
         const dialogRef = this.dialog.open(AddProtocolDialogComponent, {
           data: {
             protocol: this.protocol,

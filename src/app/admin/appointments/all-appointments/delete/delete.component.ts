@@ -26,7 +26,7 @@ export class DeleteComponent{
       this.appointment.status=false;
       this.appointmentService.update(this.appointment).subscribe(ap=>{
         this.dialogRef.close(1);
-        this.sweetAlert.delete(ap.toString());
+        this.sweetAlert.delete("Deleted");
       });
     });
 }

@@ -16,8 +16,7 @@ import Swal from "sweetalert2";
 @Component({
   selector: 'app-all-patients',
   templateUrl: './all-patients.component.html',
-  styleUrls: ['./all-patients.component.sass'],
-  providers:[OptionalSettingService]
+  styleUrls: ['./all-patients.component.sass']
 })
 export class AllPatientsComponent implements OnInit {
   displayedColumns = [
@@ -36,6 +35,7 @@ export class AllPatientsComponent implements OnInit {
   dataSource: MatTableDataSource<Patient>;
   patient: Patient | null;
   optionalSettingForIdentityRequired:OptionalSetting;
+  userName:string;
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -44,12 +44,14 @@ export class AllPatientsComponent implements OnInit {
     private protocolService:ProtocolService,
     private router:Router,
     private optionalSettingService:OptionalSettingService,
-    private authService:AuthService
+    private authService:AuthService,
+    private translate:TranslateService
   ) {}
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild("filter", { static: true }) filter: ElementRef;
   ngOnInit(): void {
+    this.userName=this.authService.getUserName();
     this.getPatientList();
     this.getOptionalSetting();
   }
@@ -85,7 +87,6 @@ export class AllPatientsComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((result:Patient) => {
-      console.log("result:" +result);
       if(result){
           this.refresh();
           this.addProtocolForPatient(result);
@@ -98,10 +99,10 @@ export class AllPatientsComponent implements OnInit {
       data: {
         patient: row,
         action: "add",
+        userName:this.userName
       },
     });
     dialogRef.afterClosed().subscribe((result:number) => {
-      console.log("result:" +result);
       if(result){
         this.router.navigateByUrl("admin/working/working-processes/"+result);
         }
@@ -110,12 +111,14 @@ export class AllPatientsComponent implements OnInit {
   }
   protocolControl(row:Patient) {
     this.protocolService.getProtocolDtoListByPatientId(row.id).subscribe(data=>{
-      console.log("veri ="+data);
-      console.log(JSON.stringify(data));
       if(data.length){
         // let isOpenControl=data.find(m=>m.isOpen==true);
         // isOpenControl==undefined?this.passParameter(row):null;
-        this.passParameter(row);
+        if(this.optionalSettingForIdentityRequired.isOpen==true){
+          row.identityNumber?this.passParameter(row):this.passParameterForIdentity(row);
+        }else{
+          this.passParameter(row);
+        }
       }else{
         if(this.optionalSettingForIdentityRequired.isOpen==true){
           row.identityNumber?this.addProtocolForPatient(row):this.passParameterForIdentity(row);
@@ -127,14 +130,14 @@ export class AllPatientsComponent implements OnInit {
   }
   passParameterForIdentity(row:Patient) {
     Swal.fire({
-      title: 'Hastanın kimlik bilgisini eklemeden protokol açamazsınız,kimlik bilgisini eklemek ister misiniz?',
-      text: row.name+" "+row.surName+" hastasına ait TC Kimlik bilgisi bulunamadı",
+      title: this.translate.instant('CannotOpenTheProtocolBeforeAddingIdentityNumberForPatient'),
+      text: row.name+" "+row.surName+" "+this.translate.instant('IdentityNumberRecordNotFound'),
       icon: 'error',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      cancelButtonText: 'Hayır',
-      confirmButtonText: 'Evet',
+      cancelButtonText: this.translate.instant('No'),
+      confirmButtonText: this.translate.instant('Yes'),
       showLoaderOnConfirm: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -142,14 +145,13 @@ export class AllPatientsComponent implements OnInit {
           data: {
             patient: row,
             action: "edit",
-            optionalSettingForIdentityRequired:this.optionalSettingForIdentityRequired
+            optionalSettingForIdentityRequired:this.optionalSettingForIdentityRequired,
           },
         });
         dialogRef.afterClosed().subscribe((result:Patient) => {
-          console.log("result:" +result);
           if(result){
               this.refresh();
-              this.addProtocolForPatient(result);
+              this.addProtocolForPatient(row);
             }
             this.refresh();
         });
@@ -158,14 +160,18 @@ export class AllPatientsComponent implements OnInit {
   }
   passParameter(row:Patient) {
     Swal.fire({
-      title: 'Açık Protokol Bulundu! Hasta Detayına Gitmek İster misiniz?',
-      text: row.name+" "+row.surName+" hastasına ait aktif hasta protokolü bulundu",
-      icon: 'warning',
+      title:this.translate.instant('OpenProtocolFinded'),
+      text:
+        row.name +
+        " " +
+        row.surName +
+        " "+ this.translate.instant('OpenProtocolFinded'),
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Hayır',
-      confirmButtonText: 'Evet',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: this.translate.instant('No'),
+      confirmButtonText: this.translate.instant('Yes'),
       showLoaderOnConfirm: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -235,6 +241,7 @@ import { OptionalSetting } from 'src/app/core/models/optional-setting.model';
 import { OptionalSettingService } from 'src/app/core/service/optional-setting.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from 'src/app/core/service/system-service/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Pipe({name: 'phone'})
 export class PhonePipe implements PipeTransform {

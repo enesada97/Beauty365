@@ -29,7 +29,7 @@
                   <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="info-box6-little primary">
                       <i class="fas fa-hand-holding"></i>
-                      <span class="count-numbers">{{ selectedPay |number:'1.0-2'}}₺</span>
+                      <span class="count-numbers">{{ selectedPay |number:'1.0-2'}}{{'Currency'|translate}}</span>
                       <span class="count-name">{{'Payable'|translate}}</span>
                       <input
                         hidden
@@ -42,7 +42,7 @@
                     <div class="info-box6-little success">
                       <i class="fas fa-money-bill-wave"></i>
                       <span class="count-numbers"
-                        >{{ selectedPay - arrears |number:'1.0-2'}}₺</span
+                        >{{ selectedPay - arrears |number:'1.0-2'}}{{'Currency'|translate}}</span
                       >
                       <span class="count-name">{{'Paid'|translate}}</span>
                       <!-- <input hidden name="totalPrice" [(ngModel)]="totalPrice" /> -->
@@ -54,7 +54,7 @@
                       <span
                         class="count-numbers"
                         *ngIf="saleValue > 0; else noDiscount"
-                        >{{ saleValue |number:'1.0-2'}}₺</span
+                        >{{ saleValue |number:'1.0-2'}}{{'Currency'|translate}}</span
                       >
                       <ng-template #noDiscount>
                         <ng-container *ngIf="discount > 0; else noDiscountTwo"
@@ -66,7 +66,7 @@
                       <ng-template #noDiscountTwo>
                         <ng-container *ngIf="latestPrice > 0"
                           ><span class="count-numbers"
-                            >{{ discountFinder |number:'1.0-2'}}₺</span
+                            >{{ discountFinder |number:'1.0-2'}}{{'Currency'|translate}}</span
                           >
                           <input
                             hidden
@@ -80,7 +80,7 @@
                   <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="info-box6-little info">
                       <i class="fas fa-minus-circle"></i>
-                      <span class="count-numbers">{{ arrears |number:'1.0-2'}}₺</span>
+                      <span class="count-numbers">{{ arrears |number:'1.0-2'}}{{'Currency'|translate}}</span>
                       <span class="count-name">{{'Balance'|translate}}</span>
                       <input
                         hidden
@@ -248,7 +248,7 @@
                               type="number"
                               matInput
                               name="selectedPays"
-                              [ngModel]="selectedPays[i]|number:'1.0-2'"
+                              [(ngModel)]="selectedPays[i]"
                               (ngModelChange)="onChangeFirst(row)"
                             />
                             <mat-icon matSuffix
@@ -310,9 +310,8 @@
                                   formControlForDiscountPrice.hasError('max')
                                 "
                               >
-                                İndirim maksimum kalan ödeme
-                                <span class="font-bold">({{ arrears }}₺) </span>
-                                değeri kadar olabilir
+                              {{'MaxDiscountCouldBeValueOfArrearsPayment'|translate}}
+                                <span class="font-bold">({{ arrears |number:'1.0-2'}}{{'Currency'|translate}}) </span>
                               </mat-error>
                             </mat-form-field>
                           </div>
@@ -323,7 +322,7 @@
                               class="example-full-width"
                               appearance="outline"
                             >
-                              <mat-label>İndirim Oranı</mat-label>
+                              <mat-label>{{'DiscountRatio'|translate}}</mat-label>
                               <input
                                 [formControl]="formControlForDiscount"
                                 style="font-weight: bold; color: black"
@@ -340,14 +339,12 @@
                               <mat-error
                                 *ngIf="formControlForDiscount.hasError('max')"
                               >
-                                İndirim oranı en fazla
-                                <span class="font-bold">%100</span> olabilir
+                              {{'MaxDiscountRatioCouldBeOneHoundred'|translate}}
                               </mat-error>
                               <mat-error
                                 *ngIf="formControlForDiscount.hasError('min')"
                               >
-                                İndirim oranı en az
-                                <span class="font-bold">%1</span> olabilir
+                              {{'MinDiscountRatioCouldBeOne'|translate}}
                               </mat-error>
                             </mat-form-field>
                           </div>
@@ -358,7 +355,7 @@
                               class="example-full-width"
                               appearance="outline"
                             >
-                              <mat-label>Son Tutar</mat-label>
+                              <mat-label>{{'LatestPrice'|translate}}</mat-label>
                               <input
                                 [formControl]="
                                   formControlForDiscountLatestPrice
@@ -380,9 +377,8 @@
                                   )
                                 "
                               >
-                                İndirim maksimum kalan ödeme
-                                <span class="font-bold">({{ arrears }}₺) </span>
-                                değeri kadar olabilir
+                              {{'MaxDiscountCouldBeValueOfArrearsPayment'|translate}}
+                                <span class="font-bold">({{ arrears |number:'1.0-2'}}{{'Currency'|translate}}) </span>
                               </mat-error>
                             </mat-form-field>
                           </div>
@@ -391,8 +387,8 @@
                           class="alert alert-info"
                           *ngIf="!(discount || saleValue || latestPrice)"
                         >
-                          <strong>Uyarı!</strong> Lütfen indirim eklemek için
-                          bir indirim türü seçiniz!
+                          <strong>{{'Warning'|translate}}</strong>
+                          {{'PleaseChooseDiscountTypeForAddToDiscount'|translate}}
                         </div>
                         <div class="row">
                           <div
@@ -414,7 +410,7 @@
                                 )
                               "
                             >
-                              İndirim Ekle
+                            {{'AddDiscount'|translate}}
                             </button>
                           </div>
                           <div
@@ -427,7 +423,7 @@
                               mat-raised-button
                               color="warn"
                             >
-                              İndirim İptal
+                            {{'CancelDiscount'|translate}}
                             </button>
                           </div>
                         </div>
@@ -441,13 +437,13 @@
                       class="example-full-width"
                       appearance="outline"
                     >
-                      <mat-label>Ödeme Tipi</mat-label>
+                      <mat-label>{{'PayType'|translate}}</mat-label>
                       <mat-select [(value)]="selectedPayType" required>
-                        <mat-option value="1">Nakit Ödeme</mat-option>
-                        <mat-option value="2">Kredi Kartı</mat-option>
+                        <mat-option value="1">{{'Cash'|translate}}</mat-option>
+                        <mat-option value="2">{{'CreditCard'|translate}}</mat-option>
                       </mat-select>
                       <mat-icon matSuffix>payment</mat-icon>
-                      <mat-error> Ödeme Tipi Seçiniz </mat-error>
+                      <mat-error>{{'ChoosePayType'|translate}}</mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-xl-5 col-lg-5 col-md-8 col-sm-8 mb-3">
@@ -455,7 +451,7 @@
                       class="example-full-width"
                       appearance="outline"
                     >
-                      <mat-label>Tahsilat Tutarı</mat-label>
+                      <mat-label>{{'AmountOfCollection'|translate}}</mat-label>
                       <input
                         [formControl]="formControl"
                         style="font-weight: bold; color: black"
@@ -468,13 +464,11 @@
                         ><i class="fas fa-lira-sign"></i
                       ></mat-icon>
                       <mat-error *ngIf="formControl.hasError('max')">
-                        Tahsilat tutarı maksimum kalan ödeme
-                        <span class="font-bold">({{ arrears }}₺) </span> değeri
-                        kadar olmalıdır
+                        {{'MaxCollectionCouldBeValueOfArrearsPayment'|translate}}
+                        <span class="font-bold">({{ arrears |number:'1.0-2'}}{{'Currency'|translate}}) </span>
                       </mat-error>
                     <mat-error *ngIf="formControl.hasError('min')">
-                        Tahsilat tutarı minimum <span class="font-bold">1₺</span> değeri
-                        kadar olmalıdır
+                      {{'MinCollectionCouldBeOne'|translate}}<span class="font-bold">(1{{'Currency'|translate}})</span>
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -499,7 +493,7 @@
                     <ul class="header-buttons-left ml-0">
                       <li class="dropdown">
                         <h2>
-                          <strong>Seçilen Ödemeler</strong>
+                          <strong>{{'ChoosedPayments'|translate}}</strong>
                         </h2>
                       </li>
                     </ul>
@@ -531,7 +525,7 @@
                           </button>
                         </div>
                       </li>
-                      <li>
+                      <li *ngIf="checkClaim('CreateCollectionCommand')">
                         <div
                           class="icon-button-demo m-l-10"
                           [hidden]="!dataSourceForCollection.data"
@@ -562,50 +556,50 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Id</mat-header-cell
+                    >{{'ID'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="paymentType">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Ödeme Tipi</mat-header-cell
+                    >{{'PaymentType'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     <ng-container
                       *ngIf="row.paymentType == 1; else elseTemplate"
                     >
-                      Nakit
+                    {{'Cash'|translate}}
                     </ng-container>
                     <ng-template #elseTemplate>
-                      Kredi Kartı
+                      {{'CreditCard'|translate}}
                     </ng-template></mat-cell
                   >
                 </ng-container>
                 <ng-container matColumnDef="discount">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >İndirim</mat-header-cell
+                    >{{'Discount'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
                     <ng-container
                       *ngIf="row.discount == true; else elseTemplate"
                     >
-                      Evet
+                    {{'Yes'|translate}}
                     </ng-container>
-                    <ng-template #elseTemplate> Hayır </ng-template></mat-cell
+                    <ng-template #elseTemplate> {{'No'|translate}} </ng-template></mat-cell
                   >
                 </ng-container>
                 <ng-container matColumnDef="paymentValue">
                   <mat-header-cell *matHeaderCellDef mat-sort-header
-                    >Ödenecek</mat-header-cell
+                    >{{'PaymentValue'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
-                    {{ row.paymentValue }}</mat-cell
+                    {{ row.paymentValue |number:'1.0-2'}}</mat-cell
                   >
                 </ng-container>
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef class="pr-0"
-                    >Eylemler</mat-header-cell
+                    >{{'Actions'|translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row; let i = index" class="pr-0">
                     <button

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/core/service/auth.service';
 import { Role } from 'src/app/core/models/role';
+import { AuthService } from 'src/app/core/service/system-service/auth.service';
 @Component({
   selector: 'app-locked',
   templateUrl: './locked.component.html',

@@ -208,7 +208,7 @@
                     </button>
                     <mat-menu #menu="matMenu">
                       <button mat-menu-item
-                      (click)="$event.stopPropagation()"
+
                       (click)="passwordChange(row.userId)"
                       *ngIf="checkClaim('UserChangePasswordCommand')">
                       <mat-icon
@@ -217,7 +217,7 @@
                         <span>{{'ChangePassword'|translate}}</span>
                       </button>
                       <button mat-menu-item
-                      (click)="$event.stopPropagation()"
+
                       (click)="editUserClaims(row.userId)"
                       *ngIf="checkClaim('UpdateUserClaimCommand')">
                       <mat-icon
@@ -226,7 +226,7 @@
                         <span>{{'UserClaim'|translate}}</span>
                       </button>
                       <button mat-menu-item
-                      (click)="$event.stopPropagation()"
+
                       (click)="editUserGroup(row.userId)"
                       *ngIf="checkClaim('UpdateGroupClaimCommand')">
                       <mat-icon
@@ -235,7 +235,7 @@
                         <span>{{'GroupClaim'|translate}}</span>
                       </button>
                       <button mat-menu-item
-                      (click)="$event.stopPropagation()"
+
                       (click)="editCall(row)"
                       *ngIf="checkClaim('UpdateUserCommand')">
                       <mat-icon
@@ -244,7 +244,7 @@
                         <span>{{'Update'|translate}}</span>
                       </button>
                       <button mat-menu-item
-                      (click)="$event.stopPropagation()"
+
                       *ngIf="checkClaim('DeleteUserCommand')"
                       (click)="deleteItem(row)">
                       <mat-icon

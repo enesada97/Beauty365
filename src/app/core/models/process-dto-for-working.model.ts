@@ -5,5 +5,6 @@ export class ProcessDtoForWorking {
     price:number;
     isLab:boolean;
     isRad:boolean;
+    taxRatio:number;
   }
 

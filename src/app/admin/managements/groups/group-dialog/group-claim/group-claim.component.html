@@ -17,19 +17,19 @@
       <mat-icon>close</mat-icon>
     </button>
   </div>
-  <div mat-dialog-content>
+  <div mat-dialog-content class="custom-dialog-container">
           <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-              <ng-multiselect-dropdown [settings]="{singleSelection: false,
-              idField: 'id',
-              textField: 'label',
-              selectAllText: 'Select All',
-              unSelectAllText: 'UnSelect All',
-              itemsShowLimit: 3,
-              allowSearchFilter: true}" [placeholder]="'Claims'" [data]="claimDropdownList"
-              [(ngModel)]="claimSelectedItems" (onSelect)="onItemSelect('Claim')" (onSelectAll)="onSelectAll('Claim')"
-              (onDeSelect)="onItemDeSelect('Claim')">
-            </ng-multiselect-dropdown>
+                <ng-multiselect-dropdown [settings]="{singleSelection: false,
+                  idField: 'id',
+                  textField: 'label',
+                  selectAllText: 'Select All',
+                  unSelectAllText: 'UnSelect All',
+                  itemsShowLimit: 3,
+                  allowSearchFilter: true}" [placeholder]="'Claims'" [data]="claimDropdownList"
+                  [(ngModel)]="claimSelectedItems" (onSelect)="onItemSelect('Claim')" (onSelectAll)="onSelectAll('Claim')"
+                  (onDeSelect)="onItemDeSelect('Claim')">
+                </ng-multiselect-dropdown>
               </div>
             </div>
       <div class="row">

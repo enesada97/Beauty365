@@ -141,7 +141,11 @@
                     >{{'LangCode' |translate}}</mat-header-cell
                   >
                   <mat-cell *matCellDef="let row">
-                    {{ row.language }}</mat-cell
+                    <div [ngSwitch]="row.langId">
+                      <div *ngSwitchCase="1">Türkçe</div>
+                      <div *ngSwitchCase="2">English</div>
+                      <div *ngSwitchCase="3">Deutch</div>
+                    </div></mat-cell
                   >
                 </ng-container>
                 <ng-container matColumnDef="code">

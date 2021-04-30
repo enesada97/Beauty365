@@ -3,10 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { Page404Component } from 'src/app/authentication/page404/page404.component';
 import { CreatableFormComponent } from './creatable-form/creatable-form.component';
 import { DetailTableComponent } from './creatable-form/detail-table/detail-table.component';
+import { FirmSettingsComponent } from './firm-settings/firm-settings.component';
 import { OptionalSettingsComponent } from './optional-settings/optional-settings.component';
 import { ProtocolTypeProcessesComponent } from './protocol-type-processes/protocol-type-processes.component';
 
 const routes: Routes = [
+  {
+    path:"firm-settings",
+    component:FirmSettingsComponent
+  },
   {
     path: 'all-protocol-type-processes',
     component: ProtocolTypeProcessesComponent,

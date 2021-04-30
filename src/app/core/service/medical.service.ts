@@ -14,7 +14,7 @@ export class MedicalService extends CrudService<Medical,null,number> {
   }
   getByProtocolId(id): Observable<Medical> {
     return this.httpClient.get<Medical>(
-      environment.apiUrl + "/medicals/getbyid?="+
+      environment.apiUrl + "/medicals/getbyprotocolid?id="+
       id
     );
   }

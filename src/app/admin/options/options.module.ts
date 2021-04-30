@@ -49,10 +49,12 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslationService } from 'src/app/core/service/system-service/Translation.service';
 import { ProcessService } from 'src/app/core/service/process.service';
+import { FirmSettingsComponent } from './firm-settings/firm-settings.component';
+import { FirmService } from 'src/app/core/service/firm.service';
 
 
 @NgModule({
-  declarations: [ProtocolTypeProcessesComponent, SaveProtocolTypeProcessComponent, DeleteProtocolTypeProcessComponent, OptionalSettingsComponent, CreatableFormComponent, DeleteComponent, SaveComponent, PreviewComponent, DetailTableComponent, SaveFieldComponent, DeleteFieldComponent, SaveFieldValueComponent],
+  declarations: [ProtocolTypeProcessesComponent, SaveProtocolTypeProcessComponent, DeleteProtocolTypeProcessComponent, OptionalSettingsComponent, CreatableFormComponent, DeleteComponent, SaveComponent, PreviewComponent, DetailTableComponent, SaveFieldComponent, DeleteFieldComponent, SaveFieldValueComponent, FirmSettingsComponent],
   imports: [
     CommonModule,
     OptionsRoutingModule,
@@ -91,6 +93,7 @@ import { ProcessService } from 'src/app/core/service/process.service';
   providers:[ProtocolTypeProcessService,ProcessInstitueService,InstitutionService,ProtocoltypeService,DepForDoctorsService,OptionalSettingService,FormTableService,
     FormFieldService,
     FormFieldSelectionValueService,
-    ProcessService]
+    ProcessService,
+  FirmService]
 })
 export class OptionsModule { }

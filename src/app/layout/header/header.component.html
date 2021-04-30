@@ -5,8 +5,8 @@
         (click)="isNavbarCollapsed = !isNavbarCollapsed" aria-expanded="false"></a>
       <a href="#" onClick="return false;" class="bars" (click)="mobileMenuSidebarOpen($event,'overlay-open')"></a>
       <a class="navbar-brand" routerLink={{homePage}}>
-        <img src="assets/images/logo.png" alt="" />
-        <span class="logo-name">Cliniva</span>
+        <img style="width: 30px;height: 30px;" src="assets/images/clinic365/header-logo.png" alt="" />
+        <span class="logo-name">{{'Clinic365'|translate}}</span>
       </a>
     </div>
     <div class="collapse navbar-collapse" [ngbCollapse]="isNavbarCollapsed">
@@ -35,7 +35,7 @@
             <div class="noti-list" style="position: relative; max-width: 600px; max-height: 250px;" [perfectScrollbar]>
               <ul class="menu">
                 <li>
-                  <a href="#" *ngFor="let notification of notifications" onClick="return false;">
+                  <!-- <a href="#" *ngFor="let notification of notifications" onClick="return false;">
                     <span class="table-img msg-user">
                       <img src="{{notification.userImg}}" alt="">
                     </span>
@@ -45,6 +45,15 @@
                         <i class="material-icons">access_time</i> {{notification.time}}
                       </span>
                       <span class="menu-desc">{{notification.message}}</span>
+                    </span>
+                  </a> -->
+                  <a href="#" onClick="return false;">
+                    <span class="table-img msg-user">
+                      <img src="assets/images/user/user1.jpg" alt="">
+                    </span>
+                    <span class="menu-info">
+                      <span class="menu-title">{{'ComingSoon'|translate}}</span>
+                      <span class="menu-desc">{{'ThankForYourSupport'|translate}}</span>
                     </span>
                   </a>
                 </li>
@@ -66,22 +75,22 @@
                   <ul class="user_dw_menu">
                     <li>
                       <a href="#" onClick="return false;">
-                        <mat-icon aria-hidden="false" class="mr-2">person</mat-icon>Profile
+                        <mat-icon aria-hidden="false" class="mr-2">person</mat-icon>{{'Profile'|translate}}
                       </a>
                     </li>
                     <li>
                       <a href="#" onClick="return false;">
-                        <mat-icon aria-hidden="false" class="mr-2">feedback</mat-icon>Feedback
+                        <mat-icon aria-hidden="false" class="mr-2">feedback</mat-icon>{{'FeedBack'|translate}}
                       </a>
                     </li>
                     <li>
                       <a href="#" onClick="return false;">
-                        <mat-icon aria-hidden="false" class="mr-2">help</mat-icon>Help
+                        <mat-icon aria-hidden="false" class="mr-2">help</mat-icon>{{'Help'|translate}}
                       </a>
                     </li>
                     <li>
                       <a href="javascript:void(0);" (click)="logout()">
-                        <mat-icon aria-hidden="false" class="mr-2">power_settings_new</mat-icon>Logout
+                        <mat-icon aria-hidden="false" class="mr-2">power_settings_new</mat-icon>{{'Logout'|translate}}
                       </a>
                     </li>
                   </ul>

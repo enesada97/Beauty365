@@ -29,7 +29,7 @@ export class AllDepartmentsComponent implements OnInit {
     private authService:AuthService,
     private sweetAlert:SweetalertService
   ) {}
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild("filter", { static: true }) filter: ElementRef;
   ngOnInit(): void {

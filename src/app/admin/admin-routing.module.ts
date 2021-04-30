@@ -58,6 +58,11 @@ const routes: Routes = [
     loadChildren: () =>
       import("./options/options.module").then((m) => m.OptionsModule),
   },
+  {
+    path: "invoices",
+    loadChildren: () =>
+      import("./invoices/invoices.module").then((m) => m.InvoicesModule),
+  },
 ];
 
 @NgModule({

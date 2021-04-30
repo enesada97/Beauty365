@@ -51,17 +51,11 @@ export class OperationClaimsComponent {
   }
 
   checkClaim(claim: string): boolean {
-    console.log(this.authService.claimGuard(claim));
     return this.authService.claimGuard(claim);
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+  applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
   editCall(row) {
     const dialogRef = this.dialog.open(OperationClaimSaveComponent, {

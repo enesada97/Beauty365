@@ -26,7 +26,7 @@
         </li>
         <!-- #END# Full Screen Button -->
         <!-- #START# Notifications-->
-        <li class="nav-item" ngbDropdown>
+        <!-- <li class="nav-item" ngbDropdown>
           <button mat-icon-button ngbDropdownToggle class="nav-notification-icons">
             <mat-icon>notifications_none</mat-icon>
             <span class="label-count bg-orange"></span>
@@ -34,7 +34,7 @@
           <div ngbDropdownMenu class="notification-dropdown pullDown">
             <div class="noti-list" style="position: relative; max-width: 600px; max-height: 250px;" [perfectScrollbar]>
               <ul class="menu">
-                <li>
+                <li> -->
                   <!-- <a href="#" *ngFor="let notification of notifications" onClick="return false;">
                     <span class="table-img msg-user">
                       <img src="{{notification.userImg}}" alt="">
@@ -47,7 +47,7 @@
                       <span class="menu-desc">{{notification.message}}</span>
                     </span>
                   </a> -->
-                  <a href="#" onClick="return false;">
+                  <!-- <a href="#" onClick="return false;">
                     <span class="table-img msg-user">
                       <img src="assets/images/user/user1.jpg" alt="">
                     </span>
@@ -61,7 +61,7 @@
             </div>
             <a class="text-center d-block border-top py-1">{{'ReadAllNotifications'|translate}}</a>
           </div>
-        </li>
+        </li> -->
         <!-- #END# Notifications-->
         <li class="nav-item user_profile" ngbDropdown>
           <a href="#" onClick="return false;" ngbDropdownToggle role="button" class="nav-notification-icons pt-0">
@@ -72,7 +72,7 @@
               <ul class="menu">
                 <li class="body">
                   <ul class="user_dw_menu">
-                    <li>
+                    <!-- <li>
                       <a href="#" onClick="return false;">
                         <mat-icon aria-hidden="false" class="mr-2">person</mat-icon>{{'Profile'|translate}}
                       </a>
@@ -86,7 +86,7 @@
                       <a href="#" onClick="return false;">
                         <mat-icon aria-hidden="false" class="mr-2">help</mat-icon>{{'Help'|translate}}
                       </a>
-                    </li>
+                    </li> -->
                     <li>
                       <a href="javascript:void(0);" (click)="logout()">
                         <mat-icon aria-hidden="false" class="mr-2">power_settings_new</mat-icon>{{'Logout'|translate}}

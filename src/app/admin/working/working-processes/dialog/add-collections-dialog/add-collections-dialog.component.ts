@@ -425,7 +425,7 @@ export class AddCollectionsDialogComponent implements OnInit {
     });
     swalWithBootstrapButtons
       .fire({
-        title: this.translate.instant('ApplyDiscount'),
+        title: this.translate.instant('DiscountQuestion'),
         showClass: {
           popup: "animate__animated animate__fadeInDown",
         },

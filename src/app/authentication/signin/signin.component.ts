@@ -35,7 +35,7 @@ export class SigninComponent implements OnInit {
     if (this.cookieService.get('remember')!=undefined) {
       if (this.cookieService.get('remember')==="Yes") {
         this.loginUser.email=this.cookieService.get('email');
-        this.loginUser.password=this.cookieService.get('password');
+        // this.loginUser.password=this.cookieService.get('password');
         this.loginUser.lang=this.cookieService.get('lang');
         this.remember=true;
         this.changeLang(this.loginUser.lang);
@@ -59,12 +59,12 @@ export class SigninComponent implements OnInit {
     if(this.remember){
       this.cookieService.set('remember','Yes');
       this.cookieService.set('email',this.loginUser.email);
-      this.cookieService.set('password',this.loginUser.password);
+      // this.cookieService.set('password',this.loginUser.password);
        this.cookieService.set('lang',this.loginUser.lang);
     }else{
       this.cookieService.set('remember','No');
       this.cookieService.set('email',"");
-      this.cookieService.set('password',null);
+      // this.cookieService.set('password',null);
        this.cookieService.set('lang',"");
     }
   }

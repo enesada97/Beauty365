@@ -150,7 +150,7 @@
                     *matHeaderCellDef
                     mat-sort-header
                     [ngClass]="'tbl-col-width-per-8'"
-                    >{{'IsOpen'|translate}}
+                    >{{'Status'|translate}}
                   </mat-header-cell>
                   <mat-cell
                     *matCellDef="let row"
@@ -169,19 +169,19 @@
                   <mat-cell *matCellDef="let row">
                     <ng-container [ngSwitch]="row.type">
                       <ng-container *ngSwitchCase="'input'">
-                        {{'LittleLetterSpace'|translate}}
+                        {{'Input'|translate}}
                       </ng-container>
                       <ng-container *ngSwitchCase="'textarea'">
-                        {{'BigLetterSpace'|translate}}
+                        {{'TextArea'|translate}}
                       </ng-container>
                       <ng-container *ngSwitchCase="'radio'">
-                        {{'RadioBox'|translate}}
+                        {{'CheckBox'|translate}}
                       </ng-container>
                       <ng-container *ngSwitchCase="'date'">
                         {{'DatePicker'|translate}}
                       </ng-container>
                       <ng-container *ngSwitchCase="'select'">
-                        {{'CheckBox'|translate}}
+                        {{'SelectBox'|translate}}
                       </ng-container>
                     </ng-container>
                     </mat-cell
@@ -209,7 +209,7 @@
                         <mat-icon>delete</mat-icon>
                         <span>"{{'Delete'| translate}}"</span>
                       </button>
-                      <button *ngIf="row.type!=('input'||'date')" mat-menu-item [matMenuTriggerFor]="formFieldValues">
+                      <button *ngIf="row.type==('radio')||row.type==('select')" mat-menu-item [matMenuTriggerFor]="formFieldValues">
                         <mat-icon>group</mat-icon>
                         <span>{{'SelectionValueProcesses'|translate}}</span>
                       </button>
@@ -217,7 +217,6 @@
                     <mat-menu #formFieldValues="matMenu">
                       <button mat-menu-item
                       *ngIf="checkClaim('UpdateFormFieldSelectionValueCommand')"
-                      (click)="$event.stopPropagation()"
                       (click)="editFieldValueCall(row)">
                         <mat-icon>edit</mat-icon>
                         <span>"{{'Update'| translate}}"</span>

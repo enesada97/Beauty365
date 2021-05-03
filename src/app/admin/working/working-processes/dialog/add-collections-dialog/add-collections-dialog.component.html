@@ -230,32 +230,43 @@
                       </ng-container>
                       <!-- actions -->
                       <ng-container matColumnDef="actions">
+
                         <mat-header-cell *matHeaderCellDef class="pr-0"
-                          >{{'CollectionCost'|translate}}</mat-header-cell
+                          >{{'CollectionAmount'|translate}}</mat-header-cell
                         >
-                        <mat-cell
-                          *matCellDef="let row; let i = index"
-                          class="pr-0"
-                        >
-                          <mat-form-field
-                            class="example-full-width"
-                            appearance="outline"
+                        <form [formGroup]="form">
+                          <ng-container formArrayName="prices">
+                            <mat-cell
+                            *matCellDef="let row; let i = index"
+                            [formGroupName]="i"
+                            class="pr-0"
                           >
-                            <mat-label>{{'CollectionCost'|translate}}</mat-label>
-                            <input
-                            [disabled]="clickDiscount"
-                              style="font-weight: bold; color: black"
-                              type="number"
-                              matInput
-                              name="selectedPays"
-                              [(ngModel)]="selectedPays[i]"
-                              (ngModelChange)="onChangeFirst(row)"
-                            />
-                            <mat-icon matSuffix
-                              ><i class="fas fa-lira-sign"></i
-                            ></mat-icon>
-                          </mat-form-field>
-                        </mat-cell>
+                            <mat-form-field
+                              class="example-full-width"
+                              appearance="outline"
+                            >
+                              <mat-label>{{'CollectionAmount'|translate}}</mat-label>
+                              <input
+                              [disabled]="clickDiscount"
+                                style="font-weight: bold; color: black"
+                                type="number"
+                                matInput
+                                name="selectedPays"
+                                [(ngModel)]="selectedPays[i]"
+                                formControlName="price"
+                                (ngModelChange)="onChangeFirst(row)"
+                              />
+                              <mat-icon matSuffix
+                                ><i class="fas fa-lira-sign"></i
+                              ></mat-icon>
+                              <mat-error *ngIf="form.controls.prices.controls[i].get('price').hasError('max')">
+                                {{'MaxCollectionCouldBeValueOfProcessPrice'|translate}}
+                                <span class="font-bold">({{ row.price |number:'1.0-2'}}{{'Currency'|translate}}) </span>
+                              </mat-error>
+                            </mat-form-field>
+                          </mat-cell>
+                          </ng-container>
+                        </form>
                       </ng-container>
                       <mat-header-row
                         *matHeaderRowDef="displayedCollections"
@@ -291,7 +302,7 @@
                               class="example-full-width"
                               appearance="outline"
                             >
-                              <mat-label>{{'DiscountPrice'|translate}}</mat-label>
+                              <mat-label>{{'DiscountValue'|translate}}</mat-label>
                               <input
                                 [formControl]="formControlForDiscountPrice"
                                 style="font-weight: bold; color: black"
@@ -437,13 +448,13 @@
                       class="example-full-width"
                       appearance="outline"
                     >
-                      <mat-label>{{'PayType'|translate}}</mat-label>
+                      <mat-label>{{'PaymentType'|translate}}</mat-label>
                       <mat-select [(value)]="selectedPayType" required>
                         <mat-option value="1">{{'Cash'|translate}}</mat-option>
                         <mat-option value="2">{{'CreditCard'|translate}}</mat-option>
                       </mat-select>
                       <mat-icon matSuffix>payment</mat-icon>
-                      <mat-error>{{'ChoosePayType'|translate}}</mat-error>
+                      <mat-error>{{'PaymentType'|translate}}</mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-xl-5 col-lg-5 col-md-8 col-sm-8 mb-3">

@@ -109,7 +109,7 @@ export class ProtocolTypeProcessesComponent implements OnInit {
   editCall(row) {
     const dialogRef = this.dialog.open(SaveProtocolTypeProcessComponent, {
       data: {
-        protocolTypeProcessDto: this.protocolTypeProcessDto,
+        protocolTypeProcessDto: row,
         action: "edit",
       },
     });

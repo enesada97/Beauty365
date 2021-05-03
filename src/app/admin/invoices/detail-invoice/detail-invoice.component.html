@@ -12,7 +12,7 @@
                 <i class="fas fa-home"></i>{{'HomePage' |translate}}</a>
             </li>
             <li class="breadcrumb-item bcrumb-2">
-              <a routerLink="/admin/working/working-processes/{{invoiceDto.protocolId}}" onClick="return false;">{{'Protocol' |translate}}:#{{invoiceDto.protocolId}}</a>
+              <a routerLink="/admin/working/working-processes/{{invoiceDto.protocolId}}" onClick="return false;">{{'ProtocolNo' |translate}}:#{{invoiceDto.protocolId}}</a>
             </li>
             <li class="breadcrumb-item active">{{'Invoice' |translate}}</li>
           </ul>
@@ -25,22 +25,25 @@
           <div class="body">
             <div class="row">
               <div class="col-md-12">
-                <div class="white-box" id="printer">
+                <div class="white-box">
                   <h3>
                     <b>{{'Invoice' |translate}}</b>
                     <span class="pull-right">#{{invoiceDto.paymentBillNo}}</span>
                   </h3>
                   <hr>
-                  <div class="row">
+                  <div class="row" id="printer">
                     <div class="col-md-12">
                       <div class="pull-left">
-                        <address>
-                          <p class="font-bold">{{'BillFrom'|translate}}:</p>
-                          <p class="text-muted">
-                            Aditya University,
-                            <br> Opp. Town Hall,
-                            <br> Sardar Patel Road,
-                            <br> Ahmedabad - 380015
+                        <address *ngIf="firm">
+                          <p class="addr-font-h3 font-bold">{{'BillFrom'|translate}}:</p>
+                          <img [src]="userImg" alt="logo" style="width: 10rem;" class="logo-default p-l-2" />
+                          <p class="text-muted m-l-5">
+                            <ng-container *ngIf="firm.name">{{firm.name}},<br></ng-container>
+                            <ng-container *ngIf="firm.address">{{firm.address}},<br></ng-container>
+                            <ng-container *ngIf="firm.district&&firm.city">{{firm.district}}/{{firm.city}},<br></ng-container>
+                            <ng-container *ngIf="firm.email">{{'Email'|translate}}:{{firm.email}}<br></ng-container>
+                            <ng-container *ngIf="firm.phoneNumber">{{'PhoneNumber'|translate}}:{{firm.phoneNumber}}<br></ng-container>
+                            <ng-container *ngIf="firm.fax">{{'Fax'|translate}}:{{firm.fax}}<br></ng-container>
                           </p>
                         </address>
                       </div>
@@ -99,10 +102,14 @@
                           <b>{{'TotalAmount'|translate}} :</b> {{invoiceDto.totalPrice |number:'1.0-2'}}{{'Currency'|translate}}</h3>
                       </div>
                       <div class="clearfix"></div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
                       <hr>
-                      <div class="text-right">
-                        <button (click)="print('printer')" mat-raised-button color="primary"><i class="fas fa-print mr-2"></i>{{'Print'|translate}}</button>
-                      </div>
+                        <div class="text-right">
+                          <button (click)="print('printer')" mat-raised-button color="primary"><i class="fas fa-print mr-2"></i>{{'Print'|translate}}</button>
+                        </div>
                     </div>
                   </div>
                 </div>

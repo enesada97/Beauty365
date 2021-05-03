@@ -95,7 +95,7 @@
                 <h5 class="pull-right">{{'DailyEarnings'|translate}}</h5>
               </div>
               <div class="m-r-10 m-l-10">
-                <h3 class="font-weight-bold pull-right mb-0"> {{'Currency'|translate}}{{dailyReportDto.totalCollectionOfDaily}}</h3>
+                <h3 class="font-weight-bold pull-right mb-0"> {{dailyReportDto.totalCollectionOfDaily}}{{'Currency'|translate}}</h3>
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@
                     <ul class="header-buttons-left ml-0">
                       <li class="dropdown">
                         <h2>
-                          <strong>{{ "AppointmentList" | translate }}</strong>
+                          <strong>{{'DailyAppointments'|translate}}</strong>
                         </h2>
                       </li>
                       <li class="dropdown m-l-20">
@@ -165,7 +165,7 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="appointmentNo">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>{{
-                    "Id" | translate
+                    "ID" | translate
                   }}</mat-header-cell>
                   <mat-cell *matCellDef="let row">{{
                     row.appointmentNo
@@ -173,7 +173,7 @@
                 </ng-container>
                 <ng-container matColumnDef="patientName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>{{
-                    "PatientName" | translate
+                    "Name" | translate
                   }}</mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     {{ row.patientName }}</mat-cell
@@ -181,7 +181,7 @@
                 </ng-container>
                 <ng-container matColumnDef="patientSurname">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>{{
-                    "PatientSurname" | translate
+                    "SurName" | translate
                   }}</mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     {{ row.patientSurname }}</mat-cell

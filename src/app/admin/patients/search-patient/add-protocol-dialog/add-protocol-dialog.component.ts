@@ -159,7 +159,6 @@ export class AddProtocolDialogComponent implements OnInit {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    console.log(this.userName)
     if (this.protocolForm.valid) {
       this.protocol.patientDataId = this.patient.id;
       this.protocol = Object.assign({}, this.protocolForm.value);
@@ -179,16 +178,17 @@ export class AddProtocolDialogComponent implements OnInit {
                 this.working = new Working({});
                 this.working.doctorId = item.doctorId;
                 this.working.doctorRatio = item.doctorRatio;
-                this.working.price = item.price;
+                item.taxRatio>0?this.working.price=item.price+((item.price/100)*item.taxRatio):this.working.price=item.price;
+                this.working.nonTaxablePrice=item.price;
                 this.working.processId = item.processId;
                 this.working.protocolId = this.protocol.id;
                 this.working.taxRatio = item.taxRatio;
                 this.working.quantity = 1;
                 this.working.paidValue = 0;
-                this.working.arrearsValue = item.price;
+                this.working.arrearsValue = this.working.price;
                 this.working.doctorRatio=item.doctorRatio;
                 // this.working.user=this.userName;
-                this.working.user='';
+                this.working.user='System Admin';
                   this.workingService.add(this.working).subscribe((data) => {});
               });
             });

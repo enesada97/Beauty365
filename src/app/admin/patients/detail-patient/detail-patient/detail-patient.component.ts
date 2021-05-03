@@ -123,7 +123,7 @@ export class DetailPatientComponent implements OnInit {
     this.medicalForm = this.createContactForm();
     this.dynamicFormGroup = this.createDynamicContactForm();
   }
-  appointments: AppointmentDto[] | null;
+  appointments: AppointmentDto[] | null=[];
   patient: Patient;
   patientDataId: number;
   id: number;
@@ -233,7 +233,7 @@ export class DetailPatientComponent implements OnInit {
     this.appointmentService
       .getListByPatientId(this.patientDataId)
       .subscribe((data) => {
-        if (data) {
+        if (data&&data.length) {
           this.appointments = data;
           setTimeout(() =>
             this.appointments[this.appointments.length - 1].appointmentNo &&
@@ -247,6 +247,12 @@ export class DetailPatientComponent implements OnInit {
                   ].appointmentNo)
               : null
           );
+          this.dataSource = new MatTableDataSource<AppointmentDto>(
+            this.appointments
+          );
+          setTimeout(() => (this.dataSource.sort = this.sort));
+          setTimeout(() => (this.dataSource.paginator = this.paginator));
+        }else{
           this.dataSource = new MatTableDataSource<AppointmentDto>(
             this.appointments
           );
@@ -414,7 +420,7 @@ export class DetailPatientComponent implements OnInit {
   passParameterForIdentity(row:Patient) {
     Swal.fire({
       title:
-      this.translate.instant('CannotOpenTheProtocolBeforeAddingIdentityNumberForPatient'),
+      this.translate.instant('CannotOpenProtocolBeforeIdentityNumber'),
       text:
         row.name +
         " " +
@@ -648,7 +654,7 @@ export class DetailPatientComponent implements OnInit {
             const element = dataControls[i];
             let dynamicTableData = new DynamicTableData({});
             // dynamicTableData.addedBy = this.userName;
-            dynamicTableData.addedBy = '';
+            dynamicTableData.addedBy = 'System Admin';
             dynamicTableData.fieldValue = data[i];
             dynamicTableData.formTableId = this.selectedNoteTypeForAdd;
             dynamicTableData.protocolId = ap.protocolId;

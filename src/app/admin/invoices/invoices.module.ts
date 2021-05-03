@@ -37,6 +37,7 @@ import { InvoiceService } from 'src/app/core/service/invoice.service';
 import { InvoiceDetailService } from 'src/app/core/service/invoice-detail.service';
 import { PreviewInvoiceDetailsComponent } from './all-invoices/invoice-dialogs/preview-invoice-details/preview-invoice-details.component';
 import { DeleteInvoiceDetailComponent } from './all-invoices/invoice-dialogs/preview-invoice-details/invoice-detail-dialog/delete-invoice-detail/delete-invoice-detail.component';
+import { FirmService } from 'src/app/core/service/firm.service';
 
 
 @NgModule({
@@ -80,6 +81,6 @@ import { DeleteInvoiceDetailComponent } from './all-invoices/invoice-dialogs/pre
       }
   })
   ],
-  providers:[InvoiceService,InvoiceDetailService]
+  providers:[InvoiceService,InvoiceDetailService,FirmService]
 })
 export class InvoicesModule { }

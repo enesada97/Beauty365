@@ -42,7 +42,7 @@
                       <tbody>
                         <tr *ngFor="let isOpen of getIsOpensFormControls(); let i = index">
                           <th scope="row">{{i+1}}</th>
-                          <td>{{optionalSettings[i].alias}}</td>
+                          <td>{{optionalSettings[i].alias|translate}}</td>
                           <td *ngIf="isOpen.value==true;else noIsOpen">{{'Open'|translate}}</td>
                           <ng-template #noIsOpen>
                             <td>{{'Close'|translate}}</td>

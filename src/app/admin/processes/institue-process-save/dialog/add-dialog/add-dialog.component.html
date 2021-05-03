@@ -18,7 +18,7 @@
       </button>
     </div>
     <div mat-dialog-content>
-        <mat-horizontal-stepper [linear]="isLinear" #stepper>
+        <mat-horizontal-stepper *ngIf="processForm&&processInstitueForm" [linear]="!isLinear" #stepper>
             <mat-step [stepControl]="processForm">
                 <form
                 class="register-form m-4"
@@ -38,29 +38,29 @@
                       <mat-error
                         *ngIf="processForm.get('name').hasError('required')"
                       >
-                      {{'ProcessForm'|translate}} {{'Required'|translate}}
+                      {{'ProcessName'|translate}} {{'Required'|translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                     <mat-form-field class="example-full-width" appearance="outline">
-                        <mat-label>{{'ProcessGroup'|translate}}</mat-label>
+                        <mat-label>{{'ProcessGroups'|translate}}</mat-label>
                         <mat-select formControlName="processGroupId" required>
                           <mat-option *ngFor="let processGroup of processGroups" [value]="processGroup.id"> {{processGroup.name}} </mat-option>
                         </mat-select>
                         <mat-error
-                          *ngIf="processForm.get('processGroupId').hasError('required')&&
+                          *ngIf="processForm.get('processGroupId').hasError('required')||
                           processForm.get('processGroupId').touched"
                         >
-                        {{'ProcessGroup'|translate}} {{'Required'|translate}}
+                        {{'ProcessGroups'|translate}} {{'Required'|translate}}
                         </mat-error>
                       </mat-form-field>
                   </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                       <div class="m-b-20">
-                        <mat-label>{{'IsLab'|translate}}</mat-label>
+                        <mat-label class="mr-3">{{'IsLab'|translate}}</mat-label>
                         <mat-radio-group
                           aria-label="Seçiniz"
                           formControlName="isLab"
@@ -79,27 +79,28 @@
                         </mat-radio-group>
                       </div>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                        <div class="m-b-20">
-                          <mat-label>{{'IsRad'|translate}}</mat-label>
-                          <mat-radio-group
-                            aria-label="Seçiniz"
-                            formControlName="isRad"
-                            required
-                          >
-                            <mat-radio-button [value]="true">{{'Yes'|translate}}</mat-radio-button>
-                            <mat-radio-button [value]="false">{{'No'|translate}}</mat-radio-button>
-                            <mat-error
-                              *ngIf="
-                                processForm.get('isRad').hasError('required') &&
-                                processForm.get('isRad').dirty
-                              "
-                            >
-                            {{'IsRad'|translate}} {{'Required'|translate}}
-                            </mat-error>
-                          </mat-radio-group>
-                        </div>
-                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <div class="m-b-20">
+                    <mat-label class="mr-3">{{'IsRad'|translate}}</mat-label>
+                    <mat-radio-group
+                      formControlName="isRad"
+                      required
+                    >
+                      <mat-radio-button [value]="true">{{'Yes'|translate}}</mat-radio-button>
+                      <mat-radio-button [value]="false">{{'No'|translate}}</mat-radio-button>
+                      <mat-error
+                        *ngIf="
+                          processForm.get('isRad').hasError('required') &&
+                          processForm.get('isRad').dirty
+                        "
+                      >
+                      {{'IsRad'|translate}} {{'Required'|translate}}
+                      </mat-error>
+                    </mat-radio-group>
+                  </div>
+                    </div>
                   </div>
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
@@ -126,6 +127,11 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>{{'TaxRatio'|translate}}</mat-label>
                       <input matInput type="number" formControlName="taxRatio"/>
+                      <mat-error
+                        *ngIf="processForm.get('taxRatio').hasError('required')"
+                      >
+                      {{'TaxRatio'|translate}} {{'Required'|translate}}
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </div>

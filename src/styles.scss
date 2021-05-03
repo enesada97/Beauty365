@@ -196,4 +196,7 @@ mat-list-option span {
     height: 40vh;
   }
 }
+mat-list-option[aria-selected="true"] {
+  background: rgba(91, 216, 216, 0.7);
+}
 

@@ -54,10 +54,21 @@ export class AddAppointmentListComponent implements OnInit {
   ngOnInit(): void {
     this.departmentService
       .getList()
-      .subscribe((data) => (this.departments = data));
+      .subscribe((data) => {this.departments = data;
+        if (this.departments[0]) {
+          this.createAppointmentsForm.controls["departmentId"].setValue(
+            this.departments[0].id
+          );
+          this.onOptionsSelected(this.departments[0].id)
+      }});
     this.protocoltypeService
       .getList()
-      .subscribe((data) => (this.protocolTypes = data));
+      .subscribe((data) => {this.protocolTypes = data;
+        if (this.protocolTypes[0]) {
+          this.createAppointmentsForm.controls["protocolTypeId"].setValue(
+            this.protocolTypes[0].id
+          );
+      }});
   }
   public onSubmit(): void {
     if (this.createAppointmentsForm.valid) {

@@ -4,8 +4,6 @@ import { CommonModule } from "@angular/common";
 import { DepartmentsRoutingModule } from "./departments-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AllDepartmentsComponent } from './all-departments/all-departments.component';
-import { EditDepartmentComponent } from './edit-department/edit-department.component';
-import { DepartmentDetailComponent } from './department-detail/department-detail.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,8 +32,6 @@ import { TranslationService } from "src/app/core/service/system-service/Translat
 @NgModule({
   declarations: [
     AllDepartmentsComponent,
-    EditDepartmentComponent,
-    DepartmentDetailComponent,
     DeleteComponent,
     FormDialogComponent,
   ],

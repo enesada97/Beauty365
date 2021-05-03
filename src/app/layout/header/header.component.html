@@ -6,7 +6,7 @@
       <a href="#" onClick="return false;" class="bars" (click)="mobileMenuSidebarOpen($event,'overlay-open')"></a>
       <a class="navbar-brand" routerLink={{homePage}}>
         <img style="width: 30px;height: 30px;" src="assets/images/clinic365/header-logo.png" alt="" />
-        <span class="logo-name">{{'Clinic365'|translate}}</span>
+        <span class="logo-name">Klinik365</span>
       </a>
     </div>
     <div class="collapse navbar-collapse" [ngbCollapse]="isNavbarCollapsed">
@@ -59,8 +59,7 @@
                 </li>
               </ul>
             </div>
-            <a class="text-center d-block border-top py-1">Read
-              All Notifications</a>
+            <a class="text-center d-block border-top py-1">{{'ReadAllNotifications'|translate}}</a>
           </div>
         </li>
         <!-- #END# Notifications-->

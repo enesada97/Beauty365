@@ -57,7 +57,7 @@
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                 <mat-form-field class="example-full-width mb-3">
-                  <mat-label>{{'Surname'|translate}}</mat-label>
+                  <mat-label>{{'SurName'|translate}}</mat-label>
                   <input matInput formControlName="surName" type="text" />
                   <mat-icon matSuffix>face</mat-icon>
                 </mat-form-field>
@@ -93,7 +93,7 @@
               <!-- ID Column -->
               <ng-container matColumnDef="id">
                 <mat-header-cell *matHeaderCellDef mat-sort-header
-                  >{{'Id'|translate}}</mat-header-cell
+                  >{{'ID'|translate}}</mat-header-cell
                 >
                 <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
               </ng-container>
@@ -209,7 +209,7 @@
         </div>
         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>{{'Department'|translate}}</mat-label>
+            <mat-label>{{'DepartmentName'|translate}}</mat-label>
             <input *ngIf="action=='edit';else depForNew" matInput disabled value="{{ department.departmentName }}" />
             <ng-template #depForNew>
               <mat-select
@@ -231,14 +231,14 @@
               appointmentForm.get('departmentId').touched
               "
             >
-            {{'Department'|translate}} {{'Required'|translate}}
+            {{'DepartmentName'|translate}} {{'Required'|translate}}
             </mat-error>
             </ng-template>
           </mat-form-field>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>{{'Doctor'|translate}}</mat-label>
+            <mat-label>{{'DoctorName'|translate}}</mat-label>
             <input *ngIf="action=='edit';else docForNew"
               matInput
               disabled
@@ -257,7 +257,7 @@
                 appointmentForm.get('doctorId').touched
                 "
               >
-              {{'Doctor'|translate}} {{'Required'|translate}}
+              {{'DoctorName'|translate}} {{'Required'|translate}}
               </mat-error>
             </ng-template>
             <mat-icon matSuffix>supervised_user_circle</mat-icon>
@@ -310,10 +310,10 @@
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>{{'PatientName'|translate}}</mat-label>
+            <mat-label>{{'Name'|translate}}</mat-label>
             <input matInput formControlName="name" type="text" />
             <mat-error *ngIf="appointmentForm.get('name').hasError('required')">
-              {{'PatientName'|translate}} {{'Required'|translate}}
+              {{'Name'|translate}} {{'Required'|translate}}
             </mat-error>
           </mat-form-field>
         </div>

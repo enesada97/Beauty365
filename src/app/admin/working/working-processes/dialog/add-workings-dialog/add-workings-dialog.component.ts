@@ -154,7 +154,6 @@ export class AddWorkingsDialogComponent implements OnInit {
   }
   addSelectedRowProcesses() {
     this.dataSourceForProcess.data.sort((a, b) => a.processId - b.processId);
-    console.log(this.dataSourceForProcess.data);
     let alertCounter = this.dataSourceForProcess.data[
       this.dataSourceForProcess.data.length - 1
     ].processId;

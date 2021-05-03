@@ -193,6 +193,7 @@ export class AddAppointmentDialogComponent implements OnInit {
               swalWithBootstrapButtons
                 .fire({
                   title:this.translate.instant('AlreadySignedUpPatient'),
+                  text:this.translate.instant('MatchAppointmentConfirm'),
                   showClass: {
                     popup: "animate__animated animate__fadeInDown",
                   },
@@ -262,7 +263,7 @@ export class AddAppointmentDialogComponent implements OnInit {
         if (this.appointment.patientDataId != 0) {
           this.appointmentService.update(this.appointment).subscribe((data) => {
             this.dialogRef.close(1);
-            this.sweetAlert.success(data);
+            this.sweetAlert.success(this.translate.instant('Updated'));
           });
         } else {
           this.patientService

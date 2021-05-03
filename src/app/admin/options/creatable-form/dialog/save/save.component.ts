@@ -42,10 +42,10 @@ export class SaveComponent{
     });
   }
   submit() {
-    if (this.tableForm.valid&&this.userName) {
+    if (this.tableForm.valid) {
       this.formTable = Object.assign({}, this.tableForm.value);
       // this.formTable.addedBy=this.userName;
-      this.formTable.addedBy='';
+      this.formTable.addedBy='System Admin';
       if(this.formTable.id==0){
         this.formTableService.add(this.formTable).subscribe(data=>{
           this.dialogRef.close(JSON.parse(data).data);

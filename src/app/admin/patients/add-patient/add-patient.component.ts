@@ -40,10 +40,10 @@ export class AddPatientComponent implements OnInit {
     this.dateAdapter.setLocale("tr");
     this.patientForm = this.fb.group({
       id: [0],
-      identityNumber: ["", [Validators.required]],
+      identityNumber: [""],
       name: ["", [Validators.required]],
       surName: ["", [Validators.required]],
-      gender: [""],
+      gender: [false],
       phoneNumber: ["", [Validators.required]],
       birthDate: [""],
       fatherName: [""],
@@ -130,7 +130,7 @@ export class AddPatientComponent implements OnInit {
   passParameterForIdentity(row: Patient) {
     Swal.fire({
       title:
-      this.translate.instant('CannotOpenTheProtocolBeforeAddingIdentityNumberForPatient'),
+      this.translate.instant('CannotOpenProtocolBeforeIdentityNumber'),
       text:
         row.name +
         " " +
@@ -163,12 +163,12 @@ export class AddPatientComponent implements OnInit {
   }
   passParameter(row: Patient) {
     Swal.fire({
-      title:this.translate.instant('OpenProtocolFinded'),
+      title:this.translate.instant('PatientDetailConfirm'),
       text:
         row.name +
         " " +
         row.surName +
-        " "+ this.translate.instant('OpenProtocolFinded'),
+        " "+ this.translate.instant('OpenProtocolFound'),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",

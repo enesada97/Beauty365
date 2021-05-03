@@ -17,7 +17,7 @@ import { AuthService } from 'src/app/core/service/system-service/auth.service';
   styleUrls: ['./institue-process-save.component.sass']
 })
 export class InstitueProcessSaveComponent implements OnInit {
-  displayedColumns = ["select", "processGroupName","processName","institutionName","price","actions"];
+  displayedColumns = ["select", "processGroupName","processName","institueName","price","actions"];
   selection = new SelectionModel<ProcessInstitueDto>(true, []);
   processInstitueDtoList: ProcessInstitueDto[];
   dataSource: MatTableDataSource<ProcessInstitueDto>;

@@ -39,7 +39,7 @@
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>{{'Type'|translate}}</mat-label>
             <mat-select formControlName="type" required>
-              <mat-option *ngFor="let opt of types" [value]="opt.value"> {{'opt.name'|translate}} </mat-option>
+              <mat-option *ngFor="let opt of types" [value]="opt.value"> {{opt.name|translate}} </mat-option>
             </mat-select>
             <mat-error
               *ngIf="fieldForm.get('type').hasError('required')&&

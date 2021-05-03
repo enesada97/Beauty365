@@ -1,12 +1,12 @@
 <div class="container">
-    <h3 mat-dialog-title>{{'AreYouSure'|translate}}</h3>
+    <h3 mat-dialog-title>{{'DeleteConfirm'|translate}}</h3>
     <div mat-dialog-content>
       <ul class="clearfix">
         <li>
           <p><span class="font-weight-bold">{{'TypeName'|translate}}: </span>{{ data.row.typeName }}</p>
         </li>
         <li>
-            <p><span class="font-weight-bold">{{'PatientName'|translate}} {{'SurName'|translate}}: </span>{{ data.row.patientName }} {{ data.row.patientSurname }}</p>
+            <p *ngIf="data.row.patientName"><span class="font-weight-bold">{{'Name'|translate}} {{'SurName'|translate}}: </span>{{ data.row.patientName }} {{ data.row.patientSurname }}</p>
         </li>
         <li>
           <p><span class="font-weight-bold">{{'DepartmentName'|translate}}: </span>{{ data.row.departmentName }}</p>
@@ -18,7 +18,17 @@
           <p><span class="font-weight-bold">{{'Date'|translate}}: </span>{{ data.row.date}}</p>
         </li>
         <li>
-          <p><span class="font-weight-bold">{{'Status'|translate}}: </span>{{ data.row.patientHasArrive}}</p>
+          <p *ngIf="data.row.patientName;else emptyAppointment"><span class="font-weight-bold">{{'Status'|translate}}: </span>
+            <ng-container *ngIf="data.row.patientHasArrive;else dontCome">
+              {{'Came'|translate}}
+            </ng-container>
+            <ng-template #dontCome>
+              {{'DidNotCome'|translate}}
+            </ng-template></p>
+            <ng-template #emptyAppointment>
+              <p><span class="font-weight-bold">{{'Status'|translate}}: </span>
+                {{'Empty'|translate}} </p>
+            </ng-template>
         </li>
       </ul>
     </div>

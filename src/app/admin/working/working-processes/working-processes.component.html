@@ -8,14 +8,14 @@
               <h4 class="page-title">{{'WorkingList'|translate}}</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
-              <a routerLink="/patient/dashboard">
+              <a routerLink="/admin/dashboard/main">
                 <i class="fas fa-home"></i> {{'Homepage'|translate}}</a
               >
             </li>
             <li class="breadcrumb-item bcrumb-2">
               <a *ngIf="checkClaim('GetPatientDataQuery')" routerLink="/admin/patients/all-patients/patient-detail/{{ patientForWorkingDto.patientId }}">{{ patientForWorkingDto.name }} {{ patientForWorkingDto.surName }}</a>
             </li>
-            <li class="breadcrumb-item active" style="cursor: pointer;"><a onclick="return false">{{'ProtocolId'|translate}}:#{{protocolId}}</a></li>
+            <li class="breadcrumb-item active" style="cursor: pointer;"><a onclick="return false">{{'ProtocolNo'|translate}}:#{{protocolId}}</a></li>
           </ul>
         </div>
       </div>
@@ -328,7 +328,7 @@
                         [ngClass]="'tbl-col-width-per-11'"
                         *matHeaderCellDef
                         mat-sort-header
-                        >{{'Arrears'|translate}}</mat-header-cell
+                        >{{'Balance'|translate}}</mat-header-cell
                       >
                       <mat-cell
                         [ngClass]="'tbl-col-width-per-11'"
@@ -447,14 +447,14 @@
           </div>
         </li>
         <li *ngIf="dataSource&&dataSource.data.length>=1&&checkClaim('CreateCollectionCommand');else noInvoices">
-          <span class="fab-label">{{'AddInvoice' |translate}}</span>
+          <span class="fab-label">{{'CreateInvoice' |translate}}</span>
           <div class="fab-icon-holder">
             <i (click)="addInvoices()" class="fas fa-file-invoice"></i>
           </div>
         </li>
         <ng-template #noInvoices>
           <li>
-            <span class="fab-label">{{'AddInvoice' |translate}}</span>
+            <span class="fab-label">{{'CreateInvoice' |translate}}</span>
           <div class="fab-icon-holder disabled">
             <i matTooltip="{{'CurrentWorkingNotFound' |translate}}"  matTooltipClass="tooltip-red" class="fas fa-file-invoice"></i>
           </div>

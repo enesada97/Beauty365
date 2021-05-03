@@ -65,15 +65,15 @@
     <div class="rightSetting mt-4">
       <p>{{'SIDEBARMENUCOLORS'|translate}}</p>
       <mat-button-toggle-group class="mt-2" [value]="isDarkSidebar ? 'dark' : 'light'">
-        <mat-button-toggle (click)="lightSidebarBtnClick()" value="light">Light</mat-button-toggle>
-        <mat-button-toggle (click)="darkSidebarBtnClick()" value="dark">Dark</mat-button-toggle>
+        <mat-button-toggle (click)="lightSidebarBtnClick()" value="light">{{'Light'|translate}}</mat-button-toggle>
+        <mat-button-toggle (click)="darkSidebarBtnClick()" value="dark">{{'Dark'|translate}}</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
     <div class="rightSetting">
       <p>{{'THEMECOLORS'|translate}}</p>
       <mat-button-toggle-group class="mt-2" [value]="isDarTheme ? 'dark' : 'light'">
-        <mat-button-toggle (click)="lightThemeBtnClick()" value="light">Light</mat-button-toggle>
-        <mat-button-toggle (click)="darkThemeBtnClick()" value="dark">Dark</mat-button-toggle>
+        <mat-button-toggle (click)="lightThemeBtnClick()" value="light">{{'Light'|translate}}</mat-button-toggle>
+        <mat-button-toggle (click)="darkThemeBtnClick()" value="dark">{{'Dark'|translate}}</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
     <div class="rightSetting">

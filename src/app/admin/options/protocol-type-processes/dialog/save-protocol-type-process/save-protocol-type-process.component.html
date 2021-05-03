@@ -21,10 +21,10 @@
     <div class="row clearfix" style="margin-left: 0;margin-right: 0;">
       <div style="padding-left: 0px;" class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
-          <div class="header bg-red">
+          <div class="header bg-red" style="min-height:100px;">
             <h2>
               {{'ProtocolTypes'|translate}}
-              <small>{{'Choose'|translate}}</small>
+              <small>{{'Select'|translate}}</small>
             </h2>
 
           </div>
@@ -41,10 +41,10 @@
     </div>
   <div style="padding-left: 0px;" class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
     <div class="card">
-    <div class="header bg-green">
+    <div class="header bg-green" style="min-height:100px;">
       <h2>
         {{'Doctors'|translate}}
-        <small>{{'Choose'|translate}}</small>
+        <small>{{'Select'|translate}}</small>
       </h2>
 
     </div>
@@ -61,10 +61,10 @@
 </div>
 <div style="padding-left: 0px;" class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
   <div class="card">
-    <div class="header bg-cyan">
+    <div class="header bg-cyan" style="min-height:100px;">
       <h2>
         {{'Institutions'|translate}}
-        <small>{{'Choose'|translate}}</small>
+        <small>{{'Select'|translate}}</small>
       </h2>
     </div>
     <div style="padding: 0px;" class="body">
@@ -231,6 +231,14 @@
                 >
                 </mat-row>
               </mat-table>
+              <div
+              class="no-results"
+              [style.display]="
+                dataSource.data.length == 0 ? '' : 'none'
+              "
+            >
+            <p class="alert alert-danger">{{'NoRecordsFound' |translate}}</p>
+            </div>
               <mat-paginator
                 #paginator
                 [pageIndex]="0"

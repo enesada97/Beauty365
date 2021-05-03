@@ -87,12 +87,12 @@
                             class="example-full-width mb-1"
                           >
                             <mat-label>{{
-                              "SelectDate" | translate
+                              "Date" | translate
                             }}</mat-label>
                             <input
                               matInput
                               [matDatepicker]="picker"
-                              placeholder="Tarih Seçiniz"
+                              placeholder="{{'Select'|translate}}"
                               [(ngModel)]="date"
                               (dateInput)="addEvent('input', $event)"
                               (dateChange)="addEvent('change', $event)"
@@ -179,7 +179,7 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="appointmentNo">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>{{
-                    "Id" | translate
+                    "ID" | translate
                   }}</mat-header-cell>
                   <mat-cell *matCellDef="let row">{{
                     row.appointmentNo
@@ -187,7 +187,7 @@
                 </ng-container>
                 <ng-container matColumnDef="patientName">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>{{
-                    "PatientName" | translate
+                    "Name" | translate
                   }}</mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     {{ row.patientName }}</mat-cell
@@ -195,7 +195,7 @@
                 </ng-container>
                 <ng-container matColumnDef="patientSurname">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>{{
-                    "PatientSurname" | translate
+                    "SurName" | translate
                   }}</mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     {{ row.patientSurname }}</mat-cell
@@ -356,7 +356,7 @@
                         mat-menu-item
                         routerLink="/admin/patients/all-patients/patient-detail/{{row.patientDataId}}"
                         *ngIf="
-                          !(row.patientName == null && row.protocolId == 0) &&
+                          row.patientDataId!=0 &&
                           checkClaim('GetPatientDataQuery')
                         "
                       >

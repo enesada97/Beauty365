@@ -13,7 +13,7 @@
                 >
               </li>
               <li class="breadcrumb-item bcrumb-2">
-                <a routerLink="/admin/doctor/all-doctors" onClick="return false;"
+                <a routerLink="/admin/dashboard/main" onClick="return false;"
                   >{{'Institutions'|translate}}</a
                 >
               </li>
@@ -132,7 +132,7 @@
                   <!-- ID Column -->
                   <ng-container matColumnDef="id">
                     <mat-header-cell *matHeaderCellDef mat-sort-header
-                      >{{'Id'|translate}}</mat-header-cell
+                      >{{'ID'|translate}}</mat-header-cell
                     >
                     <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
                   </ng-container>
@@ -166,7 +166,7 @@
                         class="btn-tbl-delete"
                         (click)="$event.stopPropagation()"
                         *ngIf="checkClaim('DeleteInstitutionCommand')"
-                        (click)="deleteItem(i, row)"
+                        (click)="deleteItem(row)"
                       >
                         <mat-icon aria-label="Delete" class="col-white"
                           >delete</mat-icon

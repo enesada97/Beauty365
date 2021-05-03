@@ -118,7 +118,7 @@ export class SearchPatientComponent implements OnInit {
   passParameterForIdentity(row:Patient) {
     Swal.fire({
       title:
-      this.translate.instant('CannotOpenTheProtocolBeforeAddingIdentityNumberForPatient'),
+      this.translate.instant('CannotOpenProtocolBeforeIdentityNumber'),
       text:
         row.name +
         " " +
@@ -150,12 +150,12 @@ export class SearchPatientComponent implements OnInit {
   }
   passParameter(row:Patient) {
     Swal.fire({
-      title:this.translate.instant('OpenProtocolFinded'),
+      title:this.translate.instant('PatientDetailConfirm'),
       text:
         row.name +
         " " +
         row.surName +
-        " "+ this.translate.instant('OpenProtocolFinded'),
+        " "+ this.translate.instant('OpenProtocolFound'),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",

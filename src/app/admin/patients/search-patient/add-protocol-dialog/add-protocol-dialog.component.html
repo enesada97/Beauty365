@@ -52,7 +52,7 @@
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Protokol Tipi</mat-label>
+            <mat-label>{{ "TypeName" | translate }}</mat-label>
             <mat-select formControlName="protocolTypeId" required>
               <mat-option
                 *ngFor="let protocolType of protocolTypes"
@@ -67,13 +67,13 @@
                 protocolForm.get('protocolTypeId').touched
               "
             >
-              Protokol Tipi Seçilmelidir
+            {{ "TypeName" | translate }} {{ "Required" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Kurum</mat-label>
+            <mat-label>{{ "InstitutionName" | translate }}</mat-label>
             <mat-select formControlName="institutionId" required>
               <mat-option
                 *ngFor="let institution of institutions"
@@ -89,7 +89,7 @@
                 protocolForm.get('institutionId').touched
               "
             >
-              Kurum Seçilmelidir
+            {{ "InstitutionName" | translate }} {{ "Required" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -97,7 +97,7 @@
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Bölüm</mat-label>
+            <mat-label>{{ "DepartmentName" | translate }}</mat-label>
             <mat-select
               #mySelect
               (selectionChange)="onOptionsSelected(mySelect.value)"
@@ -117,14 +117,14 @@
                 protocolForm.get('departmentId').touched
               "
             >
-              Departman Girilmelidir
+            {{ "DepartmentName" | translate }} {{ "Required" | translate }}
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <ng-container *ngIf="doctors; else elseTemplate">
             <mat-form-field class="example-full-width" appearance="outline">
-              <mat-label>Doktor</mat-label>
+              <mat-label>{{ "DoctorName" | translate }}</mat-label>
               <mat-select formControlName="doctorId">
                 <mat-option *ngFor="let doctor of doctors" [value]="doctor.id"
                   >{{ doctor.speciality }} {{ doctor.name }}
@@ -137,13 +137,13 @@
                   protocolForm.get('doctorId').touched
                 "
               >
-                Doktor Seçilmelidir
+              {{ "DoctorName" | translate }} {{ "Required" | translate }}
               </mat-error>
             </mat-form-field>
           </ng-container>
           <ng-template #elseTemplate>
             <mat-form-field class="example-full-width" appearance="outline">
-              <mat-label>Önce bölüm seçiniz</mat-label>
+              <mat-label>{{ "BeforeDepartment" | translate }}</mat-label>
               <mat-select [disabled] formControlName="doctorId">
                 <mat-option
                   [disabled]
@@ -167,7 +167,7 @@
               [disabled]="!protocolForm.valid"
               (click)="confirmAdd()"
             >
-              Kaydet
+            {{ "Save" | translate }}
             </button>
             <button
               mat-raised-button
@@ -175,7 +175,7 @@
               (click)="onNoClick()"
               tabindex="-1"
             >
-              Cancel
+            {{ "Cancel" | translate }}
             </button>
           </div>
         </div>

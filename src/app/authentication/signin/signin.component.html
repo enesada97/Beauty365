@@ -44,7 +44,7 @@
             <div class="row">
               <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3" appearance="outline">
-                  <mat-label>{{'Language' | translate}}</mat-label>
+                  <mat-label>{{'Languages' | translate}}</mat-label>
                   <mat-select [(ngModel)]="loginUser.lang" name="lang" (selectionChange)="changeLang($event.value)">
                     <mat-option *ngFor="let item of langugelookUp" [value]="item.id"> {{item.label}} </mat-option>
                   </mat-select>

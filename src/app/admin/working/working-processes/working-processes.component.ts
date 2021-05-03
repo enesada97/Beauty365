@@ -164,7 +164,7 @@ export class WorkingProcessesComponent implements OnInit {
     workingDtosForInvoice= workingDtosForInvoice.concat(this.workingDtos.filter(m=>m.invoiceDetailId==0));
     if (workingDtosForInvoice.length) {
       Swal.fire({
-        title: this.translate.instant('InvoiceAndPaymentBillNo'),
+        title: this.translate.instant('InvoiceAndPaymentBillNoConfirm'),
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

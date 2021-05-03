@@ -193,7 +193,7 @@ export class AllAppointmentsComponent implements OnInit {
       });
     } else {
       Swal.fire({
-        title: this.translate.instant('ViewTheProtocol'),
+        title: this.translate.instant('ViewTheProtocolConfirm'),
         text: this.translate.instant('AlreadyProtocolForAppointment'),
         icon: 'warning',
         showCancelButton: true,

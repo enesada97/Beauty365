@@ -126,7 +126,7 @@
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                     <mat-form-field class="example-full-width mb-3">
-                        <mat-label>{{'Department'|translate}}</mat-label>
+                        <mat-label>{{'DepartmentName'|translate}}</mat-label>
                         <mat-select formControlName="departmentId" required>
                           <mat-option *ngFor="let department of departments" [value]="department.id"> {{department.departmentName}} </mat-option>
                         </mat-select>
@@ -134,7 +134,7 @@
                           *ngIf="doctorForm.get('departmentId').hasError('required')&&
                           doctorForm.get('departmentId').touched"
                         >
-                        {{'Department'|translate}} {{'Required'|translate}}
+                        {{'DepartmentName'|translate}} {{'Required'|translate}}
                         </mat-error>
                       </mat-form-field>
                   </div>

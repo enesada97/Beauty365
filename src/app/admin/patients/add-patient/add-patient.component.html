@@ -12,7 +12,7 @@
             >
           </li>
           <li class="breadcrumb-item bcrumb-2">
-            <a onClick="return false;"
+            <a routerLink="/admin/patients/all-patients"
               >{{'Patients'|translate}}</a
             >
           </li>
@@ -28,8 +28,8 @@
           </div>
           <div class="body">
             <form class="m-4" [formGroup]="patientForm" (ngSubmit)="onSubmit()">
-              <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+              <div *ngIf="optionalSettingForIdentityRequired" class="row">
+                <div *ngIf="optionalSettingForIdentityRequired.isOpen;else noRequired" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
                     <mat-label>{{'IdentityNumber'|translate}}</mat-label>
                     <input
@@ -55,11 +55,33 @@
                         patientForm.get('identityNumber').hasError('minlength')
                       "
                     >
-                    {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentValue'|translate}}:
+                    {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentLength'|translate}}:
                       {{ patientForm.get("identityNumber").value.length }}
                     </mat-error>
                   </mat-form-field>
                 </div>
+                <ng-template #noRequired>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3">
+                      <mat-label>{{'IdentityNumber'|translate}}</mat-label>
+                      <input
+                        maxlength="11"
+                        minlength="11"
+                        matInput
+                        formControlName="identityNumber"
+                      />
+                      <mat-icon matSuffix>person</mat-icon>
+                      <mat-error
+                        *ngIf="
+                        patientForm.get('identityNumber').hasError('minlength')
+                        "
+                      >
+                      {{'IfEnter'|translate}} {{'IdentityNumber'|translate}} {{'Required'|translate}} {{'CurrentLength'|translate}}:
+                        {{ patientForm.get("identityNumber").value.length }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </ng-template>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
                     <mat-label>{{'PhoneNumber'|translate}}</mat-label>
@@ -72,13 +94,13 @@
                     />
                     <mat-icon matSuffix>phone</mat-icon>
                     <mat-error
-                      *ngIf="
-                        patientForm.get('phoneNumber').hasError('required') &&
-                        patientForm.get('phoneNumber').touched
-                      "
-                    >
-                    {{'PhoneNumber'|translate}} {{'Required'|translate}}
-                    </mat-error>
+                    *ngIf="
+                    patientForm.get('phoneNumber').hasError('required') &&
+                    patientForm.get('phoneNumber').touched
+                    "
+                  >
+                  {{'PhoneNumber'|translate}} {{'Required'|translate}}
+                  </mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -160,7 +182,7 @@
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>{{'photoUrl'|translate}}</mat-label>
+                    <mat-label>{{'PhotoUrl'|translate}}</mat-label>
                     <ngx-mat-file-input formControlName="photoUrl">
                     </ngx-mat-file-input>
                     <mat-icon matSuffix>add_a_photo</mat-icon>
@@ -240,7 +262,7 @@
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>{{'isTrobule'|translate}}</mat-label>
+                    <mat-label>{{'IsTrobule'|translate}}</mat-label>
                     <mat-select formControlName="isTrobule">
                       <mat-option [value]="true"> {{'Yes'|translate}} </mat-option>
                       <mat-option [value]="false"> {{'No'|translate}} </mat-option>
@@ -297,7 +319,7 @@
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
-                    <mat-label>{{'eMail'|translate}}</mat-label>
+                    <mat-label>{{'Email'|translate}}</mat-label>
                     <input matInput formControlName="eMail" type="email" />
                   </mat-form-field>
                 </div>

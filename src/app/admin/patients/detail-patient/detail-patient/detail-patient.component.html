@@ -1993,10 +1993,10 @@
                                 >Dr.{{ appointment.doctorName }}
                                 {{ appointment.doctorSurname }}</strong
                               >
-                              {{ appointment.typeName }} işlemi
+                              {{'TypeName'|translate}}: {{ appointment.typeName }}
                             </h2>
                             <p>
-                              {{ appointment.departmentName }} bölümünde
+                              {{'DepartmentName'|translate}}:{{ appointment.departmentName }}
                               {{ appointment.time }}
                             </p>
                             <span class="cd-date">{{ appointment.date }}</span>
@@ -2094,7 +2094,7 @@
                                 *matHeaderCellDef
                                 mat-sort-header
                                 >{{
-                                  "PatientName" | translate
+                                  "Name" | translate
                                 }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
@@ -2106,7 +2106,7 @@
                                 *matHeaderCellDef
                                 mat-sort-header
                                 >{{
-                                  "PatientSurName" | translate
+                                  "SurName" | translate
                                 }}</mat-header-cell
                               >
                               <mat-cell *matCellDef="let row">
@@ -2244,14 +2244,14 @@
                                     [matMenuTriggerFor]="protocolProcesses"
                                   >
                                     <mat-icon>group</mat-icon>
-                                    <span>Protokol İşlemleri</span>
+                                    <span>{{'ProtocolProcesses'|translate}}</span>
                                   </button>
                                   <button
                                     mat-menu-item
                                     [matMenuTriggerFor]="appointmentProcesses"
                                   >
                                     <mat-icon>face</mat-icon>
-                                    <span>Hasta İşlemleri</span>
+                                    <span>{{'PatientProcesses'|translate}}</span>
                                   </button>
                                 </mat-menu>
                                 <mat-menu #protocolProcesses="matMenu">
@@ -2359,7 +2359,10 @@
                           "ProtocolNo" | translate
                         }}</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          {{ row.protocolId }}</mat-cell
+                          <ng-container *ngIf="dataSourceForInvoices.data.length">
+                            {{ row.protocolId }}
+                          </ng-container>
+                          </mat-cell
                         >
                       </ng-container>
                       <ng-container matColumnDef="totalPrice">
@@ -2716,7 +2719,6 @@
                           </ng-container>
                           <div *ngFor="let form of dynamicFormArray">
                             <ng-container *ngSwitchCase="form.id">
-                              {{ dynamicFormGroup.value | json }}
                               <form
                                 class="m-2 row"
                                 [formGroup]="dynamicFormGroup"
@@ -2782,7 +2784,6 @@
                                             control.label
                                           }}</mat-label>
                                           <mat-radio-group
-                                            aria-label="Select gender"
                                             [formControlName]="
                                               control.formControlName
                                             "
@@ -3844,7 +3845,6 @@
                             </ng-container>
                             <div *ngFor="let form of dynamicFormArray">
                               <ng-container *ngSwitchCase="form.id">
-                                {{ dynamicFormGroup.value | json }}
                                 <form
                                   class="m-2 row"
                                   [formGroup]="dynamicFormGroup"
@@ -3910,7 +3910,6 @@
                                               control.label
                                             }}</mat-label>
                                             <mat-radio-group
-                                              aria-label="Select gender"
                                               [formControlName]="
                                                 control.formControlName
                                               "

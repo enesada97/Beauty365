@@ -14,12 +14,12 @@
             </li>
             <li class="breadcrumb-item bcrumb-2">
               <a
-                routerLink="/admin/patients/all-appointments"
+                routerLink="/admin/appointments/all-appointments"
                 onClick="return false;"
-                >{{'AppointmentList'|translate}}</a
+                >{{'Appointments'|translate}}</a
               >
             </li>
-            <li class="breadcrumb-item active">{{'AddAppointmentList'|translate}}</li>
+            <li class="breadcrumb-item active">{{'CreateAppointmentList'|translate}}</li>
           </ul>
         </div>
       </div>
@@ -36,7 +36,6 @@
               [formGroup]="createAppointmentsForm"
               (ngSubmit)="onSubmit()"
             >
-            {{createAppointmentsForm.value|json}}
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3">
@@ -72,7 +71,7 @@
               <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>{{'Type'|translate}}</mat-label>
+                    <mat-label>{{'TypeName'|translate}}</mat-label>
                     <mat-select
                       formControlName="protocolTypeId"
                       required
@@ -90,13 +89,13 @@
                       createAppointmentsForm.get('protocolTypeId').touched
                       "
                     >
-                    {{'Type'|translate}} {{'Required'|translate}}
+                    {{'TypeName'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>{{'Department'|translate}}</mat-label>
+                    <mat-label>{{'DepartmentName'|translate}}</mat-label>
                     <mat-select
                       #mySelect
                       (selectionChange)="onOptionsSelected(mySelect.value)"
@@ -116,14 +115,14 @@
                       createAppointmentsForm.get('departmentId').touched
                       "
                     >
-                    {{'Department'|translate}} {{'Required'|translate}}
+                    {{'DepartmentName'|translate}} {{'Required'|translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <ng-container *ngIf="doctors; else elseTemplate">
                     <mat-form-field class="example-full-width mb-3" appearance="outline">
-                      <mat-label>{{'Doctor'|translate}}</mat-label>
+                      <mat-label>{{'DoctorName'|translate}}</mat-label>
                       <mat-select formControlName="doctorId">
                         <mat-option *ngFor="let doctor of doctors" [value]="doctor.id"
                           >{{ doctor.speciality }} {{ doctor.name }}
@@ -136,7 +135,7 @@
                         createAppointmentsForm.get('doctorId').touched
                         "
                       >
-                      {{'Doctor'|translate}} {{'Required'|translate}}
+                      {{'DoctorName'|translate}} {{'Required'|translate}}
                       </mat-error>
                     </mat-form-field>
                   </ng-container>

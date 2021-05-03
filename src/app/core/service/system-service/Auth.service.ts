@@ -108,7 +108,6 @@ export class AuthService {
   claimGuard(claim: string): boolean {
     if(this.claims.length==0){
       this.claims=localStorage.getItem("claim").split(',');
-      console.log("a");
     }
     var check = this.claims.some(function (item) {
       return item == claim;

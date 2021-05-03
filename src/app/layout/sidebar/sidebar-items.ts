@@ -94,7 +94,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: "",
-    title: "--FrequentlyUsedSpaces",
+    title: "FrequentlyUsedSpaces",
     moduleName: "",
     iconType: "",
     icon: "",
@@ -404,7 +404,7 @@ export const ROUTES: RouteInfo[] = [
         iconType: "",
         icon: "",
         class: "ml-menu",
-        claim:'GetProtocolDtosQuerys',
+        claim:'GetProtocolDtosQuery',
         groupTitle: false,
         badge: "",
         badgeClass: "",
@@ -439,7 +439,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: "/admin/invoices/all-invoices",
-        title: "Invoices Processes",
+        title: "InvoicesProcesses",
         moduleName: "invoices",
         iconType: "",
         icon: "",
@@ -545,7 +545,7 @@ export const ROUTES: RouteInfo[] = [
       },
       {
         path: "/admin/options/creatable-forms",
-        title: "CreatableForm",
+        title: "CreatableForms",
         moduleName: "options",
         iconType: "",
         icon: "",

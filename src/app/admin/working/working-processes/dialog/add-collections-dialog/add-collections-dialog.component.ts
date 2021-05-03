@@ -17,7 +17,7 @@ import { WorkingDto } from "src/app/core/models/workingdto.model";
 import { WorkingService } from "src/app/core/service/working.service";
 import { AddWorkingsDialogComponent } from "../add-workings-dialog/add-workings-dialog.component";
 import Swal from "sweetalert2";
-import { FormControl, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatExpansionPanel } from "@angular/material/expansion";
 import { AuthService } from "src/app/core/service/system-service/auth.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -77,7 +77,8 @@ export class AddCollectionsDialogComponent implements OnInit {
     public workingService: WorkingService,
     public collectionService: CollectionService,
     private authService:AuthService,
-    private translate:TranslateService
+    private translate:TranslateService,
+    private fb: FormBuilder
   ) {
     this.workingForCollectionDtos = data.workingForCollectionDtos;
     this.protocolId = data.protocolId;
@@ -91,8 +92,11 @@ export class AddCollectionsDialogComponent implements OnInit {
 
   dataSourceForCollection: MatTableDataSource<Collection>;
   @ViewChild(MatPaginator, { static: false }) paginatorAdd: MatPaginator;
-
+  form: FormGroup;
   ngOnInit(): void {
+    this.form = this.fb.group({
+      prices: this.fb.array([])
+    });
     this.getCollections();
     this.totalPrice = this.selectedPay;
   }
@@ -111,6 +115,10 @@ export class AddCollectionsDialogComponent implements OnInit {
         this.selectedId[i] = this.selection.selected[i].workingNo;
         this.selectedPays[i] = this.selection.selected[i].arrearsValue;
         this.selectedPays[i]=Math.round(this.selectedPays[i]*100)/100;
+        const add = this.form.get('prices') as FormArray;
+        add.push(this.fb.group({
+          price: [this.selectedPays[i],[Validators.max(this.selection.selected[i].arrearsValue)]]
+        }));
         this.selectedPay = this.selectedPay + this.selectedPays[i];
         this.addPay = this.selectedPay;
         this.arrears = this.selectedPay;
